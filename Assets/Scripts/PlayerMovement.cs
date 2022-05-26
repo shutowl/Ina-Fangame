@@ -5,17 +5,42 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public enum playerState
+    {
+        moving,
+        attacking,
+        rolling,
+        parrying,
+        damaged,
+        dead
+    }
+    public playerState currentState;
+
     [Header ("Main Variables")]
-    public float speed = 50f;
-    public float maxSpeed = 3f;
-    public float jumpPower = 100f;
+    public float speed = 50f;               //How fast the player accelerates
+    public float maxSpeed = 3f;             //Max player speed
+    public float jumpPower = 100f;          //How high the player jumps
     private float tempSpeed;
     private float walkSpeed;
-    public float walkDelay = 1.0f;
+    public float walkDelay = 1.0f;          //How long a button is held before walk is enabled
     private float walkDelayCounter;
 
-    public float gravityScale = 1.5f;
-    public float fallGravityMultiplier = 1.5f;
+    public float gravityScale = 1.5f;               //Player Gravity
+    public float fallGravityMultiplier = 1.5f;      //Player fall gravity
+
+    [Header("Rolling")]
+    public float rollSpeed = 5f;            //How fast the roll goes
+    public float rollDuration = 1f;         //How long the roll lasts
+    private float rollCounter;
+    public float rolliFrames = 0.3f;        //How many seconds the player is invincible during a roll
+    private float rolliFramesCounter;
+
+    [Header("Damaged")]
+    public float knockbackStrength = 5f;
+    public float damagedDuration = 1f;
+    private float damagedDurationCounter;
+    public float damagediFrames = 1f;
+    private float damagediFramesCounter;
 
     [Header ("Coyote Time And Jump Buffers")]
     public float coyoteTime = 0.2f;
@@ -31,7 +56,6 @@ public class PlayerMovement : MonoBehaviour
     //Store Input Values
     private InputActions inputActions;
     private Vector2 moveVal;
-    Keyboard keyboard = Keyboard.current;
 
     private void Awake()
     {
@@ -39,7 +63,6 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         if (rb is null)
             Debug.LogError("Rigidbody is NULL");
-        //hitbox = GetComponentInChildren<SpriteRenderer>();
 
         tempSpeed = speed;
         walkSpeed = speed / 2;
@@ -48,91 +71,172 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        moveVal = inputActions.Player.Move.ReadValue<Vector2>();
+        //-----MOVE STATE-----
+        if (currentState == playerState.moving)
+        {
+            moveVal = inputActions.Player.Move.ReadValue<Vector2>();
 
-        //Jump
-        if (coyoteTimeCounter >= 0f && jumpBufferCounter > 0f)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, 0f);
-            rb.AddForce(Vector2.up * jumpPower);
+            //Jump
+            if (coyoteTimeCounter >= 0f && jumpBufferCounter > 0f)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 0f);
+                rb.AddForce(Vector2.up * jumpPower);
 
-            jumpBufferCounter = 0f;
-        }
-        //Control Jump Height
-        if (inputActions.Player.Jump.WasReleasedThisFrame() && rb.velocity.y >= 0.1)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y / 2); //Slows down y-axis momentum
+                jumpBufferCounter = 0f;
+            }
+            //Control Jump Height
+            if (inputActions.Player.Jump.WasReleasedThisFrame() && rb.velocity.y >= 0.1)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y / 2); //Slows down y-axis momentum
 
-            coyoteTimeCounter = 0f;
-        }
+                coyoteTimeCounter = 0f;
+            }
 
-        //Jump Gravity
-        if(rb.velocity.y < 0)
-        {
-            rb.gravityScale = gravityScale * fallGravityMultiplier;
-        }
-        else
-        {
-            rb.gravityScale = gravityScale;
-        }
+            //Jump Gravity
+            if (rb.velocity.y < 0)
+            {
+                rb.gravityScale = gravityScale * fallGravityMultiplier;
+            }
+            else
+            {
+                rb.gravityScale = gravityScale;
+            }
 
-        //Coyote Time
-        if (grounded)
-        {
-            coyoteTimeCounter = coyoteTime;
-        }
-        else
-        {
-            coyoteTimeCounter -= Time.deltaTime;
-        }
+            //Coyote Time
+            if (grounded)
+            {
+                coyoteTimeCounter = coyoteTime;
+            }
+            else
+            {
+                coyoteTimeCounter -= Time.deltaTime;
+            }
 
-        //Jump Buffer
-        if (inputActions.Player.Jump.WasPressedThisFrame())
-        {
-            jumpBufferCounter = jumpBufferTime;
-        }
-        else
-        {
-            if(jumpBufferCounter > 0f)
-                jumpBufferCounter -= Time.deltaTime;
-        }
+            //Jump Buffer
+            if (inputActions.Player.Jump.WasPressedThisFrame())
+            {
+                jumpBufferCounter = jumpBufferTime;
+            }
+            else
+            {
+                if (jumpBufferCounter > 0f)
+                    jumpBufferCounter -= Time.deltaTime;
+            }
 
-        //Walk Delay
-        if (inputActions.Player.Attack.WasReleasedThisFrame())
-        {
-            walkDelayCounter = walkDelay;
-            speed = tempSpeed;
-            hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
-        }
-        else if(inputActions.Player.Attack.IsPressed())
-        {
-            walkDelayCounter -= Time.deltaTime;
-        }
+            //Walk Delay
+            if (inputActions.Player.Attack.WasReleasedThisFrame())
+            {
+                walkDelayCounter = walkDelay;
+                speed = tempSpeed;
+                hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
+            }
+            else if (inputActions.Player.Attack.IsPressed())
+            {
+                walkDelayCounter -= Time.deltaTime;
+            }
 
-        //Walk
-        if (walkDelayCounter <= 0f && inputActions.Player.Attack.IsPressed())
+            //Walk
+            if (walkDelayCounter <= 0f && inputActions.Player.Attack.IsPressed())
+            {
+                speed = walkSpeed;
+                hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 1);
+            }
+
+            //Roll
+            if (inputActions.Player.Roll.WasPressedThisFrame())
+            {
+                rb.velocity = Vector2.zero;
+                currentState = playerState.rolling;
+                rollCounter = rollDuration;
+                rolliFramesCounter = rolliFrames;
+            }
+
+            //Damaged IFrames after knockback
+            else if(damagediFramesCounter <= 0 && walkDelayCounter > 0)
+            {
+                hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //DEBUG
+                hitbox.GetComponent<BoxCollider2D>().enabled = true;
+            }
+        }
+        //-----ROLL STATE-----
+        else if(currentState == playerState.rolling)
         {
-            speed = walkSpeed;
-            hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 1);
+            rollCounter -= Time.deltaTime;
+            rolliFramesCounter -= Time.deltaTime;
+
+            float direction;
+            if (GetComponent<SpriteRenderer>().flipX) direction = 1;
+            else direction = -1;
+
+            rb.velocity = new Vector2(Mathf.Lerp(0, rollSpeed, 1 - Mathf.Pow(1 - (rollCounter / rollDuration), 3)) * direction, rb.velocity.y);
+
+            if (rollCounter <= 0)
+            {
+                currentState = playerState.moving;
+            }
+            if(rolliFramesCounter > 0)
+            {
+                hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later
+                hitbox.GetComponent<BoxCollider2D>().enabled = false;
+            }
+            else
+            {
+                if (damagediFramesCounter <= 0)
+                {
+                    hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //DEBUG
+                    hitbox.GetComponent<BoxCollider2D>().enabled = true;
+                }
+            }
+        }
+        //-----DAMAGED STATE-----
+        else if(currentState == playerState.damaged)
+        {
+            float direction;
+            if (GetComponent<SpriteRenderer>().flipX) direction = 1;
+            else direction = -1;
+
+            hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later
+
+            //knockback
+            rb.velocity = new Vector2(Mathf.Lerp(0, knockbackStrength, 1 - Mathf.Pow(1 - (damagedDurationCounter / damagedDuration), 3)) * -direction, rb.velocity.y);
+
+            if (damagedDurationCounter <= 0)
+            {
+                currentState = playerState.moving;
+            }
+        }
+        if(damagedDurationCounter >= 0)
+        {
+            damagedDurationCounter -= Time.deltaTime;
+        }
+        if (damagediFramesCounter > 0)
+        {
+            damagediFramesCounter -= Time.deltaTime;
+            hitbox.GetComponent<BoxCollider2D>().enabled = false;
         }
 
     }
 
     void FixedUpdate()
     {
-        Vector3 easeVelocity = rb.velocity;
-        easeVelocity.y = rb.velocity.y;
-        easeVelocity.z = 0.0f;
-        easeVelocity.x *= 0.75f;
+        if (currentState == playerState.moving)
+        {
+            Vector3 easeVelocity = rb.velocity;
+            easeVelocity.y = rb.velocity.y;
+            easeVelocity.z = 0.0f;
+            easeVelocity.x *= 0.75f;
 
-        float h = moveVal.x; // Direction (Left/Right)
+            float h = moveVal.x; // Direction (Left/Right)
 
-        if (grounded)
-            rb.velocity = easeVelocity;
+            if (grounded)
+                rb.velocity = easeVelocity;
 
-        rb.AddForce((Vector2.right * speed) * h); //Increases speed
-        rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x, -maxSpeed, maxSpeed), rb.velocity.y); //Limits the player's speed
+            if (h > 0) GetComponent<SpriteRenderer>().flipX = true;
+            if (h < 0) GetComponent<SpriteRenderer>().flipX = false;
 
+            rb.AddForce((Vector2.right * speed) * h); //Increases speed
+            rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x, -maxSpeed, maxSpeed), rb.velocity.y); //Limits the player's speed
+        }
     }
 
     private void OnEnable()
@@ -145,4 +249,16 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Disable();
     }
 
+    public void setDamageState()
+    {
+        rb.velocity = Vector2.zero;
+        currentState = playerState.damaged;
+        damagedDurationCounter = damagedDuration;
+        damagediFramesCounter = damagediFrames;
+    }
+
+    public void knockback()
+    {
+
+    }
 }
