@@ -12,7 +12,8 @@ public class PlayerMovement : MonoBehaviour
         rolling,
         parrying,
         damaged,
-        dead
+        dead,
+        inCutscene
     }
     public playerState currentState;
 
@@ -150,12 +151,17 @@ public class PlayerMovement : MonoBehaviour
                 rollCounter = rollDuration;
                 rolliFramesCounter = rolliFrames;
             }
-
             //Damaged IFrames after knockback
             else if(damagediFramesCounter <= 0 && walkDelayCounter > 0)
             {
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //DEBUG
                 hitbox.GetComponent<BoxCollider2D>().enabled = true;
+            }
+
+            //Interaction
+            if (inputActions.Player.Interact.WasPressedThisFrame())
+            {
+                //Debug.Log("Interact button pressed");
             }
         }
         //-----ROLL STATE-----
@@ -215,6 +221,15 @@ public class PlayerMovement : MonoBehaviour
             hitbox.GetComponent<BoxCollider2D>().enabled = false;
         }
 
+        //-----CUTSCENE STATE-----
+        else if(currentState == playerState.inCutscene)
+        {
+            if (inputActions.Player.Jump.WasPressedThisFrame())
+            {
+                FindObjectOfType<DialogueManager>().DisplayNextSentence();
+            }
+        }
+
     }
 
     void FixedUpdate()
@@ -257,8 +272,21 @@ public class PlayerMovement : MonoBehaviour
         damagediFramesCounter = damagediFrames;
     }
 
-    public void knockback()
+    public IEnumerator setCutsceneState(float delay)
     {
-
+        currentState = playerState.inCutscene;
+        yield return new WaitForSeconds(delay);
+        rb.velocity = Vector2.zero;
     }
+
+    public Vector2 getMoveVal()
+    {
+        return moveVal;
+    }
+
+    public InputActions getInputActions()
+    {
+        return inputActions;
+    }
+
 }
