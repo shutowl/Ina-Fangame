@@ -49,6 +49,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpBufferTime = 0.2f;
     private float jumpBufferCounter;
 
+    private float cutsceneDelay;
+
     public bool grounded;
 
     private Rigidbody2D rb;
@@ -163,6 +165,16 @@ public class PlayerMovement : MonoBehaviour
             {
                 //Debug.Log("Interact button pressed");
             }
+
+            //Fire
+            if (inputActions.Player.Fire.WasPressedThisFrame())
+            {
+                FindObjectOfType<AOMovement>().Charge();
+            }
+            if (inputActions.Player.Fire.WasReleasedThisFrame())
+            {
+                FindObjectOfType<AOMovement>().Fire();
+            }
         }
         //-----ROLL STATE-----
         else if(currentState == playerState.rolling)
@@ -192,6 +204,16 @@ public class PlayerMovement : MonoBehaviour
                     hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //DEBUG
                     hitbox.GetComponent<BoxCollider2D>().enabled = true;
                 }
+            }
+
+            //Fire
+            if (inputActions.Player.Fire.WasPressedThisFrame())
+            {
+                FindObjectOfType<AOMovement>().Charge();
+            }
+            if (inputActions.Player.Fire.WasReleasedThisFrame())
+            {
+                FindObjectOfType<AOMovement>().Fire();
             }
         }
         //-----DAMAGED STATE-----
@@ -224,9 +246,18 @@ public class PlayerMovement : MonoBehaviour
         //-----CUTSCENE STATE-----
         else if(currentState == playerState.inCutscene)
         {
-            if (inputActions.Player.Jump.WasPressedThisFrame())
+            if (cutsceneDelay < 0)
             {
-                FindObjectOfType<DialogueManager>().DisplayNextSentence();
+                if (inputActions.Player.Confirm.WasPressedThisFrame())
+                {
+                    FindObjectOfType<DialogueManager>().DisplayNextSentence();
+                }
+                if(grounded)
+                    rb.velocity = Vector2.zero;
+            }
+            if(cutsceneDelay >= 0)
+            {
+                cutsceneDelay -= Time.deltaTime;
             }
         }
 
@@ -272,11 +303,10 @@ public class PlayerMovement : MonoBehaviour
         damagediFramesCounter = damagediFrames;
     }
 
-    public IEnumerator setCutsceneState(float delay)
+    public void setCutsceneState(float delay)
     {
         currentState = playerState.inCutscene;
-        yield return new WaitForSeconds(delay);
-        rb.velocity = Vector2.zero;
+        cutsceneDelay = delay;            
     }
 
     public Vector2 getMoveVal()

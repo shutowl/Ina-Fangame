@@ -9,6 +9,7 @@ public class DialogueManager : MonoBehaviour
 {
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
+    public Image nextImage;
 
     [Header("Position")]
     public Vector2 shownPosition;
@@ -61,6 +62,7 @@ public class DialogueManager : MonoBehaviour
         {
             StopCoroutine(lastRoutine);
             dialogueText.text = lastSentence;
+            nextImage.enabled = true;
             typing = false;
             return;
         }
@@ -118,6 +120,7 @@ public class DialogueManager : MonoBehaviour
     IEnumerator TypeSentence(string sentence, float delay)
     {
         typing = true;
+        nextImage.enabled = false;
 
         dialogueText.text = "";
         foreach(char letter in sentence.ToCharArray())
@@ -127,6 +130,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         typing = false;
+        nextImage.enabled = true;
     }
 
 }

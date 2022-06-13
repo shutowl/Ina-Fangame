@@ -20,14 +20,16 @@ public class DialogueTrigger : MonoBehaviour
     //Player passes through trigger point
     private void OnTriggerEnter2D(Collider2D col)
     {
+        //Area trigger
         if(tag != "NPC" && col.tag == "Player")
         {
-            StartCoroutine(TriggerDialogue(1f));
+            StartCoroutine(TriggerDialogue(cutSceneDelay));
             GetComponent<BoxCollider2D>().enabled = false;
 
             //Player in cutscene mode
-            StartCoroutine(col.GetComponent<PlayerMovement>().setCutsceneState(cutSceneDelay));
+            col.GetComponent<PlayerMovement>().setCutsceneState(cutSceneDelay + 0.2f);
         }
+        //NPC trigger
         if (tag == "NPC" && col.tag == "Player")
         {
             nearNPC = true;
@@ -55,7 +57,7 @@ public class DialogueTrigger : MonoBehaviour
                     StartCoroutine(TriggerDialogue(0f));
 
                     //Player in cutscene mode
-                    StartCoroutine(FindObjectOfType<PlayerMovement>().setCutsceneState(0f));
+                    FindObjectOfType<PlayerMovement>().setCutsceneState(0f);
                 }
             }
         }

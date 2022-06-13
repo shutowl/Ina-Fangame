@@ -28,6 +28,7 @@ public class PlayerHealth : MonoBehaviour
         if(curHealth <= 0)
         {
             healthText.text = "Health: Passed out";
+            player.currentState = PlayerMovement.playerState.dead;
         }
         else if (Keyboard.current.digit1Key.wasPressedThisFrame)
         {
