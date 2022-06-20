@@ -39,14 +39,14 @@ public class AOMovement : MonoBehaviour
         //Charge and Fire Mechanics
         if (isCharging)
         {
-            if (target.GetComponent<SpriteRenderer>().flipX == true) { offset = new Vector3(flip +0.5f, 0, 0); }
-            else { offset = new Vector3(-flip -0.5f, 0, 0); }
+            if (target.GetComponent<SpriteRenderer>().flipX == true) { offset = new Vector3(flip +0.25f, 0, 0); }
+            else { offset = new Vector3(-flip -0.25f, 0, 0); }
 
             if (chargeTime < 3.0f)
                 chargeTime += Time.deltaTime;
         }
 
-        if (chargeTime > 0f && chargeTime < 1.0f) chargeLevel = 0;
+        if (chargeTime > 0f && chargeTime < 1f) chargeLevel = 0;
         else if (chargeTime > 1f && chargeTime < 2f) chargeLevel = 1;
         else if (chargeTime > 2f && chargeTime < 3f) chargeLevel = 2;
         else if (chargeTime > 3f) chargeLevel = 3;
@@ -59,7 +59,7 @@ public class AOMovement : MonoBehaviour
     public void Charge()
     {
         firePosDelayCounter = firePosDelay;
-        smoothSpeed = savedSpeed * 2;
+        smoothSpeed = savedSpeed * 3;
         isCharging = true;
     }
     

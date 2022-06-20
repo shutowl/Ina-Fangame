@@ -8,14 +8,15 @@ TagManager:
   - Hazard
   - Hitbox
   - NPC
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 

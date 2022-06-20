@@ -105,25 +105,10 @@ public class PlayerMovement : MonoBehaviour
                 rb.gravityScale = gravityScale;
             }
 
-            //Coyote Time
-            if (grounded)
-            {
-                coyoteTimeCounter = coyoteTime;
-            }
-            else
-            {
-                coyoteTimeCounter -= Time.deltaTime;
-            }
-
             //Jump Buffer
             if (inputActions.Player.Jump.WasPressedThisFrame())
             {
                 jumpBufferCounter = jumpBufferTime;
-            }
-            else
-            {
-                if (jumpBufferCounter > 0f)
-                    jumpBufferCounter -= Time.deltaTime;
             }
 
             //Walk Delay
@@ -132,10 +117,6 @@ public class PlayerMovement : MonoBehaviour
                 walkDelayCounter = walkDelay;
                 speed = tempSpeed;
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
-            }
-            else if (inputActions.Player.Attack.IsPressed())
-            {
-                walkDelayCounter -= Time.deltaTime;
             }
 
             //Walk
@@ -259,6 +240,35 @@ public class PlayerMovement : MonoBehaviour
             {
                 cutsceneDelay -= Time.deltaTime;
             }
+        }
+
+        //------DEAD STATE-----
+        else if(currentState == playerState.dead)
+        {
+            rb.velocity = Vector2.zero;
+            //Play death animation
+        }
+
+        //-----TIMERS-----
+
+        //Coyote Time
+        if (grounded)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        //Jump Buffer
+        if (jumpBufferCounter > 0f)
+            jumpBufferCounter -= Time.deltaTime;
+
+        //Walk
+        if (inputActions.Player.Attack.IsPressed())
+        {
+            walkDelayCounter -= Time.deltaTime;
         }
 
     }
