@@ -15,6 +15,9 @@ public class AOMovement : MonoBehaviour
     bool isCharging = false;
     private float chargeTime;
     [SerializeField] private int chargeLevel;
+    private int direction;
+
+    public GameObject[] bullets = new GameObject[4];
 
     void Start()
     {
@@ -46,13 +49,16 @@ public class AOMovement : MonoBehaviour
                 chargeTime += Time.deltaTime;
         }
 
-        if (chargeTime > 0f && chargeTime < 1f) chargeLevel = 0;
-        else if (chargeTime > 1f && chargeTime < 2f) chargeLevel = 1;
-        else if (chargeTime > 2f && chargeTime < 3f) chargeLevel = 2;
+        if (chargeTime > 0f && chargeTime <= 0.5f) chargeLevel = 0;
+        else if (chargeTime > 0.5f && chargeTime <= 2f) chargeLevel = 1;
+        else if (chargeTime > 2f && chargeTime <= 3f) chargeLevel = 2;
         else if (chargeTime > 3f) chargeLevel = 3;
 
         if (firePosDelayCounter > 0)
             firePosDelayCounter -= Time.deltaTime;
+
+        if(offset.x > 0) direction = 1;
+        else direction = -1;
 
     }
 
@@ -71,15 +77,21 @@ public class AOMovement : MonoBehaviour
         {
             case 0:
                 Debug.Log("Fired Lv 0 shot");   //small spammable projectile
+                //instantiate a bullet in AO's direction and position
+                Instantiate(bullets[0], target.position + offset,  Quaternion.Euler(0, 0, direction * 270f));
                 break;
             case 1:
-                Debug.Log("Fired Lv 1 shot");   //faster projectile
+                Debug.Log("Fired Lv 1 shot");   //slower but stronger projectile
+                Instantiate(bullets[1], target.position + offset, Quaternion.Euler(0, 0, direction * 270f));   
                 break;
             case 2:
-                Debug.Log("Fired Lv 2 shot");   //
+                Debug.Log("Fired Lv 2 shot");   //piercing laser
+                
                 break;
             case 3:
                 Debug.Log("Fired Lv 3 shot");   //piercing laser
+                //should quickly ease in, then slowly ease out within 1 second
+                //Draw a line/ray from AO to closest wall or to edge of screen?
                 break;
         }
         chargeTime = 0f;

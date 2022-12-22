@@ -22,12 +22,18 @@ public class DialogueManager : MonoBehaviour
     private bool typing;
     private bool moving;
     private string lastSentence;
+    private float canvasWidth;
+    private float canvasHeight;
     Coroutine lastRoutine = null;
 
     void Start()
     {
         sentences = new Queue<string>();
         textSpeeds = new Queue<float>();
+
+        //Get Canvas width/height to place text in center
+        canvasWidth = GetComponentInParent<RectTransform>().position.x; //Temp solution till I get internet and find out how to get width
+        //canvasHeight = GetComponentInParent<RectTransform>().getHeight();
     }
 
     public void StartDialogue(Dialogue dialogue)
@@ -44,6 +50,32 @@ public class DialogueManager : MonoBehaviour
         {
             textSpeeds.Enqueue(textSpeed);
         }
+
+        if (moving)
+        {
+            StopCoroutine(lastRoutine);
+            transform.position = hiddenPosition;
+            moving = false;
+        }
+        lastRoutine = StartCoroutine(moveDialogueBox(shownPosition, 1f));
+
+        DisplayNextSentence();
+    }
+
+    public void StartDialogue(Dialogue dialogue, int start, int end)
+    {
+        nameText.text = dialogue.name;
+
+        sentences.Clear();
+
+        for(int i = start; i < end; i++){
+            sentences.Enqueue(dialogue.sentences[i]);
+            if(dialogue.textSpeeds.Length > i)
+                textSpeeds.Enqueue(dialogue.textSpeeds[i]);
+            else
+                textSpeeds.Enqueue(defaultTextSpeed);
+        }
+
 
         if (moving)
         {
@@ -92,11 +124,11 @@ public class DialogueManager : MonoBehaviour
 
     public void setShownPosition()
     {
-        shownPosition = new Vector2(GetComponent<RectTransform>().position.x, GetComponent<RectTransform>().position.y);
+        shownPosition = new Vector2(canvasWidth, GetComponent<RectTransform>().position.y);
     }
     public void setHiddenPosition()
     {
-        hiddenPosition = new Vector2(GetComponent<RectTransform>().position.x, GetComponent<RectTransform>().position.y);
+        hiddenPosition = new Vector2(canvasWidth, GetComponent<RectTransform>().position.y);
     }
 
     //easeOutQuint Function: https://easings.net/#easeOutQuart

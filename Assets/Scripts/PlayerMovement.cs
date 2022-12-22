@@ -10,12 +10,14 @@ public class PlayerMovement : MonoBehaviour
         moving,
         attacking,
         rolling,
+        sliding,
         parrying,
         damaged,
         dead,
         inCutscene
     }
     public playerState currentState;
+    //Animation has variable PlayerAnimState based on int 
 
     [Header ("Main Variables")]
     public float speed = 50f;               //How fast the player accelerates
@@ -36,6 +38,12 @@ public class PlayerMovement : MonoBehaviour
     public float rolliFrames = 0.3f;        //How many seconds the player is invincible during a roll
     private float rolliFramesCounter;
 
+    [Header("Sliding")]
+    public float slideSpeed = 5f;
+    public float slideDuration = 1f;
+    public Vector2 hitboxOffset;            //x = box collider y size offset, y = y position offset
+    private float slideCounter;
+
     [Header("Damaged")]
     public float knockbackStrength = 5f;
     public float damagedDuration = 1f;
@@ -54,7 +62,9 @@ public class PlayerMovement : MonoBehaviour
     public bool grounded;
 
     private Rigidbody2D rb;
+    public float hitboxSize = 0.35f;
     public SpriteRenderer hitbox;
+    public Transform hitboxTransform;
 
     //Store Input Values
     private InputActions inputActions;
@@ -134,6 +144,13 @@ public class PlayerMovement : MonoBehaviour
                 rollCounter = rollDuration;
                 rolliFramesCounter = rolliFrames;
             }
+            //Slide
+            if(grounded && inputActions.Player.Slide.WasPressedThisFrame())
+            {
+                rb.velocity = Vector2.zero;
+                currentState = playerState.sliding;
+                slideCounter = slideDuration;
+            }
             //Damaged IFrames after knockback
             else if(damagediFramesCounter <= 0 && walkDelayCounter > 0)
             {
@@ -145,6 +162,7 @@ public class PlayerMovement : MonoBehaviour
             if (inputActions.Player.Interact.WasPressedThisFrame())
             {
                 //Debug.Log("Interact button pressed");
+                //Code done in DialogueTrigger.cs
             }
 
             //Fire
@@ -156,6 +174,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 FindObjectOfType<AOMovement>().Fire();
             }
+
+            resetHitbox();
         }
         //-----ROLL STATE-----
         else if(currentState == playerState.rolling)
@@ -187,7 +207,38 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
-            //Fire
+            //Enables AO abilities during roll
+            if (inputActions.Player.Fire.WasPressedThisFrame())
+            {
+                FindObjectOfType<AOMovement>().Charge();
+            }
+            if (inputActions.Player.Fire.WasReleasedThisFrame())
+            {
+                FindObjectOfType<AOMovement>().Fire();
+            }
+        }
+        //-----SLIDE STATE-----
+        else if(currentState == playerState.sliding)
+        {
+            slideCounter -= Time.deltaTime;
+            hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later (turn on hitbox)
+            hitboxTransform.position = new Vector2(transform.position.x, transform.position.y + hitboxOffset.y);  //lower hitbox
+            hitboxTransform.localScale = new Vector2(hitboxSize, hitboxSize + hitboxOffset.x);   //squish size
+
+            float direction;
+            if (GetComponent<SpriteRenderer>().flipX) direction = 1;
+            else direction = -1;
+
+            rb.velocity = new Vector2(slideSpeed * direction, rb.velocity.y);   //constant movement
+
+            if (slideCounter <= 0)
+            {
+                currentState = playerState.moving;
+                resetHitbox();
+
+            }
+
+            //Enables AO abilities during slide
             if (inputActions.Player.Fire.WasPressedThisFrame())
             {
                 FindObjectOfType<AOMovement>().Charge();
@@ -211,6 +262,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (damagedDurationCounter <= 0)
             {
+                resetHitbox();
                 currentState = playerState.moving;
             }
         }
@@ -227,14 +279,15 @@ public class PlayerMovement : MonoBehaviour
         //-----CUTSCENE STATE-----
         else if(currentState == playerState.inCutscene)
         {
+            hitbox.GetComponent<BoxCollider2D>().enabled = false;
+            rb.velocity = new Vector2(0, rb.velocity.y);
+
             if (cutsceneDelay < 0)
             {
                 if (inputActions.Player.Confirm.WasPressedThisFrame())
                 {
                     FindObjectOfType<DialogueManager>().DisplayNextSentence();
                 }
-                if(grounded)
-                    rb.velocity = Vector2.zero;
             }
             if(cutsceneDelay >= 0)
             {
@@ -327,6 +380,13 @@ public class PlayerMovement : MonoBehaviour
     public InputActions getInputActions()
     {
         return inputActions;
+    }
+
+    private void resetHitbox(){
+        hitboxTransform.position = transform.position;    //reset hitbox position
+        hitboxTransform.localScale = new Vector2(hitboxSize, hitboxSize);   //reset size
+        //hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //turn off color
+        hitbox.GetComponent<BoxCollider2D>().enabled = true;    //turn on hitbox
     }
 
 }

@@ -9,6 +9,7 @@ TagManager:
   - Hitbox
   - NPC
   - Enemy
+  - Player Bullet
   layers:
   - Default
   - TransparentFX
