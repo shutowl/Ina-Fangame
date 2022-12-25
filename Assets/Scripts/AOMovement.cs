@@ -47,19 +47,27 @@ public class AOMovement : MonoBehaviour
 
             if (chargeTime < 3.0f)
                 chargeTime += Time.deltaTime;
+
+            //DEBUG DrawRay
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(direction, 0), 100f, LayerMask.GetMask("Ground")); //layer mask "Ground" = 7
+            if (hit.collider != null)
+            {
+                Debug.Log("Raycast: " + hit.point);
+                Debug.DrawRay(transform.position, new Vector2(hit.distance * direction, 0), Color.red);
+            }
         }
 
         if (chargeTime > 0f && chargeTime <= 0.5f) chargeLevel = 0;
-        else if (chargeTime > 0.5f && chargeTime <= 2f) chargeLevel = 1;
-        else if (chargeTime > 2f && chargeTime <= 3f) chargeLevel = 2;
-        else if (chargeTime > 3f) chargeLevel = 3;
+        else if (chargeTime > 0.5f && chargeTime <= 1.5f) chargeLevel = 1;
+        else if (chargeTime > 1.5f && chargeTime <= 3f) chargeLevel = 2;
+        else if (chargeTime > 3f) chargeLevel = 2;
 
+        //Timers
         if (firePosDelayCounter > 0)
             firePosDelayCounter -= Time.deltaTime;
 
         if(offset.x > 0) direction = 1;
         else direction = -1;
-
     }
 
     public void Charge()
@@ -86,16 +94,16 @@ public class AOMovement : MonoBehaviour
                 break;
             case 2:
                 Debug.Log("Fired Lv 2 shot");   //piercing laser
-                
+                Instantiate(bullets[2], target.position + offset, Quaternion.Euler(0, 0, direction * 270f));
                 break;
-            case 3:
-                Debug.Log("Fired Lv 3 shot");   //piercing laser
-                //should quickly ease in, then slowly ease out within 1 second
-                //Draw a line/ray from AO to closest wall or to edge of screen?
+            default:
+                Debug.Log("Fired Lv 3 shot");   //stronger piercing laser
+                Instantiate(bullets[2], target.position + offset, Quaternion.Euler(0, 0, direction * 270f));
                 break;
         }
         chargeTime = 0f;
 
         //offset = savedOffset;
     }
+
 }

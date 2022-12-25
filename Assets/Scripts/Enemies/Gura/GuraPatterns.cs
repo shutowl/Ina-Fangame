@@ -21,6 +21,7 @@ public class GuraPatterns : MonoBehaviour
     public int density = 5;                 //Number of bullets per wave
     public float bulletOffsetRate = 0.01f;  //Rate at which angle of bullets turn
     private float bulletOffset = 0;
+    public float accelOffsetRate = 0.025f;
     private float accelOffset = 0;
 
     [Header ("Attack Duration")]
@@ -63,10 +64,10 @@ public class GuraPatterns : MonoBehaviour
             if(timer <= 0) rest();
         }
         else if(currentState == pattern.spiral2){
-            fireRate = 0.3f;
-            density = 10;
-            bulletOffsetRate = 0.05f;
-            accelOffset = 0.025f;
+            if (fireRate > 0.1f)
+                fireRate = 0.3f - accelOffset;
+            density = 6;
+            bulletOffsetRate = 0.05f + (accelOffset * 2);
 
             if(fireRateTimer > 0) fireRateTimer -= Time.deltaTime;
             else{
@@ -82,13 +83,14 @@ public class GuraPatterns : MonoBehaviour
                     bullet.GetComponent<guraBullet1>().setDirection(x,y);
                     fireRateTimer = fireRate;
                 }
-                accelOffset += 0.025f;
-                fireRate = fireRate - accelOffset;
-                bulletOffsetRate += accelOffset;
+                accelOffset += accelOffsetRate;
                 bulletOffset += bulletOffsetRate;
             }
-            
-            if(timer <= 0) rest();
+
+            if (timer <= 0){
+                fireRate = 0.3f;
+                rest();
+            }
         }
         else if(currentState == pattern.pulse){
             fireRate = 1.5f;
@@ -118,6 +120,7 @@ public class GuraPatterns : MonoBehaviour
 
             if(timer <= 0){
                 int nextState = (int)Random.Range(1,4);
+                //int nextState = 2;
                 currentState = (pattern)nextState;
                 //go back to normal attack or another pattern?
                 switch(nextState){
@@ -144,6 +147,7 @@ public class GuraPatterns : MonoBehaviour
 
     void rest(){
         //bulletOffset = 0;
+        accelOffset = 0;
         timer = restPeriod;
         currentState = pattern.rest;
     }
