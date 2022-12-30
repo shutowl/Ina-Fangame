@@ -16,8 +16,8 @@ public class aoBullet : MonoBehaviour
     public float lifeTime = 3f;
     private float lifeTimeTimer = 0f;
 
-    private float y;
-    private float direction;
+    private Vector2 position;
+    private Vector2 direction;
     public float lv2Acceleration = 0.01f;
     private float lv2Speed = 0;
 
@@ -32,10 +32,11 @@ public class aoBullet : MonoBehaviour
     {
         lifeTimeTimer = lifeTime;
 
-        y = GetComponent<Transform>().position.y;
+        position = GetComponent<Transform>().position;
 
-        if(FindObjectOfType<AOMovement>().offset.x > 0) direction = 1;
-        else direction = -1;
+        direction = FindObjectOfType<AOMovement>().getDirection();
+        if (FindObjectOfType<AOMovement>().offset.x > 0) direction.x = 1;
+        else direction.x = -1;
 
         if (bulletLevel == type.level3) { 
             lr = GetComponent<LineRenderer>();
@@ -51,18 +52,22 @@ public class aoBullet : MonoBehaviour
     void Update()
     {
         //Bullet moves at a fast, constant speed
-        if(bulletLevel == type.level1){
-            GetComponent<Transform>().position = new Vector2(transform.position.x + (direction * speed * Time.deltaTime), y);
+        if (bulletLevel == type.level1) {
+            if (direction.y > 0) { GetComponent<Transform>().position = new Vector2(position.x, transform.position.y + (direction.y * speed * Time.deltaTime)); }    //Fires up
+            else GetComponent<Transform>().position = new Vector2(transform.position.x + (direction.x * speed * Time.deltaTime), position.y);                       //Fires left/right
         }
         //Bullet starts slow, but speeds up
-        else if(bulletLevel == type.level2){
-            GetComponent<Transform>().position = new Vector2(transform.position.x + (direction * (speed * Time.deltaTime + lv2Speed)), y);
+        else if (bulletLevel == type.level2) {
+            if (direction.y > 0) { GetComponent<Transform>().position = new Vector2(position.x, transform.position.y + (direction.y * (speed * Time.deltaTime + lv2Speed))); }
+            else { GetComponent<Transform>().position = new Vector2(transform.position.x + (direction.x * (speed * Time.deltaTime + lv2Speed)), position.y); }
             lv2Speed += lv2Acceleration;
         }
         //Shoots a piercing laser
-        else{
+        else {
             //Draw ray or line to wall or edge of screen
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(direction, 0), 100f, LayerMask.GetMask("Ground"));
+            RaycastHit2D hit;
+            if (direction.y > 0) { hit = Physics2D.Raycast(transform.position, new Vector2(0, direction.y), 100f, LayerMask.GetMask("Ground")); }
+            else { hit = Physics2D.Raycast(transform.position, new Vector2(direction.x, 0), 100f, LayerMask.GetMask("Ground")); }
             //Draw laser
             laserPositions[0] = GetComponent<Transform>().position;
             laserPositions[1] = hit.point;
@@ -88,9 +93,16 @@ public class aoBullet : MonoBehaviour
         List<Vector2> edges = new();
 
         edges.Add(Vector2.zero);
-        edges.Add(new Vector2(0, (lr.GetPosition(1).x - lr.GetPosition(0).x) * direction));
-        Debug.Log(lr.GetPosition(0));
-        Debug.Log(lr.GetPosition(1));
+        if(direction.y > 0)
+        {
+            edges.Add(new Vector2(0, (lr.GetPosition(1).y - lr.GetPosition(0).y) * direction.y));
+        }
+        else
+        {
+            edges.Add(new Vector2(0, (lr.GetPosition(1).x - lr.GetPosition(0).x) * direction.x));
+        }
+        //Debug.Log(lr.GetPosition(0));
+        //Debug.Log(lr.GetPosition(1));
 
         edgeCollider.SetPoints(edges);
     }

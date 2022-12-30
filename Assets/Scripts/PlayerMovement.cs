@@ -180,6 +180,9 @@ public class PlayerMovement : MonoBehaviour
         //-----ROLL STATE-----
         else if(currentState == playerState.rolling)
         {
+            if (rollCounter >= rollDuration - 0.05) //Fixes a bug where jumping and rolling on the same frame makes player roll upwards
+                rb.velocity = Vector2.zero;
+
             rollCounter -= Time.deltaTime;
             rolliFramesCounter -= Time.deltaTime;
 
