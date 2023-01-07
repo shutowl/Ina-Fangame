@@ -13,7 +13,6 @@ public class AOMovement : MonoBehaviour
     private float firePosDelayCounter = -1;
     public float chargeBulletFireRate = 0.3f;   //Fire rate of lv0 bullets when player is charging
     private float chargeBulletFireRateTimer = 0f;
-    private float flip;
     bool isCharging = false;
     private float chargeTime;
     [SerializeField] private int chargeLevel;
@@ -23,7 +22,6 @@ public class AOMovement : MonoBehaviour
 
     void Start()
     {
-        flip = offset.x;
         savedOffset = offset;
         savedSpeed = smoothSpeed;
     }
@@ -31,7 +29,9 @@ public class AOMovement : MonoBehaviour
     void Update()
     {
         direction = FindObjectOfType<PlayerMovement>().getInputActions().Player.Move.ReadValue<Vector2>();
-        Debug.Log(direction);
+        if (target.GetComponent<SpriteRenderer>().flipX) direction.x = 1;
+        else direction.x = -1;
+        //Debug.Log(direction);
     }
 
     void FixedUpdate()
@@ -42,20 +42,18 @@ public class AOMovement : MonoBehaviour
 
         if (!isCharging && firePosDelayCounter <= 0)
         {
-            if (target.GetComponent<SpriteRenderer>().flipX) { offset = new Vector3(flip, savedOffset.y, 0); }
-            else { offset = new Vector3(flip, savedOffset.y, 0); }
+            offset = new Vector3(-direction.x, savedOffset.y, 0);
             smoothSpeed = savedSpeed;
         }
 
         //Charge and Fire Mechanics
         if (isCharging)
         {
-            if(direction.y > 0)
+            if(direction.y > 0) //aim upwards
             {
                 offset = new Vector3(0, 1.25f, 0);
             }
-            else if (target.GetComponent<SpriteRenderer>().flipX) { offset = new Vector3(flip +0.25f, 0, 0); }
-            else { offset = new Vector3(-flip -0.25f, 0, 0); }
+            else { offset = new Vector3(direction.x * 1.25f, 0, 0); }  //aim left
 
             if (chargeTime < 3.0f)
                 chargeTime += Time.deltaTime;
@@ -73,7 +71,7 @@ public class AOMovement : MonoBehaviour
             if (chargeBulletFireRateTimer <= 0)
             {
                 chargeBulletFireRateTimer = chargeBulletFireRate;
-                Instantiate(bullets[0], target.position + offset, Quaternion.Euler(0, 0, direction.x * 270f));
+                Instantiate(bullets[0], target.position + offset, Quaternion.Euler(new Vector3(0, 0, 90 * offset.x)));
             }
         }
 
@@ -107,19 +105,19 @@ public class AOMovement : MonoBehaviour
                 //Debug.Log("Fired Lv 0 shot");   //small spammable projectile
                 //instantiate a bullet in AO's direction and position
                 if (chargeBulletFireRateTimer <= 0)
-                    Instantiate(bullets[0], target.position + offset,  Quaternion.Euler(0, 0, direction.x * 270f));
+                    Instantiate(bullets[0], target.position + offset, Quaternion.Euler(new Vector3(0, 0, 90 * offset.x)));
                 break;
             case 1:
                 //Debug.Log("Fired Lv 1 shot");   //slower but stronger projectile
-                Instantiate(bullets[1], target.position + offset, Quaternion.Euler(0, 0, direction.x * 270f));   
+                Instantiate(bullets[1], target.position + offset, Quaternion.identity);   
                 break;
             case 2:
                 //Debug.Log("Fired Lv 2 shot");   //piercing laser
-                Instantiate(bullets[2], target.position + offset, Quaternion.Euler(0, 0, direction.x * 270f));
+                Instantiate(bullets[2], target.position + offset, Quaternion.identity);
                 break;
             default:
                 //Debug.Log("Fired Lv 3 shot");   //stronger piercing laser
-                Instantiate(bullets[2], target.position + offset, Quaternion.Euler(0, 0, direction.x * 270f));
+                Instantiate(bullets[2], target.position + offset, Quaternion.identity);
                 break;
         }
         chargeTime = 0f;

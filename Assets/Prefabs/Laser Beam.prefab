@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7072925024047873550}
   - component: {fileID: 2395232633363393018}
-  - component: {fileID: 1772293814253028998}
+  - component: {fileID: 6607671267921404015}
   - component: {fileID: -6359098480457863904}
   m_Layer: 0
   m_Name: Laser Beam
@@ -133,8 +133,8 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!68 &1772293814253028998
-EdgeCollider2D:
+--- !u!61 &6607671267921404015
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -147,14 +147,18 @@ EdgeCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.0001, y: 0.0001}
   m_EdgeRadius: 0
-  m_Points:
-  - {x: 41.944622, y: -1.130653}
-  - {x: 42.944622, y: -1.130653}
-  m_AdjacentStartPoint: {x: 0, y: 0}
-  m_AdjacentEndPoint: {x: 0, y: 0}
-  m_UseAdjacentStartPoint: 0
-  m_UseAdjacentEndPoint: 0
 --- !u!114 &-6359098480457863904
 MonoBehaviour:
   m_ObjectHideFlags: 0

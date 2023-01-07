@@ -23,7 +23,7 @@ public class aoBullet : MonoBehaviour
 
     [Header("Laser Properties")]
     private LineRenderer lr;
-    private EdgeCollider2D edgeCollider;
+    private BoxCollider2D boxCollider;
     private Vector3[] laserPositions = new Vector3[2];
     public float laserSize = 0.5f;
 
@@ -40,12 +40,14 @@ public class aoBullet : MonoBehaviour
 
         if (bulletLevel == type.level3) { 
             lr = GetComponent<LineRenderer>();
-            edgeCollider = GetComponent<EdgeCollider2D>();
+            boxCollider = GetComponent<BoxCollider2D>();
             laserPositions[0] = new Vector3(0, 0);
             laserPositions[1] = new Vector3(0, 0);
             lr.startWidth = 0;
             lr.SetPositions(laserPositions);
         }
+
+        //Debug.Log(direction);
     }
 
     // Update is called once per frame
@@ -64,6 +66,8 @@ public class aoBullet : MonoBehaviour
         }
         //Shoots a piercing laser
         else {
+            //reset rotation
+            transform.rotation = Quaternion.identity;
             //Draw ray or line to wall or edge of screen
             RaycastHit2D hit;
             if (direction.y > 0) { hit = Physics2D.Raycast(transform.position, new Vector2(0, direction.y), 100f, LayerMask.GetMask("Ground")); }
@@ -74,7 +78,7 @@ public class aoBullet : MonoBehaviour
             lr.SetPositions(laserPositions);
 
             lr.startWidth = (1 - Mathf.Pow(1 - lifeTimeTimer, 5)) * laserSize;
-            SetEdgeCollider(lr);
+            SetCollider(lr);
         }
         
         //Destroy after a certain amount of time
@@ -88,29 +92,26 @@ public class aoBullet : MonoBehaviour
 
     }
 
-    private void SetEdgeCollider(LineRenderer lr)
+    private void SetCollider(LineRenderer lr)
     {
-        List<Vector2> edges = new();
-
-        edges.Add(Vector2.zero);
-        if(direction.y > 0)
+        if(direction.y > 0) //aim up
         {
-            edges.Add(new Vector2(0, (lr.GetPosition(1).y - lr.GetPosition(0).y) * direction.y));
+            boxCollider.offset = new Vector2(0, (lr.GetPosition(1).y - lr.GetPosition(0).y) / 2); // centered between the 2 endpoints
+            boxCollider.size = new Vector2(laserSize, Mathf.Abs(lr.GetPosition(1).y - lr.GetPosition(0).y));
         }
-        else
+        else // aim left/right
         {
-            edges.Add(new Vector2(0, (lr.GetPosition(1).x - lr.GetPosition(0).x) * direction.x));
+            boxCollider.offset = new Vector2((lr.GetPosition(1).x - lr.GetPosition(0).x) / 2, 0); // centered between the 2 endpoints
+            boxCollider.size = new Vector2(Mathf.Abs(lr.GetPosition(1).x - lr.GetPosition(0).x), laserSize);
         }
-        //Debug.Log(lr.GetPosition(0));
-        //Debug.Log(lr.GetPosition(1));
 
-        edgeCollider.SetPoints(edges);
+
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         //Hits wall or exceeds lifetime
-        if(col.tag == "Ground")
+        if(bulletLevel != type.level3 && col.tag == "Ground")
         {
             Destroy(this.gameObject);
         }
