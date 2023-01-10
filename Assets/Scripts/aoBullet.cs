@@ -68,13 +68,23 @@ public class aoBullet : MonoBehaviour
         else {
             //reset rotation
             transform.rotation = Quaternion.identity;
-            //Draw ray or line to wall or edge of screen
+            //Draw ray to wall or edge of screen
             RaycastHit2D hit;
-            if (direction.y > 0) { hit = Physics2D.Raycast(transform.position, new Vector2(0, direction.y), 100f, LayerMask.GetMask("Ground")); }
-            else { hit = Physics2D.Raycast(transform.position, new Vector2(direction.x, 0), 100f, LayerMask.GetMask("Ground")); }
+            Vector2 laserDirection;
+            float laserLength = 20f;
+            if (direction.y > 0) { laserDirection = new Vector2(0, direction.y); }    //Fires up
+            else { laserDirection = new Vector2(direction.x, 0); }                    //Fires left/right
+            hit = Physics2D.Raycast(transform.position, laserDirection, laserLength, LayerMask.GetMask("Ground"));
+
             //Draw laser
             laserPositions[0] = GetComponent<Transform>().position;
-            laserPositions[1] = hit.point;
+            if (hit.point != Vector2.zero) {    //laser hits wall
+                laserPositions[1] = hit.point;
+            }
+            else {  //laser hits nothing (infinite length)
+                laserPositions[1] = laserPositions[0] + new Vector3(laserDirection.x * laserLength, laserDirection.y * laserLength);
+            }
+
             lr.SetPositions(laserPositions);
 
             lr.startWidth = (1 - Mathf.Pow(1 - lifeTimeTimer, 5)) * laserSize;

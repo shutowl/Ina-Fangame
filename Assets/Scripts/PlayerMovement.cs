@@ -219,6 +219,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 FindObjectOfType<AOMovement>().Fire();
             }
+
+            //Walk Delay
+            if (inputActions.Player.Attack.WasReleasedThisFrame())
+            {
+                walkDelayCounter = walkDelay;
+                speed = tempSpeed;
+                hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
+            }
         }
         //-----SLIDE STATE-----
         else if(currentState == playerState.sliding)
@@ -249,6 +257,14 @@ public class PlayerMovement : MonoBehaviour
             if (inputActions.Player.Fire.WasReleasedThisFrame())
             {
                 FindObjectOfType<AOMovement>().Fire();
+            }
+
+            //Walk Delay
+            if (inputActions.Player.Attack.WasReleasedThisFrame())
+            {
+                walkDelayCounter = walkDelay;
+                speed = tempSpeed;
+                hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
             }
         }
         //-----DAMAGED STATE-----
@@ -390,6 +406,23 @@ public class PlayerMovement : MonoBehaviour
         hitboxTransform.localScale = new Vector2(hitboxSize, hitboxSize);   //reset size
         //hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //turn off color
         hitbox.GetComponent<BoxCollider2D>().enabled = true;    //turn on hitbox
+    }
+
+    IEnumerator Attack(float lastDuration, float duration, int attackNum, float force, int direction)
+    {
+        rb.velocity = new Vector2(0, 0);
+        //attacking = true;
+        //movement = false;
+        yield return new WaitForSeconds(lastDuration);  //wait until last attack is finished
+        //attackDuration = duration;
+        //anim.SetInteger("attack num", attackNum);       //start next attack
+
+        if (direction != 0)                             //0 = forward
+            transform.localScale = new Vector3(direction, 1, 1);
+        if (transform.localScale.x == -1)               //move forward a bit when attacking
+            rb.AddForce(new Vector2(-force, 0));
+        else
+            rb.AddForce(new Vector2(force, 0));
     }
 
 }

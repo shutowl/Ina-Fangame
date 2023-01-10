@@ -22,18 +22,12 @@ public class DialogueManager : MonoBehaviour
     private bool typing;
     private bool moving;
     private string lastSentence;
-    private float canvasWidth;
-    private float canvasHeight;
     Coroutine lastRoutine = null;
 
     void Start()
     {
         sentences = new Queue<string>();
         textSpeeds = new Queue<float>();
-
-        //Get Canvas width/height to place text in center
-        canvasWidth = GetComponentInParent<RectTransform>().position.x; //Temp solution till I get internet and find out how to get width
-        //canvasHeight = GetComponentInParent<RectTransform>().getHeight();
     }
 
     public void StartDialogue(Dialogue dialogue)
@@ -124,11 +118,11 @@ public class DialogueManager : MonoBehaviour
 
     public void setShownPosition()
     {
-        shownPosition = new Vector2(canvasWidth, GetComponent<RectTransform>().position.y);
+        shownPosition = GetComponent<RectTransform>().localPosition;
     }
     public void setHiddenPosition()
     {
-        hiddenPosition = new Vector2(canvasWidth, GetComponent<RectTransform>().position.y);
+        hiddenPosition = GetComponent<RectTransform>().localPosition;
     }
 
     //easeOutQuint Function: https://easings.net/#easeOutQuart
@@ -137,14 +131,14 @@ public class DialogueManager : MonoBehaviour
         moving = true;
 
         float time = 0;
-        Vector2 startPosition = transform.position;
+        Vector2 startPosition = transform.localPosition;
         while (time < duration)
         {
-            transform.position = Vector2.Lerp(startPosition, targetPos, 1 - Mathf.Pow(1 - (time / duration), 5));
+            transform.localPosition = Vector2.Lerp(startPosition, targetPos, 1 - Mathf.Pow(1 - (time / duration), 5));
             time += Time.deltaTime;
             yield return null;
         }
-        transform.position = targetPos;
+        transform.localPosition = targetPos;
 
         moving = false;
     }

@@ -26,50 +26,60 @@ public class Tako : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        enabled = false;
     }
 
     void Update()
     {
         //-----MOVING STATE--------
-        if(currentState == enemyState.moving)
+        if (currentState == enemyState.moving)
         {
             rb.velocity = new Vector2(Mathf.Lerp(0, speed, 1 - Mathf.Pow(1 - (rngCounter / actionTimer), 3)) * direction, rb.velocity.y);
         }
 
         //-----JUMPING STATE------
-        else if(currentState == enemyState.jumping)
+        else if (currentState == enemyState.jumping)
         {
-            rb.AddForce(new Vector2(jumpForce/4 * direction, jumpForce));
+            rb.AddForce(new Vector2(jumpForce / 4 * direction, jumpForce));
             currentState = enemyState.idle;
         }
 
         //-----DAMAGED STATE------
-        else if(currentState == enemyState.damaged)
+        else if (currentState == enemyState.damaged)
         {
 
         }
 
-        else if(currentState == enemyState.idle)
+        else if (currentState == enemyState.idle)
         {
             if (grounded)
                 rb.velocity = Vector2.zero;
         }
 
 
-        if(rngCounter > 0)
+        if (rngCounter > 0)
         {
             rngCounter -= Time.deltaTime;
         }
         else
         {
-            rngCounter = Random.Range(1,actionTimer);
-            currentState = (enemyState)(int)Random.Range(0,2);
+            rngCounter = Random.Range(1, actionTimer);
+            currentState = (enemyState)(int)Random.Range(0, 2);
             directionRNG = Random.Range(0, 100);
 
-            if(directionRNG <= 33)
+            if (directionRNG <= 33)
             {
                 direction = -direction;
             }
         }
+    }
+
+    private void OnBecameVisible()
+    {
+        enabled = true;
+    }
+    private void OnBecameInvisible()
+    {
+        enabled = false;
     }
 }
