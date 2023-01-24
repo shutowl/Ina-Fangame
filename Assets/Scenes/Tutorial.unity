@@ -421,7 +421,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 2, y: -136}
+  m_AnchoredPosition: {x: 0, y: -136}
   m_SizeDelta: {x: 755.6226, y: 139.98163}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &626515065
@@ -439,8 +439,8 @@ MonoBehaviour:
   nameText: {fileID: 1030219184}
   dialogueText: {fileID: 1891983075}
   nextImage: {fileID: 1612449172}
-  shownPosition: {x: 0, y: -274}
-  hiddenPosition: {x: 0, y: -520}
+  shownPosition: {x: 0, y: -397}
+  hiddenPosition: {x: 0, y: -676}
   defaultTextSpeed: 0.05
 --- !u!114 &626515066
 MonoBehaviour:

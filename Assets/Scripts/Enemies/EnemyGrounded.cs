@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class EnemyGrounded : MonoBehaviour
 {
-	private Tako tako;
+	private Enemy enemy;
 
 	void Start()
 	{
-		tako = gameObject.GetComponentInParent<Tako>();
+		enemy = gameObject.GetComponentInParent<Enemy>();
 	}
 
 	//If ground collider touches the floor (tilemap)
@@ -16,7 +16,7 @@ public class EnemyGrounded : MonoBehaviour
 	{
 		if (col.tag == "Ground")
 		{
-			tako.grounded = true;
+			enemy.grounded = true;
 		}
 	}
 
@@ -25,7 +25,7 @@ public class EnemyGrounded : MonoBehaviour
 	{
 		if (col.tag == "Ground")
 		{
-			tako.grounded = true;
+			enemy.grounded = true;
 		}
 	}
 
@@ -34,7 +34,7 @@ public class EnemyGrounded : MonoBehaviour
 	{
 		if (col.tag == "Ground")
 		{
-			tako.grounded = false;
+			enemy.grounded = false;
 		}
 	}
 }

@@ -2,22 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tako : MonoBehaviour
+public class Tako : Enemy
 {
-    public enum enemyState
-    {
-        moving,
-        jumping,
-        damaged,
-        idle
-    }
-    public enemyState currentState;
-
     public float speed = 10;
     public float jumpForce = 500;
     public float actionTimer = 2;   //Actions will alternate every 1 to actionTimer seconds
     private float rngCounter = 0;
-    public bool grounded;
     private int direction = 1;
     private int directionRNG;
 
@@ -45,7 +35,7 @@ public class Tako : MonoBehaviour
         }
 
         //-----DAMAGED STATE------
-        else if (currentState == enemyState.damaged)
+        else if (currentState == enemyState.hurt)
         {
 
         }
