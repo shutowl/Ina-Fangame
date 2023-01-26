@@ -19,3 +19,4 @@ public class Enemy : MonoBehaviour
     private int currentHealth;
 
 }
+

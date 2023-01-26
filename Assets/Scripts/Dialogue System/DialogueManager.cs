@@ -162,7 +162,7 @@ public class DialogueManager : MonoBehaviour
 }
 
 [CustomEditor(typeof(DialogueManager))]
-public class customInspector : Editor
+public class CustomInspector : Editor
 {
     public override void OnInspectorGUI()
     {

@@ -12,6 +12,10 @@ public class KDTDMovement : Enemy
     private int movesLeft;
     private float rngCounter = 0f;
     private float moveTimer = 0f;
+    private Vector2 centerPos = Vector2.zero;
+    private float attackTimer;          // Used for attack timings (such as delays or charges)
+    private int attackNum = 1;          // Determines which attack is used
+    private int attackStep = 1;         // Current step of the current attack
 
     private Rigidbody2D rb;
     public GameObject player;
@@ -23,6 +27,7 @@ public class KDTDMovement : Enemy
         rb = GetComponent<Rigidbody2D>();
         enabled = false;
         currentState = enemyState.idle;
+        centerPos = Camera.main.transform.position;
     }
 
     void Update()
@@ -35,6 +40,7 @@ public class KDTDMovement : Enemy
             rb.velocity = new Vector2(Mathf.Lerp(0, speed, 1 - Mathf.Pow(2, -10 * (moveTimer / rngCounter))) * direction, rb.velocity.y);
             moveTimer -= Time.deltaTime;
             if(Mathf.Abs(rb.velocity.x) < 0.5f){
+                movesLeft--;
                 currentState = enemyState.idle;
             }
         }
@@ -43,7 +49,7 @@ public class KDTDMovement : Enemy
         //Jumps will vary between 3 types (low, medium and high)
         else if (currentState == enemyState.jumping)
         {
-            int jumpType = Random.Range(0, 3) + 1; //1, 2, or 3
+            int jumpType = Random.Range(0, 3) + 1; //1 to 3
             switch(jumpType){
                 case 1:
                     rb.AddForce(new Vector2(jumpForce / 4 * direction, jumpForce - 400));
@@ -55,21 +61,126 @@ public class KDTDMovement : Enemy
                     rb.AddForce(new Vector2(jumpForce / 4 * direction, jumpForce));
                     break;
             }
+            movesLeft--;
             currentState = enemyState.idle;
         }
 
         //-----ATTACKING STATE------
-        else if(currentState == enemyState.attacking){
-            currentState = enemyState.idle;
-
-            int attackNum = Random.Range(0,3) + 1;
+        else if(currentState == enemyState.attacking)
+        {
             //Add attack patterns here
+            switch (attackNum)
+            {
+                //Attack 1: Makes a big jump towards the player. Upon landing, create a fountain of bullets spraying everywhere
+                case 1:
+                    if(attackStep == 1)  //Charge jump (Anticipation)
+                    {
+                        attackTimer -= Time.deltaTime;
 
-            //Attack 1: Makes a big jump towards the center of the stage. Upon landing, create a fountain of bullets spraying everywhere
+                        if (attackTimer <= 0)
+                        {
+                            rb.AddForce(new Vector2((Mathf.Abs(transform.position.x - player.transform.position.x)) * 30 * direction, jumpForce));   //distance based on distance to player
+                            attackStep = 2;
+                        }
+                    }
+                    if(attackStep == 2)   //Getting in position
+                    {
+                        if(!grounded && rb.velocity.y < 0.1f)
+                        {
+                            attackTimer = 1f;
+                            attackStep = 3;
+                        }
+                    }
+                    if(attackStep == 3)   //hover in air for a bit before slamming down
+                    {
+                        attackTimer -= Time.deltaTime;
+                        rb.velocity = Vector2.zero;
 
-            //Attack 2: Summons about 3 takos around itself (maybe falls from the sky)
+                        if (attackTimer <= 0)
+                        {
+                            rb.AddForce(new Vector2(0, -jumpForce*2));  //slam down
+                            attackStep = 4;
+                        }
+                    }
+                    if(attackStep == 4)   //create bullets upon landing
+                    {
+                        if (grounded)
+                        {
+                            //create bullets
+                            Debug.Log("KDTD Leap attack finished (attack 1)");
+                            currentState = enemyState.idle;
+                        }
+                    }
+                    break;
+                //Attack 2: Summons about 3 takos around itself (maybe falls from the sky)
+                case 2:
+                    if(attackStep == 1)         //For future attacks, step 1 can be used to setup charge values like this:
+                    {
+                        attackTimer = 3f;
+                        attackStep = 2;
+                    }
+                    if(attackStep == 2)         //Summon takos after a short delay
+                    {
+                        attackTimer -= Time.deltaTime;
+                        //Enable summoning animation
 
-            //Attack 3: Goes to one side of the stage and fires 
+                        if(attackTimer <= 0)
+                        {
+                            //Spawn up to 3 takos
+                            Debug.Log("KDTD Summon Tako finished (attack 2)");
+                            currentState = enemyState.idle;
+                        }
+                    }
+                    break;
+                //Attack 3: Goes to center of stage and shakes itself, releasing projectiles
+                case 3:
+                    if(attackStep == 1)
+                    {
+                        direction = (transform.position.x < centerPos.x) ? 1 : -1;          //Faces camera (center)
+                        rb.AddForce(new Vector2(20 * direction, 50));                       //Jump towards center
+                        attackStep = 2;
+                    }
+                    if(attackStep == 2)
+                    {
+                        if (grounded)
+                        {
+                            rb.velocity = Vector2.zero;
+                            if (transform.position.x < centerPos.x + 1 && transform.position.x > centerPos.x - 1)    //Check if near enough to center
+                            {
+                                attackTimer = 1f;   //duration of delay
+                                attackStep = 3;
+                            }
+                            else
+                            {
+                                attackStep = 1; //if not, jump again
+                            }
+                        }
+                    }
+                    if(attackStep == 3) //Charge up attack
+                    {
+                        attackTimer -= Time.deltaTime;
+
+                        if(attackTimer <= 0)
+                        {
+                            attackTimer = 4f;       //duration of attack
+                            attackStep = 4;
+                        }
+
+                    }
+                    if(attackStep == 4) //Shake attack and spawn projectiles
+                    {
+                        attackTimer -= Time.deltaTime;
+                        //Spawn bullets at a random angle (above a certain point) every [rate] seconds at varying speeds
+
+                        if(attackTimer <= 0)
+                        {
+                            Debug.Log("KDTD Shake attack finished (attack 3)");
+                            currentState = enemyState.idle;
+                        }
+                    }
+                    break;
+            }
+
 
             //Overdrive Attack 1: Constantly makes quick leaping attacks towards the player and sprays bullets upon landing. Stops briefly after landing.
         }
@@ -101,7 +212,10 @@ public class KDTDMovement : Enemy
             }
             else{
                 currentState = enemyState.attacking;
-                movesLeft = Random.Range(0, 3) + 1;
+                attackTimer = 1f;
+                attackNum = Random.Range(0,3) + 1;  //1 to 3
+                attackStep = 1;         // Current step of the current attack
+                movesLeft = Random.Range(0,3) + 1; //1 to 3
             }
             direction = (player.transform.position.x - transform.position.x > 0) ? 1 : -1;  //if player is right of enemy, face right on next action, else do opposite.
             //currentState = (enemyState)(int)Random.Range(0, 2);
@@ -117,4 +231,6 @@ public class KDTDMovement : Enemy
     {
         enabled = false;
     }
+
 }
+
