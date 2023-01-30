@@ -17,8 +17,13 @@ public class KDTDMovement : Enemy
     private int attackNum = 1;          // Determines which attack is used
     private int attackStep = 1;         // Current step of the current attack
 
+    public float attack3Rate = 0.2f;    // Fire rate of shake attack (attack 3)
+    private float attack3RateTimer = 0f;
+
     private Rigidbody2D rb;
     public GameObject player;
+    public GameObject[] bullets;
+    public GameObject tako;
 
     void Start()
     {
@@ -107,6 +112,12 @@ public class KDTDMovement : Enemy
                         if (grounded)
                         {
                             //create bullets
+                            for (int i = 0; i < 20; i++)
+                            {
+                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
+                                bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(600f, 900f));
+                            }
                             Debug.Log("KDTD Leap attack finished (attack 1)");
                             currentState = enemyState.idle;
                         }
@@ -127,6 +138,9 @@ public class KDTDMovement : Enemy
                         if(attackTimer <= 0)
                         {
                             //Spawn up to 3 takos
+                            Instantiate(tako, transform.position + new Vector3(0, 2), Quaternion.identity);
+                            Instantiate(tako, transform.position + new Vector3(0.7f, 1), Quaternion.identity);
+                            Instantiate(tako, transform.position + new Vector3(-0.7f, 1), Quaternion.identity);
                             Debug.Log("KDTD Summon Tako finished (attack 2)");
                             currentState = enemyState.idle;
                         }
@@ -137,7 +151,7 @@ public class KDTDMovement : Enemy
                     if(attackStep == 1)
                     {
                         direction = (transform.position.x < centerPos.x) ? 1 : -1;          //Faces camera (center)
-                        rb.AddForce(new Vector2(20 * direction, 50));                       //Jump towards center
+                        rb.AddForce(new Vector2(20 * direction, 40));                       //Jump towards center
                         attackStep = 2;
                     }
                     if(attackStep == 2)
@@ -159,20 +173,32 @@ public class KDTDMovement : Enemy
                     if(attackStep == 3) //Charge up attack
                     {
                         attackTimer -= Time.deltaTime;
+                        rb.velocity = Vector2.zero; //prevents moving during charge
 
-                        if(attackTimer <= 0)
+                        if (attackTimer <= 0)
                         {
                             attackTimer = 4f;       //duration of attack
                             attackStep = 4;
+                            attack3RateTimer = attack3Rate;
                         }
 
                     }
                     if(attackStep == 4) //Shake attack and spawn projectiles
                     {
                         attackTimer -= Time.deltaTime;
-                        //Spawn bullets at a random angle (above a certain point) every [rate] seconds at varying speeds
+                        attack3RateTimer -= Time.deltaTime;
 
-                        if(attackTimer <= 0)
+                        //Spawn bullets at a random angle (above a certain point) every [rate] seconds at varying speeds
+                        if (attack3RateTimer < 0)
+                        {
+                            GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
+                            bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                            bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(700f, 900f));
+                            attack3RateTimer = attack3Rate;
+                        }
+
+
+                        if (attackTimer <= 0)
                         {
                             Debug.Log("KDTD Shake attack finished (attack 3)");
                             currentState = enemyState.idle;
@@ -213,8 +239,23 @@ public class KDTDMovement : Enemy
             else{
                 currentState = enemyState.attacking;
                 attackTimer = 1f;
-                attackNum = Random.Range(0,3) + 1;  //1 to 3
-                attackStep = 1;         // Current step of the current attack
+                //weighted RNG for attacks
+                float RNG = Random.Range(0, 100);
+                switch (RNG)
+                {
+                    case < 50:  //50%
+                        attackNum = 1;
+                        break;
+                    case < 70:  //20%
+                        attackNum = 2;
+                        break;
+                    default:    //30%
+                        attackNum = 3;
+                        break;
+                }
+                //attackNum = Random.Range(0,3) + 1;  //1 to 3
+                attackStep = 1;                     //Reset attack step to 1
+
                 movesLeft = Random.Range(0,3) + 1; //1 to 3
             }
             direction = (player.transform.position.x - transform.position.x > 0) ? 1 : -1;  //if player is right of enemy, face right on next action, else do opposite.

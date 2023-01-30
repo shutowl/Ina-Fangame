@@ -9,12 +9,12 @@ public class Tako : Enemy
     public float actionTimer = 2;   //Actions will alternate every 1 to actionTimer seconds
     private float rngCounter = 0;
     private int direction = 1;
-    private int directionRNG;
 
     private Rigidbody2D rb;
 
     void Start()
     {
+        direction = -1; //start facing left;
         rb = GetComponent<Rigidbody2D>();
         enabled = false;
     }
@@ -55,12 +55,7 @@ public class Tako : Enemy
         {
             rngCounter = Random.Range(1, actionTimer);
             currentState = (enemyState)(int)Random.Range(0, 2);
-            directionRNG = Random.Range(0, 100);
-
-            if (directionRNG <= 33)
-            {
-                direction = -direction;
-            }
+            direction = (FindObjectOfType<PlayerMovement>().transform.position.x - transform.position.x > 0) ? 1 : -1;
         }
     }
 

@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
         jumping,
         attacking,
         hurt,
+        dying,  //for death animation
         idle
     }
     public enemyState currentState;

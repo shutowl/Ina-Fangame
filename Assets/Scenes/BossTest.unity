@@ -204,7 +204,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 81612016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 36.45, y: 0.73, z: 0}
+  m_LocalPosition: {x: 35.89, y: 1.15, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -231,7 +231,11 @@ MonoBehaviour:
   jumpForce: 600
   minActionRate: 0.5
   maxActionRate: 1.5
+  attack3Rate: 0.1
   player: {fileID: 1899365987}
+  bullets:
+  - {fileID: 5126173865412392491, guid: cbfcd963f8b77e84997ee0a01001c371, type: 3}
+  tako: {fileID: 3400607705881677324, guid: 39e06b5630529c945b413660e71986fa, type: 3}
 --- !u!61 &81612020
 BoxCollider2D:
   m_ObjectHideFlags: 0
