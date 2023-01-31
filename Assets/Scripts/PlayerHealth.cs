@@ -30,12 +30,12 @@ public class PlayerHealth : MonoBehaviour
             healthText.text = "Health: Passed out";
             player.currentState = PlayerMovement.playerState.dead;
         }
-        else if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        else if (Keyboard.current.digit1Key.wasPressedThisFrame)    //Debug: Press 1 to take damage
         {
             damage(10);
         }
         
-        if (Keyboard.current.digit2Key.wasPressedThisFrame)
+        if (Keyboard.current.digit2Key.wasPressedThisFrame)         //Debug: Press 2 to go back to max health
         {
             curHealth = maxHealth;
         }

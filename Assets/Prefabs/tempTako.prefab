@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 3400607705881677326}
   - component: {fileID: 3400607705881677327}
   m_Layer: 6
-  m_Name: tempEnemy(Tako)
+  m_Name: tempTako
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

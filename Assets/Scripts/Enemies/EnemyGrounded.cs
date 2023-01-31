@@ -14,7 +14,7 @@ public class EnemyGrounded : MonoBehaviour
 	//If ground collider touches the floor (tilemap)
 	void OnTriggerEnter2D(Collider2D col)
 	{
-		if (col.tag == "Ground")
+		if (col.CompareTag("Ground"))
 		{
 			enemy.grounded = true;
 		}
@@ -23,7 +23,7 @@ public class EnemyGrounded : MonoBehaviour
 	//If ground collider is still touching the floor 
 	void OnTriggerStay2D(Collider2D col)
 	{
-		if (col.tag == "Ground")
+		if (col.CompareTag("Ground"))
 		{
 			enemy.grounded = true;
 		}
@@ -32,7 +32,7 @@ public class EnemyGrounded : MonoBehaviour
 	//When ground collider leaves the floor
 	void OnTriggerExit2D(Collider2D col)
 	{
-		if (col.tag == "Ground")
+		if (col.CompareTag("Ground"))
 		{
 			enemy.grounded = false;
 		}

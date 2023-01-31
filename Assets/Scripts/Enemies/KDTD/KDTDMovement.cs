@@ -20,6 +20,8 @@ public class KDTDMovement : Enemy
     public float attack3Rate = 0.2f;    // Fire rate of shake attack (attack 3)
     private float attack3RateTimer = 0f;
 
+    public int difficulty = 1;
+
     private Rigidbody2D rb;
     public GameObject player;
     public GameObject[] bullets;
@@ -112,7 +114,7 @@ public class KDTDMovement : Enemy
                         if (grounded)
                         {
                             //create bullets
-                            for (int i = 0; i < 20; i++)
+                            for (int i = 0; i < 20 + difficulty; i++)
                             {
                                 GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
                                 bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
@@ -138,9 +140,10 @@ public class KDTDMovement : Enemy
                         if(attackTimer <= 0)
                         {
                             //Spawn up to 3 takos
-                            Instantiate(tako, transform.position + new Vector3(0, 2), Quaternion.identity);
-                            Instantiate(tako, transform.position + new Vector3(0.7f, 1), Quaternion.identity);
-                            Instantiate(tako, transform.position + new Vector3(-0.7f, 1), Quaternion.identity);
+                            for(int i = 0; i < 3 + difficulty/5; i++)
+                            {
+                                Instantiate(tako, transform.position + new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(0,2)), Quaternion.identity);
+                            }
                             Debug.Log("KDTD Summon Tako finished (attack 2)");
                             currentState = enemyState.idle;
                         }
@@ -189,11 +192,11 @@ public class KDTDMovement : Enemy
                         attack3RateTimer -= Time.deltaTime;
 
                         //Spawn bullets at a random angle (above a certain point) every [rate] seconds at varying speeds
-                        if (attack3RateTimer < 0)
+                        if (attack3RateTimer < 0 + (difficulty/400f))    //difficulty 4 = 0.01f
                         {
                             GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
                             bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
-                            bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(700f, 900f));
+                            bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(800f, 1000f));
                             attack3RateTimer = attack3Rate;
                         }
 
@@ -225,13 +228,25 @@ public class KDTDMovement : Enemy
                 if (rngCounter > 0){
                     rngCounter -= Time.deltaTime;
                 }
-            }
-                
+            }       
+        }
+        //-----DYING STATE-----
+        else if (currentState == enemyState.dying)
+        {
+            rb.velocity = Vector2.zero;
+            rb.AddForce(new Vector2(200f * -direction, 200f));
+            GetComponent<BoxCollider2D>().enabled = false;
+            currentState = enemyState.dead;
+        }
+        //-----DEAD STATE------
+        else
+        {
+            Destroy(this.gameObject, 3f);
         }
 
         //Random Counters and Timers
-        if(grounded && rngCounter <= 0){
-            rngCounter = Random.Range(minActionRate, maxActionRate);  //from 1 to [actionTimer] seconds
+        if (grounded && rngCounter <= 0){
+            rngCounter = Mathf.Clamp(Random.Range(minActionRate - (difficulty/100f), maxActionRate - (difficulty/100f)), 0.2f, 10f);  //from 1 to [actionTimer] seconds
             if(movesLeft > 0){
                 currentState = (enemyState)(int)(Random.Range(0,2)); //Can still move, so either move or jump
                 moveTimer = rngCounter;

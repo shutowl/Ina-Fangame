@@ -36,7 +36,7 @@ public class Dummy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D col)
     {
         //Bullet enters Dummy
-        if(col.tag == "Player Bullet")
+        if(col.CompareTag("Player Bullet"))
         {
             //DPSText.color = new Color(255, 255, 255, 255);
             int damage = col.GetComponent<aoBullet>().damage;
