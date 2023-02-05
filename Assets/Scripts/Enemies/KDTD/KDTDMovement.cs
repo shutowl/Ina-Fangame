@@ -154,7 +154,7 @@ public class KDTDMovement : Enemy
                     if(attackStep == 1)
                     {
                         direction = (transform.position.x < centerPos.x) ? 1 : -1;          //Faces camera (center)
-                        rb.AddForce(new Vector2(20 * direction, 40));                       //Jump towards center
+                        rb.AddForce(new Vector2((15 + Mathf.Abs(transform.position.x - centerPos.x)) * direction, 40));                       //Jump towards center
                         attackStep = 2;
                     }
                     if(attackStep == 2)
@@ -212,6 +212,9 @@ public class KDTDMovement : Enemy
 
 
             //Overdrive Attack 1: Constantly makes quick leaping attacks towards the player and sprays bullets upon landing. Stops briefly after landing.
+            //Basically 3-4 Attack1 in a row
+            //Activates upon reaching a certain HP
+
         }
 
         //-----HURT STATE------

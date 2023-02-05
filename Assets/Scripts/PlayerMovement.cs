@@ -44,10 +44,10 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 hitboxOffset;            //x = box collider y size offset, y = y position offset
     private float slideCounter;
 
-    [Header("Damaged")]
+    [Header("Hitstun")]
     public float knockbackStrength = 5f;
-    public float damagedDuration = 1f;
-    private float damagedDurationCounter;
+    public float hitstun = 1f;              //default hitstun value
+    private float hitstunCounter;
     public float damagediFrames = 1f;
     private float damagediFramesCounter;
 
@@ -70,6 +70,8 @@ public class PlayerMovement : MonoBehaviour
     private InputActions inputActions;
     private Vector2 moveVal;
 
+    private Vector2 respawnPoint; //Respawn point
+
     private void Awake()
     {
         inputActions = new InputActions();
@@ -80,6 +82,8 @@ public class PlayerMovement : MonoBehaviour
         tempSpeed = speed;
         walkSpeed = speed / 2;
         walkDelayCounter = walkDelay;
+
+        respawnPoint = transform.position;
     }
 
     void Update()
@@ -277,22 +281,13 @@ public class PlayerMovement : MonoBehaviour
             hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later
 
             //knockback
-            rb.velocity = new Vector2(Mathf.Lerp(0, knockbackStrength, 1 - Mathf.Pow(1 - (damagedDurationCounter / damagedDuration), 3)) * -direction, rb.velocity.y);
+            rb.velocity = new Vector2(Mathf.Lerp(0, knockbackStrength, 1 - Mathf.Pow(1 - (hitstunCounter / hitstun), 3)) * -direction, rb.velocity.y);
 
-            if (damagedDurationCounter <= 0)
+            if (hitstunCounter <= 0)
             {
                 resetHitbox();
                 currentState = playerState.moving;
             }
-        }
-        if(damagedDurationCounter >= 0)
-        {
-            damagedDurationCounter -= Time.deltaTime;
-        }
-        if (damagediFramesCounter > 0)
-        {
-            damagediFramesCounter -= Time.deltaTime;
-            hitbox.GetComponent<BoxCollider2D>().enabled = false;
         }
 
         //-----CUTSCENE STATE-----
@@ -319,6 +314,11 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
             //Play death animation
+
+            //DEBUG: reset position to recent respawn point
+            transform.position = respawnPoint;
+            GetComponent<PlayerHealth>().fullHeal();
+            currentState = playerState.moving;
         }
 
         //-----TIMERS-----
@@ -341,6 +341,17 @@ public class PlayerMovement : MonoBehaviour
         if (inputActions.Player.Attack.IsPressed())
         {
             walkDelayCounter -= Time.deltaTime;
+        }
+
+        //Hitstun
+        if (hitstunCounter >= 0)
+        {
+            hitstunCounter -= Time.deltaTime;
+        }
+        if (damagediFramesCounter > 0)
+        {
+            damagediFramesCounter -= Time.deltaTime;
+            hitbox.GetComponent<BoxCollider2D>().enabled = false;
         }
 
     }
@@ -381,7 +392,15 @@ public class PlayerMovement : MonoBehaviour
     {
         rb.velocity = Vector2.zero;
         currentState = playerState.damaged;
-        damagedDurationCounter = damagedDuration;
+        hitstunCounter = hitstun;
+        damagediFramesCounter = damagediFrames;
+    }
+
+    public void setDamageState(float hitstun)   //used for variable hitstun lengths
+    {
+        rb.velocity = Vector2.zero;
+        currentState = playerState.damaged;
+        hitstunCounter = hitstun;
         damagediFramesCounter = damagediFrames;
     }
 
@@ -425,4 +444,11 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(new Vector2(force, 0));
     }
 
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("RespawnPoint"))
+        {
+            respawnPoint = col.transform.position;
+        }
+    }
 }

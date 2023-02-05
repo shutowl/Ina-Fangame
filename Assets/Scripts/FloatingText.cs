@@ -36,12 +36,12 @@ public class FloatingText : MonoBehaviour
             timer = 1;
         }
 
-        text.color = new Color(1, 1, 1, Mathf.Clamp(timer, 0, duration));
+        text.color = new Color(1, 1, 1, Mathf.Clamp(timer/duration, 0, 1));
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.tag == "Player")
+        if(col.CompareTag("Player"))
         {
             isNear = true;
         }
@@ -49,7 +49,7 @@ public class FloatingText : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D col)
     {
-        if (col.tag == "Player")
+        if (col.CompareTag("Player"))
         {
             isNear = false;
         }

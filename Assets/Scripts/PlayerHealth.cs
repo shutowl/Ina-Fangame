@@ -18,32 +18,43 @@ public class PlayerHealth : MonoBehaviour
     {
         player = gameObject.GetComponent<PlayerMovement>();
         curHealth = maxHealth;
+        healthText.text = "Health: " + Mathf.Clamp(curHealth, 0, maxHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
-        healthText.text = "Health: " + curHealth;
 
-        if(curHealth <= 0)
+        if (Keyboard.current.digit1Key.wasPressedThisFrame)    //Debug: Press 1 to take damage
         {
-            healthText.text = "Health: Passed out";
-            player.currentState = PlayerMovement.playerState.dead;
-        }
-        else if (Keyboard.current.digit1Key.wasPressedThisFrame)    //Debug: Press 1 to take damage
-        {
-            damage(10);
+            damage(20);
         }
         
         if (Keyboard.current.digit2Key.wasPressedThisFrame)         //Debug: Press 2 to go back to max health
         {
-            curHealth = maxHealth;
+            fullHeal();
         }
     }
 
     public void damage(int damage)
     {
         curHealth -= damage;
-        player.setDamageState();
+
+        if (curHealth <= 0)
+        {
+            healthText.text = "Health: Passed out";
+            player.currentState = PlayerMovement.playerState.dead;
+        }
+        else
+        {
+            healthText.text = "Health: " + Mathf.Clamp(curHealth, 0, maxHealth);
+            player.setDamageState(0.5f);
+        }
+    }
+
+    public void fullHeal()
+    {
+        curHealth = maxHealth;
+        healthText.text = "Health: " + Mathf.Clamp(curHealth, 0, maxHealth);
     }
 }
