@@ -995,7 +995,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 414129594}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.01, y: 13.03, z: 0}
+  m_LocalPosition: {x: 0.913, y: 11.842, z: 0}
   m_LocalScale: {x: 0.6434, y: 0.6434, z: 0.6434}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1803,8 +1803,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729511432}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
+  m_LocalPosition: {x: -0.008, y: -0.125, z: 0}
+  m_LocalScale: {x: 0.12857269, y: 0.12857269, z: 0.12857269}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1899365995}
@@ -2004,6 +2004,7 @@ GameObject:
   - component: {fileID: 1899365993}
   - component: {fileID: 1899365992}
   - component: {fileID: 1899365991}
+  - component: {fileID: 1899365996}
   - component: {fileID: 1899365990}
   - component: {fileID: 1899365989}
   - component: {fileID: 1899365988}
@@ -2052,16 +2053,16 @@ MonoBehaviour:
   rolliFrames: 0.3
   slideSpeed: 10
   slideDuration: 0.3
-  hitboxOffset: {x: -0.15, y: -0.45}
+  hitboxOffset: {x: -0.15, y: -0.82}
   knockbackStrength: 3
   hitstun: 1
   damagediFrames: 1
   coyoteTime: 0.15
   jumpBufferTime: 0.1
-  grounded: 0
-  hitboxSize: 0.35
+  hitboxSize: 0.1285727
   hitbox: {fileID: 1729511435}
   hitboxTransform: {fileID: 1729511433}
+  grounded: 0
 --- !u!114 &1899365990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2121,7 +2122,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.033180684, y: -0.06088257}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -2132,7 +2133,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5305548, y: 0.87823486}
   m_EdgeRadius: 0
 --- !u!50 &1899365993
 Rigidbody2D:
@@ -2196,8 +2197,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.80997455, g: 0.53733534, b: 0.990566, a: 1}
+  m_Sprite: {fileID: 1239365601, guid: 4900c7bdaa0a79a4dbc935f4a59ebd08, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2215,8 +2216,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1899365987}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.26000023, y: 11.85, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.344, y: 10.936, z: 0}
+  m_LocalScale: {x: 1.6982, y: 1.6982, z: 1.6982}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1729511433}
@@ -2224,6 +2225,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1899365996
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1899365987}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3370015606d864e4aa6c0fc211f32af8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &2001047070
 GameObject:
   m_ObjectHideFlags: 0
@@ -3773,7 +3794,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.010592997, y: -0.57202065}
+  m_Offset: {x: -0.024111047, y: -0.54867125}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -3784,7 +3805,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.66808665, y: 0.16668582}
+  m_Size: {x: 0.34611115, y: 0.09540653}
   m_EdgeRadius: 0
 --- !u!1 &2031664954
 GameObject:

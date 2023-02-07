@@ -154,7 +154,7 @@ public class KDTDMovement : Enemy
                     if(attackStep == 1)
                     {
                         direction = (transform.position.x < centerPos.x) ? 1 : -1;          //Faces camera (center)
-                        rb.AddForce(new Vector2((15 + Mathf.Abs(transform.position.x - centerPos.x)) * direction, 40));                       //Jump towards center
+                        rb.AddForce(new Vector2((20 + 4*Mathf.Abs(transform.position.x - centerPos.x)) * direction, 80));                       //Jump towards center
                         attackStep = 2;
                     }
                     if(attackStep == 2)
@@ -261,10 +261,10 @@ public class KDTDMovement : Enemy
                 float RNG = Random.Range(0, 100);
                 switch (RNG)
                 {
-                    case < 50:  //50%
+                    case < 0:  //50%
                         attackNum = 1;
                         break;
-                    case < 70:  //20%
+                    case < 1:  //20%
                         attackNum = 2;
                         break;
                     default:    //30%

@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
         rolling,
         sliding,
         parrying,
-        damaged,
+        hitstun,
         dead,
         inCutscene
     }
@@ -57,14 +57,17 @@ public class PlayerMovement : MonoBehaviour
     public float jumpBufferTime = 0.2f;
     private float jumpBufferCounter;
 
-    private float cutsceneDelay;
-
-    public bool grounded;
-
-    private Rigidbody2D rb;
+    [Header ("Hitbox")]
     public float hitboxSize = 0.35f;
     public SpriteRenderer hitbox;
     public Transform hitboxTransform;
+
+    //Animations
+    private Animator anim;
+
+    private float cutsceneDelay;
+    public bool grounded;
+    private Rigidbody2D rb;
 
     //Store Input Values
     private InputActions inputActions;
@@ -74,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        anim = GetComponent<Animator>();
         inputActions = new InputActions();
         rb = GetComponent<Rigidbody2D>();
         if (rb is null)
@@ -140,6 +144,11 @@ public class PlayerMovement : MonoBehaviour
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 1);
             }
 
+            if (inputActions.Player.Attack.IsPressed())
+            {
+                //First attack doesn't stop movement
+            }
+
             //Roll
             if (inputActions.Player.Roll.WasPressedThisFrame())
             {
@@ -191,8 +200,8 @@ public class PlayerMovement : MonoBehaviour
             rolliFramesCounter -= Time.deltaTime;
 
             float direction;
-            if (GetComponent<SpriteRenderer>().flipX) direction = 1;
-            else direction = -1;
+            if (GetComponent<SpriteRenderer>().flipX) direction = -1;
+            else direction = 1;
 
             rb.velocity = new Vector2(Mathf.Lerp(0, rollSpeed, 1 - Mathf.Pow(1 - (rollCounter / rollDuration), 3)) * direction, rb.velocity.y);
 
@@ -238,11 +247,11 @@ public class PlayerMovement : MonoBehaviour
             slideCounter -= Time.deltaTime;
             hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later (turn on hitbox)
             hitboxTransform.position = new Vector2(transform.position.x, transform.position.y + hitboxOffset.y);  //lower hitbox
-            hitboxTransform.localScale = new Vector2(hitboxSize, hitboxSize + hitboxOffset.x);   //squish size
+            //hitboxTransform.localScale = new Vector2(hitboxSize, hitboxSize + hitboxOffset.x);   //squish size
 
             float direction;
-            if (GetComponent<SpriteRenderer>().flipX) direction = 1;
-            else direction = -1;
+            if (GetComponent<SpriteRenderer>().flipX) direction = -1;
+            else direction = 1;
 
             rb.velocity = new Vector2(slideSpeed * direction, rb.velocity.y);   //constant movement
 
@@ -272,11 +281,11 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         //-----DAMAGED STATE-----
-        else if(currentState == playerState.damaged)
+        else if(currentState == playerState.hitstun)
         {
             float direction;
-            if (GetComponent<SpriteRenderer>().flipX) direction = 1;
-            else direction = -1;
+            if (GetComponent<SpriteRenderer>().flipX) direction = -1;
+            else direction = 1;
 
             hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later
 
@@ -354,6 +363,23 @@ public class PlayerMovement : MonoBehaviour
             hitbox.GetComponent<BoxCollider2D>().enabled = false;
         }
 
+
+        //------Animations-------
+        /* STATES:
+         * 0 = moving
+         * 1 = attacking
+         * 2 = rolling
+         * 3 = sliding
+         * 4 = parrying
+         * 5 = hitstun
+         * 6 = dead
+         * 7 = cutscene
+         */
+        anim.SetInteger("curState", (int)currentState);
+        anim.SetFloat("xVelocity", Mathf.Abs(rb.velocity.x));
+        anim.SetFloat("yVelocity", rb.velocity.y);
+        anim.SetBool("grounded", grounded);
+
     }
 
     void FixedUpdate()
@@ -370,8 +396,8 @@ public class PlayerMovement : MonoBehaviour
             if (grounded)
                 rb.velocity = easeVelocity;
 
-            if (h > 0) GetComponent<SpriteRenderer>().flipX = true;
-            if (h < 0) GetComponent<SpriteRenderer>().flipX = false;
+            if (h > 0) GetComponent<SpriteRenderer>().flipX = false;
+            if (h < 0) GetComponent<SpriteRenderer>().flipX = true;
 
             rb.AddForce((Vector2.right * speed) * h); //Increases speed
             rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x, -maxSpeed, maxSpeed), rb.velocity.y); //Limits the player's speed
@@ -391,7 +417,7 @@ public class PlayerMovement : MonoBehaviour
     public void setDamageState()
     {
         rb.velocity = Vector2.zero;
-        currentState = playerState.damaged;
+        currentState = playerState.hitstun;
         hitstunCounter = hitstun;
         damagediFramesCounter = damagediFrames;
     }
@@ -399,7 +425,7 @@ public class PlayerMovement : MonoBehaviour
     public void setDamageState(float hitstun)   //used for variable hitstun lengths
     {
         rb.velocity = Vector2.zero;
-        currentState = playerState.damaged;
+        currentState = playerState.hitstun;
         hitstunCounter = hitstun;
         damagediFramesCounter = damagediFrames;
     }
@@ -421,7 +447,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void resetHitbox(){
-        hitboxTransform.position = transform.position;    //reset hitbox position
+        hitboxTransform.localPosition = new Vector2(0, -0.125f);    //reset hitbox position
         hitboxTransform.localScale = new Vector2(hitboxSize, hitboxSize);   //reset size
         //hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //turn off color
         hitbox.GetComponent<BoxCollider2D>().enabled = true;    //turn on hitbox
