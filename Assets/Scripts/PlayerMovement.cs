@@ -62,6 +62,9 @@ public class PlayerMovement : MonoBehaviour
     public SpriteRenderer hitbox;
     public Transform hitboxTransform;
 
+    [Header("Attacking")]
+    private float attackTimer = 0f;          //If attack is pressed again while active, goes into the next attack in the combo. Also acts as attack duration for single attack combos
+
     //Animations
     private Animator anim;
 
@@ -129,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
                 jumpBufferCounter = jumpBufferTime;
             }
 
-            //Walk Delay
+            //Reset Walk back to Run
             if (inputActions.Player.Attack.WasReleasedThisFrame())
             {
                 walkDelayCounter = walkDelay;
@@ -144,15 +147,43 @@ public class PlayerMovement : MonoBehaviour
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 1);
             }
 
-            if (inputActions.Player.Attack.IsPressed())
+            //Attack
+            if (inputActions.Player.Attack.WasPressedThisFrame())
             {
-                //First attack doesn't stop movement
+                if (grounded)
+                {
+                    //First attack doesn't stop movement
+                    //Neutral Attack 1: Quick forward swing
+                    if (anim.GetInteger("attackNum") == -1)
+                    {
+                        StartCoroutine(Attack(0, 0.5f, 1));
+                    }
+                    //Second attack and onwards stop movement
+                    else if(anim.GetInteger("attackNum") == 1)
+                    {
+                        StartCoroutine(Attack(attackTimer, 0.5f, 2));
+                    }
+                }
+                //aerial attacks
+                else if(attackTimer <= 0)
+                {
+                    //Downwards Aerial: Quick swing downwards. Bounces up upon hit.
+                    if (inputActions.Player.Move.ReadValue<Vector2>().y == -1)
+                    {
+                        StartCoroutine(Attack(0, 0.3f, 5));
+                    }
+                    //Neutral Aerial: Quick swing forward
+                    else
+                    {
+                        StartCoroutine(Attack(0, 0.3f, 4));
+                    }
+                }
             }
 
             //Roll
             if (inputActions.Player.Roll.WasPressedThisFrame())
             {
-                rb.velocity = Vector2.zero;
+                //rb.velocity = Vector2.zero;           //Setting velocity to zero makes it look a lil choppy
                 currentState = playerState.rolling;
                 rollCounter = rollDuration;
                 rolliFramesCounter = rolliFrames;
@@ -160,7 +191,7 @@ public class PlayerMovement : MonoBehaviour
             //Slide
             if(grounded && inputActions.Player.Slide.WasPressedThisFrame())
             {
-                rb.velocity = Vector2.zero;
+                //rb.velocity = Vector2.zero;
                 currentState = playerState.sliding;
                 slideCounter = slideDuration;
             }
@@ -244,6 +275,9 @@ public class PlayerMovement : MonoBehaviour
         //-----SLIDE STATE-----
         else if(currentState == playerState.sliding)
         {
+            if (slideCounter >= slideDuration - 0.1)   //Fixes the same bug as the roll bug
+                rb.velocity = Vector2.zero;
+
             slideCounter -= Time.deltaTime;
             hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later (turn on hitbox)
             hitboxTransform.position = new Vector2(transform.position.x, transform.position.y + hitboxOffset.y);  //lower hitbox
@@ -278,6 +312,18 @@ public class PlayerMovement : MonoBehaviour
                 walkDelayCounter = walkDelay;
                 speed = tempSpeed;
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
+            }
+        }
+        //-----ATTACKING STATE-----
+        else if(currentState == playerState.attacking)
+        {
+            //Neutral Attack 2: Quick swing infront of player
+
+            //Neutral Attack 3: Throws spinning weapon forward and hits multiple times. Returns to player after a short delay
+
+            if(attackTimer < 0)
+            {
+                currentState = playerState.moving;
             }
         }
         //-----DAMAGED STATE-----
@@ -361,6 +407,16 @@ public class PlayerMovement : MonoBehaviour
         {
             damagediFramesCounter -= Time.deltaTime;
             hitbox.GetComponent<BoxCollider2D>().enabled = false;
+        }
+
+        //Attack
+        if(attackTimer >= 0)
+        {
+            attackTimer -= Time.deltaTime;
+        }
+        else
+        {
+            anim.SetInteger("attackNum", -1);   //Not attacking
         }
 
 
@@ -453,21 +509,16 @@ public class PlayerMovement : MonoBehaviour
         hitbox.GetComponent<BoxCollider2D>().enabled = true;    //turn on hitbox
     }
 
-    IEnumerator Attack(float lastDuration, float duration, int attackNum, float force, int direction)
+    IEnumerator Attack(float lastDuration, float duration, int attackNum)
     {
-        rb.velocity = new Vector2(0, 0);
-        //attacking = true;
-        //movement = false;
         yield return new WaitForSeconds(lastDuration);  //wait until last attack is finished
-        //attackDuration = duration;
-        //anim.SetInteger("attack num", attackNum);       //start next attack
-
-        if (direction != 0)                             //0 = forward
-            transform.localScale = new Vector3(direction, 1, 1);
-        if (transform.localScale.x == -1)               //move forward a bit when attacking
-            rb.AddForce(new Vector2(-force, 0));
-        else
-            rb.AddForce(new Vector2(force, 0));
+        anim.SetInteger("attackNum", attackNum);
+        if(attackNum == 2)
+        {
+            rb.velocity = Vector2.zero;
+            currentState = playerState.attacking;
+        }
+        attackTimer = duration;
     }
 
     private void OnTriggerEnter2D(Collider2D col)
