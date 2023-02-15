@@ -298,6 +298,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
+  hitstun: 0.5
 --- !u!1 &183495689
 GameObject:
   m_ObjectHideFlags: 0
@@ -2157,6 +2158,7 @@ MonoBehaviour:
   maxSpeed: 5
   jumpPower: 750
   walkDelay: 0.3
+  size: 1.7
   gravityScale: 1.5
   fallGravityMultiplier: 1.5
   rollSpeed: 10
@@ -2165,14 +2167,15 @@ MonoBehaviour:
   slideSpeed: 10
   slideDuration: 0.3
   hitboxOffset: {x: -0.15, y: -0.82}
+  knockbackLimit: 0.5
   knockbackStrength: 3
-  hitstun: 1
   damagediFrames: 1
   coyoteTime: 0.15
   jumpBufferTime: 0.1
   hitboxSize: 0.1285727
   hitbox: {fileID: 1729511435}
   hitboxTransform: {fileID: 1729511433}
+  hurtbox: {fileID: 1478535387}
   grounded: 0
 --- !u!114 &1899365990
 MonoBehaviour:
@@ -2260,7 +2263,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 1.5
   m_Material: {fileID: 6200000, guid: 6310aeb8c7a920246861b9767180d92e, type: 2}
   m_Interpolate: 0
@@ -2328,7 +2331,7 @@ Transform:
   m_GameObject: {fileID: 1899365987}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.344, y: 10.936, z: 0}
-  m_LocalScale: {x: 1.6982, y: 1.6982, z: 1.6982}
+  m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1729511433}

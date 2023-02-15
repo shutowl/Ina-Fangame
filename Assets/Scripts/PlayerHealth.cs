@@ -27,7 +27,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (Keyboard.current.digit1Key.wasPressedThisFrame)    //Debug: Press 1 to take damage
         {
-            damage(20);
+            damage(20, 0.5f);
         }
         
         if (Keyboard.current.digit2Key.wasPressedThisFrame)         //Debug: Press 2 to go back to max health
@@ -36,7 +36,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void damage(int damage)
+    public void damage(int damage, float hitstun)
     {
         curHealth -= damage;
 
@@ -48,7 +48,7 @@ public class PlayerHealth : MonoBehaviour
         else
         {
             healthText.text = "Health: " + Mathf.Clamp(curHealth, 0, maxHealth);
-            player.setDamageState(0.5f);
+            player.setDamageState(hitstun);
         }
     }
 

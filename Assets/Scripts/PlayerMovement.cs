@@ -19,14 +19,17 @@ public class PlayerMovement : MonoBehaviour
     public playerState currentState;
     //Animation has variable PlayerAnimState based on int 
 
-    [Header ("Main Variables")]
+    [Header("Main Variables")]
+    private int direction = 1;
     public float speed = 50f;               //How fast the player accelerates
     public float maxSpeed = 3f;             //Max player speed
     public float jumpPower = 100f;          //How high the player jumps
+    private bool bufferJump = false;
     private float tempSpeed;
     private float walkSpeed;
     public float walkDelay = 1.0f;          //How long a button is held before walk is enabled
     private float walkDelayCounter;
+    public float size = 1.7f;
 
     public float gravityScale = 1.5f;               //Player Gravity
     public float fallGravityMultiplier = 1.5f;      //Player fall gravity
@@ -45,8 +48,9 @@ public class PlayerMovement : MonoBehaviour
     private float slideCounter;
 
     [Header("Hitstun")]
+    public float knockbackLimit = 0.5f;     //Max duration of knockback
     public float knockbackStrength = 5f;
-    public float hitstun = 1f;              //default hitstun value
+    private float hitstun = 0.5f;              //hitstun value
     private float hitstunCounter;
     public float damagediFrames = 1f;
     private float damagediFramesCounter;
@@ -63,6 +67,8 @@ public class PlayerMovement : MonoBehaviour
     public Transform hitboxTransform;
 
     [Header("Attacking")]
+    public Transform hurtbox;
+    private int attackNum = -1;
     private float attackTimer = 0f;          //If attack is pressed again while active, goes into the next attack in the combo. Also acts as attack duration for single attack combos
 
     //Animations
@@ -106,18 +112,36 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, 0f);
                 rb.AddForce(Vector2.up * jumpPower);
 
+                if (bufferJump)
+                {
+                    rb.AddForce(Vector2.down * jumpPower/3);
+                    bufferJump = false;
+                }
+
                 jumpBufferCounter = 0f;
             }
-            //Control Jump Height
-            if (inputActions.Player.Jump.WasReleasedThisFrame() && rb.velocity.y >= 0.1)
+            //Jump Buffer
+            if (inputActions.Player.Jump.WasPressedThisFrame())
             {
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y / 2); //Slows down y-axis momentum
+                jumpBufferCounter = jumpBufferTime;
 
-                coyoteTimeCounter = 0f;
+                if (!grounded) bufferJump = false;
+            }
+            //Control Jump Height
+            if (inputActions.Player.Jump.WasReleasedThisFrame())
+            {
+                if(jumpBufferCounter > 0)
+                    bufferJump = true;
+
+                if(rb.velocity.y >= 0.1)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y / 2); //Slows down y-axis momentum
+                    coyoteTimeCounter = 0f;
+                }
             }
 
             //Jump Gravity
-            if (rb.velocity.y < 0)
+                if (rb.velocity.y < 0)
             {
                 rb.gravityScale = gravityScale * fallGravityMultiplier;
             }
@@ -126,11 +150,6 @@ public class PlayerMovement : MonoBehaviour
                 rb.gravityScale = gravityScale;
             }
 
-            //Jump Buffer
-            if (inputActions.Player.Jump.WasPressedThisFrame())
-            {
-                jumpBufferCounter = jumpBufferTime;
-            }
 
             //Reset Walk back to Run
             if (inputActions.Player.Attack.WasReleasedThisFrame())
@@ -150,22 +169,24 @@ public class PlayerMovement : MonoBehaviour
             //Attack
             if (inputActions.Player.Attack.WasPressedThisFrame())
             {
+                //Grounded Attacks
                 if (grounded)
                 {
                     //First attack doesn't stop movement
                     //Neutral Attack 1: Quick forward swing
-                    if (anim.GetInteger("attackNum") == -1)
+                    if (attackNum == -1)
                     {
-                        StartCoroutine(Attack(0, 0.5f, 1));
+                        attackNum = 1;
+                        StartCoroutine(Attack(0, 0.5f, attackNum));
                     }
-                    //Second attack and onwards stop movement
-                    else if(anim.GetInteger("attackNum") == 1)
+                    else if (attackNum == 1 || attackNum == 2)
                     {
-                        StartCoroutine(Attack(attackTimer, 0.5f, 2));
+                        if(attackTimer <= 0)
+                            currentState = playerState.attacking;
                     }
                 }
-                //aerial attacks
-                else if(attackTimer <= 0)
+                //Aerial Attacks
+                else if (attackTimer <= 0)
                 {
                     //Downwards Aerial: Quick swing downwards. Bounces up upon hit.
                     if (inputActions.Player.Move.ReadValue<Vector2>().y == -1)
@@ -178,10 +199,11 @@ public class PlayerMovement : MonoBehaviour
                         StartCoroutine(Attack(0, 0.3f, 4));
                     }
                 }
+
             }
 
             //Roll
-            if (inputActions.Player.Roll.WasPressedThisFrame())
+            if (inputActions.Player.Roll.WasPressedThisFrame() && attackTimer <= 0)
             {
                 //rb.velocity = Vector2.zero;           //Setting velocity to zero makes it look a lil choppy
                 currentState = playerState.rolling;
@@ -189,14 +211,14 @@ public class PlayerMovement : MonoBehaviour
                 rolliFramesCounter = rolliFrames;
             }
             //Slide
-            if(grounded && inputActions.Player.Slide.WasPressedThisFrame())
+            if(grounded && inputActions.Player.Slide.WasPressedThisFrame() && attackTimer <= 0)
             {
                 //rb.velocity = Vector2.zero;
                 currentState = playerState.sliding;
                 slideCounter = slideDuration;
             }
             //Damaged IFrames after knockback
-            else if(damagediFramesCounter <= 0 && walkDelayCounter > 0)
+            if(damagediFramesCounter <= 0 && walkDelayCounter > 0)
             {
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //DEBUG
                 hitbox.GetComponent<BoxCollider2D>().enabled = true;
@@ -219,6 +241,11 @@ public class PlayerMovement : MonoBehaviour
                 FindObjectOfType<AOMovement>().Fire();
             }
 
+            if (Keyboard.current.bKey.wasPressedThisFrame)
+            {
+                Bounce();
+            }
+
             resetHitbox();
         }
         //-----ROLL STATE-----
@@ -229,10 +256,6 @@ public class PlayerMovement : MonoBehaviour
 
             rollCounter -= Time.deltaTime;
             rolliFramesCounter -= Time.deltaTime;
-
-            float direction;
-            if (GetComponent<SpriteRenderer>().flipX) direction = -1;
-            else direction = 1;
 
             rb.velocity = new Vector2(Mathf.Lerp(0, rollSpeed, 1 - Mathf.Pow(1 - (rollCounter / rollDuration), 3)) * direction, rb.velocity.y);
 
@@ -283,10 +306,6 @@ public class PlayerMovement : MonoBehaviour
             hitboxTransform.position = new Vector2(transform.position.x, transform.position.y + hitboxOffset.y);  //lower hitbox
             //hitboxTransform.localScale = new Vector2(hitboxSize, hitboxSize + hitboxOffset.x);   //squish size
 
-            float direction;
-            if (GetComponent<SpriteRenderer>().flipX) direction = -1;
-            else direction = 1;
-
             rb.velocity = new Vector2(slideSpeed * direction, rb.velocity.y);   //constant movement
 
             if (slideCounter <= 0)
@@ -314,29 +333,41 @@ public class PlayerMovement : MonoBehaviour
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
             }
         }
-        //-----ATTACKING STATE-----
+        //-----ATTACKING STATE----- (only applies to Neutral 2 and 3)
         else if(currentState == playerState.attacking)
         {
-            //Neutral Attack 2: Quick swing infront of player
+            if (attackNum == 2 || attackNum == 3)
+                rb.velocity = Vector2.zero;
+            else
+                moveVal = inputActions.Player.Move.ReadValue<Vector2>();
 
-            //Neutral Attack 3: Throws spinning weapon forward and hits multiple times. Returns to player after a short delay
-
-            if(attackTimer < 0)
+            if (attackNum == 1)
             {
-                currentState = playerState.moving;
+                StartCoroutine(Attack(attackTimer, 0.4f, 2));
             }
+
+            if(attackNum == 2 && inputActions.Player.Attack.WasPressedThisFrame())
+            {
+                StartCoroutine(Attack(attackTimer, 0.7f, 3));
+            }
+
+            if (attackNum == -1) currentState = playerState.moving;
+
         }
         //-----DAMAGED STATE-----
         else if(currentState == playerState.hitstun)
         {
-            float direction;
-            if (GetComponent<SpriteRenderer>().flipX) direction = -1;
-            else direction = 1;
-
             hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later
 
-            //knockback
-            rb.velocity = new Vector2(Mathf.Lerp(0, knockbackStrength, 1 - Mathf.Pow(1 - (hitstunCounter / hitstun), 3)) * -direction, rb.velocity.y);
+            //knockback            
+            if(hitstunCounter < (hitstun - knockbackLimit) && grounded) //prevents player from constantly sliding backwards
+            {
+                rb.velocity = Vector2.zero;
+            }
+            else
+            {
+                rb.velocity = new Vector2(Mathf.Lerp(0, knockbackStrength, 1 - Mathf.Pow(1 - (hitstunCounter / hitstun), 3)) * -direction, rb.velocity.y);
+            }
 
             if (hitstunCounter <= 0)
             {
@@ -391,6 +422,8 @@ public class PlayerMovement : MonoBehaviour
         //Jump Buffer
         if (jumpBufferCounter > 0f)
             jumpBufferCounter -= Time.deltaTime;
+        else
+            bufferJump = false;
 
         //Walk
         if (inputActions.Player.Attack.IsPressed())
@@ -410,13 +443,13 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Attack
-        if(attackTimer >= 0)
+        if(attackTimer > 0)
         {
             attackTimer -= Time.deltaTime;
         }
         else
         {
-            anim.SetInteger("attackNum", -1);   //Not attacking
+            attackNum = -1;
         }
 
 
@@ -435,12 +468,18 @@ public class PlayerMovement : MonoBehaviour
         anim.SetFloat("xVelocity", Mathf.Abs(rb.velocity.x));
         anim.SetFloat("yVelocity", rb.velocity.y);
         anim.SetBool("grounded", grounded);
+        anim.SetInteger("attackNum", attackNum);
+
+
+        //-----Others-----
+        if(attackTimer <= 0)    //prevent flipping on attacks
+            transform.localScale = new Vector3(size * direction, size, size);   //flips sprite of this object and its children (like hurtbox)
 
     }
 
     void FixedUpdate()
     {
-        if (currentState == playerState.moving)
+        if (currentState == playerState.moving || (currentState == playerState.attacking && (attackNum != 2 || attackNum != 3)))
         {
             Vector3 easeVelocity = rb.velocity;
             easeVelocity.y = rb.velocity.y;
@@ -452,8 +491,8 @@ public class PlayerMovement : MonoBehaviour
             if (grounded)
                 rb.velocity = easeVelocity;
 
-            if (h > 0) GetComponent<SpriteRenderer>().flipX = false;
-            if (h < 0) GetComponent<SpriteRenderer>().flipX = true;
+            if (h > 0) direction = 1;   //1 = right
+            if (h < 0) direction = -1;  //-1 = left
 
             rb.AddForce((Vector2.right * speed) * h); //Increases speed
             rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x, -maxSpeed, maxSpeed), rb.velocity.y); //Limits the player's speed
@@ -475,7 +514,7 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = Vector2.zero;
         currentState = playerState.hitstun;
         hitstunCounter = hitstun;
-        damagediFramesCounter = damagediFrames;
+        damagediFramesCounter = hitstun + 0.5f;
     }
 
     public void setDamageState(float hitstun)   //used for variable hitstun lengths
@@ -483,7 +522,8 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = Vector2.zero;
         currentState = playerState.hitstun;
         hitstunCounter = hitstun;
-        damagediFramesCounter = damagediFrames;
+        this.hitstun = hitstun;
+        damagediFramesCounter = hitstun + 0.5f;
     }
 
     public void setCutsceneState(float delay)
@@ -511,14 +551,10 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator Attack(float lastDuration, float duration, int attackNum)
     {
-        yield return new WaitForSeconds(lastDuration);  //wait until last attack is finished
-        anim.SetInteger("attackNum", attackNum);
-        if(attackNum == 2)
-        {
-            rb.velocity = Vector2.zero;
-            currentState = playerState.attacking;
-        }
+        yield return new WaitForSeconds(Mathf.Clamp(lastDuration, 0, lastDuration));  //wait until last attack is finished
+
         attackTimer = duration;
+        this.attackNum = attackNum;
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -527,5 +563,16 @@ public class PlayerMovement : MonoBehaviour
         {
             respawnPoint = col.transform.position;
         }
+    }
+
+    public int getDirection()
+    {
+        return direction;
+    }
+
+    public void Bounce()    //used for when DAir hits something
+    {
+        rb.velocity = new Vector2(rb.velocity.x, 0);
+        rb.AddForce(new Vector2(0, jumpPower));
     }
 }

@@ -34,9 +34,7 @@ public class AOMovement : MonoBehaviour
     void Update()
     {
         direction = player.GetComponent<PlayerMovement>().getInputActions().Player.Move.ReadValue<Vector2>();
-        if (player.GetComponent<SpriteRenderer>().flipX) direction.x = -1;
-        else direction.x = 1;
-        //Debug.Log(direction);
+        direction.x = player.GetComponent<PlayerMovement>().getDirection();
     }
 
     void FixedUpdate()
