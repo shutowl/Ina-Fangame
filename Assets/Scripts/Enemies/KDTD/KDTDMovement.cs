@@ -37,8 +37,10 @@ public class KDTDMovement : Enemy
         centerPos = Camera.main.transform.position;
     }
 
-    void Update()
+    new void Update()
     {
+        base.Update();
+
         //KDTD will move or jump 2 or 3 times before attacking player
 
         //-----MOVING STATE--------
@@ -248,7 +250,7 @@ public class KDTDMovement : Enemy
         }
 
         //Random Counters and Timers
-        if (grounded && rngCounter <= 0){
+        if (grounded && rngCounter <= 0 && !stunned){
             rngCounter = Mathf.Clamp(Random.Range(minActionRate - (difficulty/100f), maxActionRate - (difficulty/100f)), 0.2f, 10f);  //from 1 to [actionTimer] seconds
             if(movesLeft > 0){
                 currentState = (enemyState)(int)(Random.Range(0,2)); //Can still move, so either move or jump
@@ -261,10 +263,10 @@ public class KDTDMovement : Enemy
                 float RNG = Random.Range(0, 100);
                 switch (RNG)
                 {
-                    case < 0:  //50%
+                    case < 0.5f:  //50%
                         attackNum = 1;
                         break;
-                    case < 1:  //20%
+                    case < 0.7f:  //20%
                         attackNum = 2;
                         break;
                     default:    //30%

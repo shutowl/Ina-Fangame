@@ -19,14 +19,30 @@ public class Enemy : MonoBehaviour
     public bool grounded;
     public int maxHealth = 30;
     [SerializeField] private int currentHealth;
+    private float hitstunTimer = 0f;
+    public bool stunned = false;
 
     private void Awake()
     {
         currentHealth = maxHealth;
     }
 
-    //damage take with no knockback/flinch
-    public void TakeDamage(int damage)
+    public void Update()
+    {
+        if(hitstunTimer > 0)
+        {
+            GetComponent<Hazard>().enabled = false;
+            hitstunTimer -= Time.deltaTime;
+        }
+        else
+        {
+            stunned = false;
+            GetComponent<Hazard>().enabled = true;
+        }
+    }
+
+    //damage taken with no knockback
+    public void TakeDamage(int damage, float hitstun)
     {
         currentHealth -= damage;
 
@@ -34,7 +50,11 @@ public class Enemy : MonoBehaviour
         {
             currentState = enemyState.dying;
         }
-
+        else
+        {
+            hitstunTimer = hitstun;
+            stunned = true;
+        }
     }
 
     public int getCurrentHealth()
@@ -48,7 +68,7 @@ public class Enemy : MonoBehaviour
         if (col.CompareTag("Player Bullet") && currentState != enemyState.dead)
         {
             int damage = col.GetComponent<aoBullet>().damage;
-            TakeDamage(damage);
+            TakeDamage(damage, 0f);
         }
     }
 }

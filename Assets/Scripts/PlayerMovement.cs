@@ -70,6 +70,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform hurtbox;
     private int attackNum = -1;
     private float attackTimer = 0f;          //If attack is pressed again while active, goes into the next attack in the combo. Also acts as attack duration for single attack combos
+    private float flipOffset = 0.1f;         //Player continues looking towards attack for [flipOffset] seconds longer.
 
     //Animations
     private Animator anim;
@@ -181,12 +182,11 @@ public class PlayerMovement : MonoBehaviour
                     }
                     else if (attackNum == 1 || attackNum == 2)
                     {
-                        if(attackTimer <= 0)
-                            currentState = playerState.attacking;
+                        currentState = playerState.attacking;
                     }
                 }
                 //Aerial Attacks
-                else if (attackTimer <= 0)
+                else if (attackTimer <= 0 - flipOffset)
                 {
                     //Downwards Aerial: Quick swing downwards. Bounces up upon hit.
                     if (inputActions.Player.Move.ReadValue<Vector2>().y == -1)
@@ -337,7 +337,10 @@ public class PlayerMovement : MonoBehaviour
         else if(currentState == playerState.attacking)
         {
             if (attackNum == 2 || attackNum == 3)
+            {
                 rb.velocity = Vector2.zero;
+                moveVal.x = 0;
+            }
             else
                 moveVal = inputActions.Player.Move.ReadValue<Vector2>();
 
@@ -345,7 +348,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 StartCoroutine(Attack(attackTimer, 0.4f, 2));
             }
-
             if(attackNum == 2 && inputActions.Player.Attack.WasPressedThisFrame())
             {
                 StartCoroutine(Attack(attackTimer, 0.7f, 3));
@@ -443,7 +445,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Attack
-        if(attackTimer > 0)
+        if(attackTimer > 0 - flipOffset)
         {
             attackTimer -= Time.deltaTime;
         }
@@ -472,7 +474,7 @@ public class PlayerMovement : MonoBehaviour
 
 
         //-----Others-----
-        if(attackTimer <= 0)    //prevent flipping on attacks
+        if (attackTimer <= 0 - flipOffset)    //prevent flipping on attacks (+ some leeway)
             transform.localScale = new Vector3(size * direction, size, size);   //flips sprite of this object and its children (like hurtbox)
 
     }
@@ -568,6 +570,11 @@ public class PlayerMovement : MonoBehaviour
     public int getDirection()
     {
         return direction;
+    }
+
+    public int getAttackNum()
+    {
+        return attackNum;
     }
 
     public void Bounce()    //used for when DAir hits something

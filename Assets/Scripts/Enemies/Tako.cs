@@ -20,57 +20,66 @@ public class Tako : Enemy
         currentState = enemyState.moving;
     }
 
-    void Update()
+    new void Update()
     {
-        //-----MOVING STATE--------
-        if (currentState == enemyState.moving)
-        {
-            rb.velocity = new Vector2(Mathf.Lerp(0, speed, 1 - Mathf.Pow(1 - (rngCounter / actionTimer), 3)) * direction, rb.velocity.y);
-        }
+        base.Update();
 
-        //-----JUMPING STATE------
-        else if (currentState == enemyState.jumping)
+        if (!stunned)
         {
-            rb.AddForce(new Vector2(jumpForce / 4 * direction, jumpForce));
-            currentState = enemyState.idle;
-        }
+            //-----MOVING STATE--------
+            if (currentState == enemyState.moving)
+            {
+                rb.velocity = new Vector2(Mathf.Lerp(0, speed, 1 - Mathf.Pow(1 - (rngCounter / actionTimer), 3)) * direction, rb.velocity.y);
+            }
 
-        //-----DAMAGED STATE------
-        else if (currentState == enemyState.hurt)
-        {
+            //-----JUMPING STATE------
+            else if (currentState == enemyState.jumping)
+            {
+                rb.AddForce(new Vector2(jumpForce / 4 * direction, jumpForce));
+                currentState = enemyState.idle;
+            }
 
-        }
-        //-----IDLE STATE------
-        else if (currentState == enemyState.idle)
-        {
-            if (grounded)
+            //-----DAMAGED STATE------
+            else if (currentState == enemyState.hurt)
+            {
+
+            }
+            //-----IDLE STATE------
+            else if (currentState == enemyState.idle)
+            {
+                if (grounded)
+                    rb.velocity = Vector2.zero;
+            }
+            //-----DYING STATE-----
+            else if (currentState == enemyState.dying)
+            {
                 rb.velocity = Vector2.zero;
+                direction = (FindObjectOfType<PlayerMovement>().transform.position.x - transform.position.x > 0) ? 1 : -1;
+                rb.AddForce(new Vector2(200f * -direction, 200f));
+                GetComponent<BoxCollider2D>().enabled = false;
+                currentState = enemyState.dead;
+                rngCounter = 999f;
+            }
+            //-----DEAD STATE------
+            else
+            {
+                Destroy(this.gameObject, 3f);
+            }
+
+            if (rngCounter > 0)
+            {
+                rngCounter -= Time.deltaTime;
+            }
+            else
+            {
+                rngCounter = Random.Range(1, actionTimer);
+                currentState = (enemyState)(int)Random.Range(0, 2); //0-1
+                direction = (FindObjectOfType<PlayerMovement>().transform.position.x - transform.position.x > 0) ? 1 : -1;
+            }
         }
-        //-----DYING STATE-----
-        else if(currentState == enemyState.dying)
+        else
         {
             rb.velocity = Vector2.zero;
-            direction = (FindObjectOfType<PlayerMovement>().transform.position.x - transform.position.x > 0) ? 1 : -1;
-            rb.AddForce(new Vector2(200f * -direction, 200f));
-            GetComponent<BoxCollider2D>().enabled = false;
-            currentState = enemyState.dead;
-            rngCounter = 999f;
-        }
-        //-----DEAD STATE------
-        else
-        {
-            Destroy(this.gameObject, 3f);
-        }
-
-        if (rngCounter > 0)
-        {
-            rngCounter -= Time.deltaTime;
-        }
-        else
-        {
-            rngCounter = Random.Range(1, actionTimer);
-            currentState = (enemyState)(int)Random.Range(0, 2); //0-1
-            direction = (FindObjectOfType<PlayerMovement>().transform.position.x - transform.position.x > 0) ? 1 : -1;
         }
     }
 
