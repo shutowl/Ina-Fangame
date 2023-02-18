@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour
     public int maxHealth = 30;
     [SerializeField] private int currentHealth;
     private float hitstunTimer = 0f;
+    public float ghostDuration = 1f;                //Determines how long the enemy contact hitbox is disabled for (ex: the Hazard script)
+    private float ghostTimer = 0f;                  //Named "ghost" since the player should be able to pass through enemies
     public bool stunned = false;
 
     private void Awake()
@@ -31,29 +33,50 @@ public class Enemy : MonoBehaviour
     {
         if(hitstunTimer > 0)
         {
-            GetComponent<Hazard>().enabled = false;
             hitstunTimer -= Time.deltaTime;
+            stunned = true;
         }
         else
         {
             stunned = false;
-            GetComponent<Hazard>().enabled = true;
+        }
+
+        if(ghostTimer > 0)
+        {
+            ghostTimer -= Time.deltaTime;
+            GetComponent<Hazard>().setActive(false);
+        }
+        else
+        {
+            GetComponent<Hazard>().setActive(true);
         }
     }
 
-    //damage taken with no knockback
+    //damage taken (includes hitstun)
     public void TakeDamage(int damage, float hitstun)
     {
         currentHealth -= damage;
 
         if(currentHealth <= 0)
         {
+            GetComponent<Hazard>().setActive(false);
             currentState = enemyState.dying;
         }
         else
         {
             hitstunTimer = hitstun;
-            stunned = true;
+            ghostTimer = ghostDuration;
+        }
+    }
+
+    //damage taken (no hitstun)
+    public void TakeDamageNoStun(int damage)
+    {
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            currentState = enemyState.dying;
         }
     }
 
@@ -68,7 +91,16 @@ public class Enemy : MonoBehaviour
         if (col.CompareTag("Player Bullet") && currentState != enemyState.dead)
         {
             int damage = col.GetComponent<aoBullet>().damage;
-            TakeDamage(damage, 0f);
+
+            if((int)col.GetComponent<aoBullet>().bulletLevel == 2) //laser
+            {
+                TakeDamage(damage, 0.5f);
+            }
+            else
+            {
+                TakeDamageNoStun(damage);
+            }
+            
         }
     }
 }

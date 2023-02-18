@@ -120,7 +120,7 @@ public class aoBullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        //Hits wall or exceeds lifetime
+        //Hits wall
         if(bulletLevel != type.level3 && col.CompareTag("Ground"))
         {
             Destroy(this.gameObject);

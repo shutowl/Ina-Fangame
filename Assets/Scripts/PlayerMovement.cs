@@ -344,10 +344,12 @@ public class PlayerMovement : MonoBehaviour
             else
                 moveVal = inputActions.Player.Move.ReadValue<Vector2>();
 
+            //Neutral Attack 2: Quick swing forwards
             if (attackNum == 1)
             {
-                StartCoroutine(Attack(attackTimer, 0.4f, 2));
+                StartCoroutine(Attack(attackTimer, 0.2f, 2));
             }
+            //Neutral Attack 3: Throws crowbar out and hits multiple times
             if(attackNum == 2 && inputActions.Player.Attack.WasPressedThisFrame())
             {
                 StartCoroutine(Attack(attackTimer, 0.7f, 3));
@@ -355,6 +357,16 @@ public class PlayerMovement : MonoBehaviour
 
             if (attackNum == -1) currentState = playerState.moving;
 
+
+            //Enables AO abilities during attacks
+            if (inputActions.Player.Fire.WasPressedThisFrame())
+            {
+                FindObjectOfType<AOMovement>().Charge();
+            }
+            if (inputActions.Player.Fire.WasReleasedThisFrame())
+            {
+                FindObjectOfType<AOMovement>().Fire();
+            }
         }
         //-----DAMAGED STATE-----
         else if(currentState == playerState.hitstun)

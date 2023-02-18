@@ -180,7 +180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3400607705881677326, guid: 39e06b5630529c945b413660e71986fa, type: 3}
       propertyPath: maxHealth
-      value: 100
+      value: 500
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39e06b5630529c945b413660e71986fa, type: 3}
@@ -289,6 +289,7 @@ MonoBehaviour:
   grounded: 0
   maxHealth: 3000
   currentHealth: 0
+  ghostDuration: 0.2
   stunned: 0
   speed: 5
   jumpForce: 600
@@ -887,7 +888,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1899365987}
-  smoothSpeed: 15
+  smoothSpeed: 20
   offset: {x: 1, y: 1, z: 0}
   firePosDelay: 0.5
   autoFireRate: 0.15
@@ -1648,8 +1649,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1478535386}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5762, y: -0.0336, z: 0}
-  m_LocalScale: {x: 0.6784728, y: 0.47528207, z: 1}
+  m_LocalPosition: {x: 0.5533, y: -0.066, z: 0}
+  m_LocalScale: {x: 0.6326706, y: 0.6091215, z: 1.2816}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1899365995}

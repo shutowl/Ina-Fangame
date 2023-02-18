@@ -34,7 +34,7 @@ public class AOMovement : MonoBehaviour
     void Update()
     {
         direction = player.GetComponent<PlayerMovement>().getInputActions().Player.Move.ReadValue<Vector2>();
-        direction.x = player.GetComponent<PlayerMovement>().getDirection();
+        direction.x = (player.GetComponent<Transform>().localScale.x > 0) ? 1 : -1;
     }
 
     void FixedUpdate()
