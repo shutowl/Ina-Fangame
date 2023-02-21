@@ -50,5 +50,7 @@ public class Dummy : MonoBehaviour
             }
             textTimer = showText;
         }
+
+        //Crowbar enters Dummy
     }
 }

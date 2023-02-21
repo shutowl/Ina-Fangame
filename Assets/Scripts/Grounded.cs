@@ -18,6 +18,7 @@ public class Grounded : MonoBehaviour
 		if (col.tag == "Ground")
 		{
 			player.grounded = true;
+			player.resetAttackTimer();
 		}
 	}
 

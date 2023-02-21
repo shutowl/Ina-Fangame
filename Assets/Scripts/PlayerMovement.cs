@@ -178,7 +178,7 @@ public class PlayerMovement : MonoBehaviour
                     if (attackNum == -1)
                     {
                         attackNum = 1;
-                        StartCoroutine(Attack(0, 0.5f, attackNum));
+                        StartCoroutine(Attack(0, 0.2f, attackNum));
                     }
                     else if (attackNum == 1 || attackNum == 2)
                     {
@@ -203,8 +203,15 @@ public class PlayerMovement : MonoBehaviour
             }
 
             //Roll
-            if (inputActions.Player.Roll.WasPressedThisFrame() && attackTimer <= 0)
+            if (inputActions.Player.Roll.WasPressedThisFrame())
             {
+                StopAllCoroutines();
+                attackTimer = -10;
+
+                //determine roll direction, if no input (x = 0), roll forwards
+                if (inputActions.Player.Move.ReadValue<Vector2>().x > 0) direction = 1;
+                else if (inputActions.Player.Move.ReadValue<Vector2>().x < 0) direction = -1;
+
                 //rb.velocity = Vector2.zero;           //Setting velocity to zero makes it look a lil choppy
                 currentState = playerState.rolling;
                 rollCounter = rollDuration;
@@ -366,6 +373,45 @@ public class PlayerMovement : MonoBehaviour
             if (inputActions.Player.Fire.WasReleasedThisFrame())
             {
                 FindObjectOfType<AOMovement>().Fire();
+            }
+
+            //Cancels attacks into a roll
+            if (inputActions.Player.Roll.WasPressedThisFrame())
+            {
+                StopAllCoroutines();
+                attackTimer = -10;
+
+                //determine roll direction, if no input (x = 0), roll forwards
+                if (inputActions.Player.Move.ReadValue<Vector2>().x > 0) direction = 1;
+                else if (inputActions.Player.Move.ReadValue<Vector2>().x < 0) direction = -1;
+
+                currentState = playerState.rolling;
+                rollCounter = rollDuration;
+                rolliFramesCounter = rolliFrames;
+            }
+
+            //Prevents ground attacks in midair
+            if (!grounded)
+            {
+                StopAllCoroutines();
+                attackNum = -1;
+                currentState = playerState.moving;
+                attackTimer = -10;
+
+                //Aerial Attacks
+                if (attackTimer <= 0 - flipOffset)
+                {
+                    //Downwards Aerial: Quick swing downwards. Bounces up upon hit.
+                    if (inputActions.Player.Move.ReadValue<Vector2>().y == -1)
+                    {
+                        StartCoroutine(Attack(0, 0.3f, 5));
+                    }
+                    //Neutral Aerial: Quick swing forward
+                    else
+                    {
+                        StartCoroutine(Attack(0, 0.3f, 4));
+                    }
+                }
             }
         }
         //-----DAMAGED STATE-----
@@ -533,6 +579,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void setDamageState(float hitstun)   //used for variable hitstun lengths
     {
+        StopAllCoroutines();
+
         rb.velocity = Vector2.zero;
         currentState = playerState.hitstun;
         hitstunCounter = hitstun;
@@ -559,7 +607,7 @@ public class PlayerMovement : MonoBehaviour
     private void resetHitbox(){
         hitboxTransform.localPosition = new Vector2(0, -0.125f);    //reset hitbox position
         hitboxTransform.localScale = new Vector2(hitboxSize, hitboxSize);   //reset size
-        //hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //turn off color
+        hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //turn off color
         hitbox.GetComponent<BoxCollider2D>().enabled = true;    //turn on hitbox
     }
 
@@ -592,6 +640,11 @@ public class PlayerMovement : MonoBehaviour
     public void Bounce()    //used for when DAir hits something
     {
         rb.velocity = new Vector2(rb.velocity.x, 0);
-        rb.AddForce(new Vector2(0, jumpPower));
+        rb.AddForce(new Vector2(0, jumpPower*2/3));
+    }
+
+    public void resetAttackTimer()
+    {
+        attackTimer = -10;
     }
 }

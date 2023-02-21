@@ -15,13 +15,14 @@ public class Hazard : MonoBehaviour
         active = true;
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void OnTriggerStay2D(Collider2D col)
     {
         if(col.CompareTag("Hitbox"))
         {
             if (active)
             {
-                col.GetComponentInParent<PlayerHealth>().damage(damage, hitstun);
+                if(damage > 0)
+                    col.GetComponentInParent<PlayerHealth>().damage(damage, hitstun);
             }
         }
     }

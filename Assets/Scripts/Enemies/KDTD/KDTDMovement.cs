@@ -46,7 +46,7 @@ public class KDTDMovement : Enemy
         //-----MOVING STATE--------
         if (currentState == enemyState.moving)
         {
-            rb.velocity = new Vector2(Mathf.Lerp(0, speed, 1 - Mathf.Pow(2, -10 * (moveTimer / rngCounter))) * direction, rb.velocity.y);
+            rb.velocity = new Vector2(Mathf.Lerp(0, speed * 1/(2 * rngCounter), 1 - Mathf.Pow(2, -10 * (moveTimer / rngCounter))) * direction, rb.velocity.y);
             moveTimer -= Time.deltaTime;
             if(Mathf.Abs(rb.velocity.x) < 0.5f){
                 movesLeft--;
@@ -260,7 +260,7 @@ public class KDTDMovement : Enemy
                 currentState = enemyState.attacking;
                 attackTimer = 1f;
                 //weighted RNG for attacks
-                float RNG = Random.Range(0, 100);
+                float RNG = Random.Range(0, 1f);
                 switch (RNG)
                 {
                     case < 0.5f:  //50%
