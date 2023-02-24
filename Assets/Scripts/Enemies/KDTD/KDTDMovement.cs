@@ -23,7 +23,7 @@ public class KDTDMovement : Enemy
     public int difficulty = 1;
 
     private Rigidbody2D rb;
-    public GameObject player;
+    private GameObject player;
     public GameObject[] bullets;
     public GameObject tako;
 
@@ -35,6 +35,7 @@ public class KDTDMovement : Enemy
         enabled = false;
         currentState = enemyState.idle;
         centerPos = Camera.main.transform.position;
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     new void Update()
@@ -246,6 +247,7 @@ public class KDTDMovement : Enemy
         //-----DEAD STATE------
         else
         {
+            tag = "Untagged";
             Destroy(this.gameObject, 3f);
         }
 

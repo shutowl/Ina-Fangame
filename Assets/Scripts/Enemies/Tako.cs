@@ -63,7 +63,8 @@ public class Tako : Enemy
             //-----DEAD STATE------
             else
             {
-                Destroy(this.gameObject, 3f);
+                tag = "Untagged";
+                Destroy(this.gameObject, 2f);
             }
 
             if (rngCounter > 0)
