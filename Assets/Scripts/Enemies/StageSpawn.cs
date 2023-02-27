@@ -66,19 +66,8 @@ public class StageSpawn : MonoBehaviour
                 {
                     //Stage 1 Enemies: Takos, others
                     case 1:
-                        int wave = Random.Range(1, 2);  //1
-                        switch (wave)
-                        {
-                            //Wave 1
-                            case 1:
-                                StartCoroutine(SpawnStage1Wave1());
-                                waveDuration = 5f;
-                                break;
-                            //Wave 2
-                            case 2:
-
-                                break;
-                        }
+                        int wave = Random.Range(1, 6); //1-5
+                        StartCoroutine(SpawnStage1Wave(wave));
                         break;
                     //Stage 2 Enemies
                     case 2:
@@ -103,22 +92,121 @@ public class StageSpawn : MonoBehaviour
             waveDuration -= Time.deltaTime;
 
         noEnemies = (GameObject.FindGameObjectsWithTag("Enemy").Length == 0) ? true : false;
-        Debug.Log(GameObject.FindGameObjectsWithTag("Enemy").Length);
+        //Debug.Log(GameObject.FindGameObjectsWithTag("Enemy").Length);
     }
 
-
-    IEnumerator SpawnStage1Wave1()
+    public int GetCurrentWave()
     {
-        spawner.GetComponent<Spawner>().SetSpawn(enemies[0], 1f);
-        Instantiate(spawner, contoller.position + new Vector3(4, -4), Quaternion.identity);
+        return wavesLeft;
+    }
 
-        yield return new WaitForSeconds(0.2f);
-        spawner.GetComponent<Spawner>().SetSpawn(enemies[0], 1f);
-        Instantiate(spawner, contoller.position + new Vector3(5, -4), Quaternion.identity);
+    public int GetCurrentStage()
+    {
+        return currentStage;
+    }
 
-        yield return new WaitForSeconds(0.2f);
-        spawner.GetComponent<Spawner>().SetSpawn(enemies[0], 1f);
-        Instantiate(spawner, contoller.position + new Vector3(6, -4), Quaternion.identity);
+    public float GetTimeLeft()
+    {
+        return waveDuration;
+    }
+
+    IEnumerator SpawnStage1Wave(int wave)
+    {
+        switch (wave)
+        {
+            case 1:
+                waveDuration = 5f;
+
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[0], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(4, -4), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.2f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[0], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(5, -4), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.2f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[0], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(6, -4), Quaternion.identity);
+                break;
+            case 2:
+                waveDuration = 5f;
+
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[0], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(-4, -4), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.2f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[0], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(-5, -4), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.2f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[0], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(-6, -4), Quaternion.identity);
+                break;
+            case 3:
+                waveDuration = 7f;
+
+                enemies[1].GetComponent<FlyingTako>().SetFireRate(1f);
+                enemies[1].GetComponent<FlyingTako>().SetDuration(5f);
+
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(-8, 4), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.2f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(-8, 3.5f), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.2f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(-8, 3), Quaternion.identity);
+                break;
+
+            case 4:
+                waveDuration = 10f;
+
+                enemies[1].GetComponent<FlyingTako>().SetFireRate(1f);
+                enemies[1].GetComponent<FlyingTako>().SetDuration(7f);
+
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
+                Instantiate(spawner, contoller.position + new Vector3(-8, 4), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.1f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
+                Instantiate(spawner, contoller.position + new Vector3(8, 4), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.1f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
+                Instantiate(spawner, contoller.position + new Vector3(-8, 3.8f), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.1f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
+                Instantiate(spawner, contoller.position + new Vector3(8, 3.8f), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.1f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
+                Instantiate(spawner, contoller.position + new Vector3(-8, 3.6f), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.1f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
+                Instantiate(spawner, contoller.position + new Vector3(8, 3.6f), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.1f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
+                Instantiate(spawner, contoller.position + new Vector3(-8, 3.4f), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.1f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
+                Instantiate(spawner, contoller.position + new Vector3(8, 3.4f), Quaternion.identity);
+                break;
+            case 5:
+                waveDuration = 5f;
+
+                enemies[1].GetComponent<FlyingTako>().SetFireRate(0.1f);
+                enemies[1].GetComponent<FlyingTako>().SetDuration(1f);
+
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
+                Instantiate(spawner, contoller.position + new Vector3(-8, 4), Quaternion.identity);
+                break;
+        }
     }
 
     IEnumerator SpawnStage1Boss()

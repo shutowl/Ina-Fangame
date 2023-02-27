@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class KDTDMovement : Enemy
 {
+    [Header("Enemy Specific Variables")]
     public float speed = 10f;
     public float jumpForce = 300f;
     public float minActionRate = 0.5f;

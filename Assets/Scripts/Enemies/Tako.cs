@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Tako : Enemy
 {
+    [Header("Enemy Specific Variables")]
     public float speed = 10;
     public float jumpForce = 500;
     public float actionTimer = 2;   //Actions will alternate every 1 to actionTimer seconds
@@ -55,8 +56,8 @@ public class Tako : Enemy
             {
                 rb.velocity = Vector2.zero;
                 direction = (FindObjectOfType<PlayerMovement>().transform.position.x - transform.position.x > 0) ? 1 : -1;
-                rb.AddForce(new Vector2(200f * -direction, 200f));
-                GetComponent<BoxCollider2D>().enabled = false;
+                rb.AddForce(new Vector2(Random.Range(200f, 400f) * -direction, Random.Range(200f, 400f)));
+                GetComponent<Collider2D>().enabled = false;
                 currentState = enemyState.dead;
                 rngCounter = 999f;
             }
