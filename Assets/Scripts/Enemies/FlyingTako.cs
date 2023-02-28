@@ -12,7 +12,7 @@ public class FlyingTako : Enemy
     private float fireRateTimer = 0f;
     public GameObject bullet;
 
-    private int maxDistance = 8;            //Max distance enemy can fly from center of stage
+    private float maxDistance = 8;          //Max distance enemy can fly from center of stage
     private Vector2 centerPos;              //Camera position
     private int direction = 1;              //1 = right, -1 = left
     private float timer = 0f;
@@ -27,6 +27,7 @@ public class FlyingTako : Enemy
         rb = GetComponent<Rigidbody2D>();
 
         direction = (transform.position.x > centerPos.x) ? -1 : 1;
+        maxDistance = Mathf.Abs(centerPos.x - transform.position.x);
     }
 
     // Update is called once per frame

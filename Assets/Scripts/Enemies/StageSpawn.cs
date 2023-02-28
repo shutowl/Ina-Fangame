@@ -66,7 +66,7 @@ public class StageSpawn : MonoBehaviour
                 {
                     //Stage 1 Enemies: Takos, others
                     case 1:
-                        int wave = Random.Range(1, 6); //1-5
+                        int wave = Random.Range(3, 6); //1-5
                         StartCoroutine(SpawnStage1Wave(wave));
                         break;
                     //Stage 2 Enemies
@@ -149,15 +149,15 @@ public class StageSpawn : MonoBehaviour
                 enemies[1].GetComponent<FlyingTako>().SetDuration(5f);
 
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 1f);
-                Instantiate(spawner, contoller.position + new Vector3(-8, 4), Quaternion.identity);
+                Instantiate(spawner, contoller.position + new Vector3(-4, 4), Quaternion.identity);
 
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.5f);
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 1f);
-                Instantiate(spawner, contoller.position + new Vector3(-8, 3.5f), Quaternion.identity);
+                Instantiate(spawner, contoller.position + new Vector3(-5, 3), Quaternion.identity);
 
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.5f);
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 1f);
-                Instantiate(spawner, contoller.position + new Vector3(-8, 3), Quaternion.identity);
+                Instantiate(spawner, contoller.position + new Vector3(-6, 2), Quaternion.identity);
                 break;
 
             case 4:
@@ -169,31 +169,30 @@ public class StageSpawn : MonoBehaviour
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
                 Instantiate(spawner, contoller.position + new Vector3(-8, 4), Quaternion.identity);
 
-                yield return new WaitForSeconds(0.1f);
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
                 Instantiate(spawner, contoller.position + new Vector3(8, 4), Quaternion.identity);
 
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.2f);
+
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
                 Instantiate(spawner, contoller.position + new Vector3(-8, 3.8f), Quaternion.identity);
 
-                yield return new WaitForSeconds(0.1f);
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
                 Instantiate(spawner, contoller.position + new Vector3(8, 3.8f), Quaternion.identity);
 
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.2f);
+
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
                 Instantiate(spawner, contoller.position + new Vector3(-8, 3.6f), Quaternion.identity);
 
-                yield return new WaitForSeconds(0.1f);
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
                 Instantiate(spawner, contoller.position + new Vector3(8, 3.6f), Quaternion.identity);
 
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.2f);
+
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
                 Instantiate(spawner, contoller.position + new Vector3(-8, 3.4f), Quaternion.identity);
 
-                yield return new WaitForSeconds(0.1f);
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[1], 0.5f);
                 Instantiate(spawner, contoller.position + new Vector3(8, 3.4f), Quaternion.identity);
                 break;
