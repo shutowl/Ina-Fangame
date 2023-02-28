@@ -434,6 +434,16 @@ public class PlayerMovement : MonoBehaviour
                 resetHitbox();
                 currentState = playerState.moving;
             }
+
+            //Enables AO abilities during hitstun
+            if (inputActions.Player.Fire.WasPressedThisFrame())
+            {
+                FindObjectOfType<AOMovement>().Charge();
+            }
+            if (inputActions.Player.Fire.WasReleasedThisFrame())
+            {
+                FindObjectOfType<AOMovement>().Fire();
+            }
         }
 
         //-----CUTSCENE STATE-----

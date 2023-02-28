@@ -10,13 +10,18 @@ public class FlyingTako : Enemy
     public float duration = 10f;
     public float fireRate = 1f;
     private float fireRateTimer = 0f;
-    public GameObject bullet;
+    public GameObject[] bullets;            //bullets[0] = normal, bullets[1] = no follow
+    public bool follow = true;
+    public float x = 0, y = -1;
 
     private float maxDistance = 8;          //Max distance enemy can fly from center of stage
     private Vector2 centerPos;              //Camera position
     private int direction = 1;              //1 = right, -1 = left
     private float timer = 0f;
     private float xPos;
+
+    public float lifeTime = 100f;
+    private float lifeTimeTimer = 0f;
 
     private Rigidbody2D rb;
 
@@ -70,7 +75,16 @@ public class FlyingTako : Enemy
         else if(currentState == enemyState.attacking)
         {
             //Shoot bullet towards player
-            Instantiate(bullet, transform.position, Quaternion.identity);
+            if (follow)
+            {
+                Instantiate(bullets[0], transform.position, Quaternion.identity);
+            }
+            else
+            {
+                GameObject bullet = Instantiate(bullets[1], transform.position, Quaternion.identity);
+                bullet.GetComponent<NormalBulletNoFollow>().SetDirection(x, y);
+            }
+
             fireRateTimer = 0f;
             currentState = enemyState.moving;
         }
@@ -95,6 +109,12 @@ public class FlyingTako : Enemy
 
         fireRateTimer += Time.deltaTime;
         timer += Time.deltaTime;
+        lifeTimeTimer += Time.deltaTime;
+
+        if(lifeTimeTimer > lifeTime)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     public void SetFireRate(float fireRate)
@@ -105,6 +125,32 @@ public class FlyingTako : Enemy
     public void SetDuration(float duration)
     {
         this.duration = duration;
+    }
+
+    public void SetFollow(bool follow)
+    {
+        this.follow = follow;
+    }
+
+    public void SetDirection(float x, float y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void SetLifeTime(float lifeTime)
+    {
+        this.lifeTime = lifeTime;
+    }
+
+    public void ResetValues()
+    {
+        lifeTime = 100f;
+        follow = true;
+        fireRate = 1f;
+        duration = 5f;
+        x = 0;
+        y = -1;
     }
 
     private void OnBecameVisible()
