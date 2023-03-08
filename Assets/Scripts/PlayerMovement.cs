@@ -473,7 +473,7 @@ public class PlayerMovement : MonoBehaviour
 
             //DEBUG: reset position to recent respawn point
             transform.position = respawnPoint;
-            GetComponent<PlayerHealth>().fullHeal();
+            GetComponent<PlayerHealth>().FullHeal();
             currentState = playerState.moving;
         }
 

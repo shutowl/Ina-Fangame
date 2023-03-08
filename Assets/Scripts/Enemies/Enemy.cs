@@ -23,10 +23,12 @@ public class Enemy : MonoBehaviour
     public float ghostDuration = 1f;                //Determines how long the enemy contact hitbox is disabled for (ex: the Hazard script)
     private float ghostTimer = 0f;                  //Named "ghost" since the player should be able to pass through enemies
     public bool stunned = false;
-
+    ComboMeter comboMeter;
+    
     private void Awake()
     {
         currentHealth = maxHealth;
+        comboMeter = FindObjectOfType<ComboMeter>();
     }
 
     public void Update()
@@ -67,6 +69,8 @@ public class Enemy : MonoBehaviour
             hitstunTimer = hitstun;
             ghostTimer = ghostDuration;
         }
+
+        comboMeter.AddCombo();
     }
 
     //damage taken (no hitstun)
@@ -78,6 +82,8 @@ public class Enemy : MonoBehaviour
         {
             currentState = enemyState.dying;
         }
+
+        comboMeter.AddCombo();
     }
 
     public int getCurrentHealth()
@@ -100,7 +106,6 @@ public class Enemy : MonoBehaviour
             {
                 TakeDamageNoStun(damage);
             }
-            
         }
     }
 }

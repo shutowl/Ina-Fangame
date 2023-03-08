@@ -8,53 +8,101 @@ using UnityEngine.InputSystem;
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth;
-    private int curHealth;
+    private int currentHealth;
     private PlayerMovement player;
 
     public TextMeshProUGUI healthText;
+    public Slider HPSlider;
+    public Slider delaySlider;
+    public float delayDuration = 2f;
+    private float delayTimer = 0f;
+    private float timer = 0f;
 
-    // Start is called before the first frame update
     void Start()
     {
         player = gameObject.GetComponent<PlayerMovement>();
-        curHealth = maxHealth;
-        healthText.text = "Health: " + Mathf.Clamp(curHealth, 0, maxHealth);
+        currentHealth = maxHealth;
+        healthText.text = currentHealth + "/" + maxHealth;
+        SetMaxHealth(maxHealth);
+        FullHeal();
     }
 
-    // Update is called once per frame
     void Update()
     {
 
         if (Keyboard.current.digit1Key.wasPressedThisFrame)    //Debug: Press 1 to take damage
         {
-            damage(20, 0.5f);
+            Damage(20, 0.5f);
         }
-        
         if (Keyboard.current.digit2Key.wasPressedThisFrame)         //Debug: Press 2 to go back to max health
         {
-            fullHeal();
+            FullHeal();
+        }
+        if (Keyboard.current.digit3Key.wasPressedThisFrame)         //Debug: Press 3 to add 20 HP
+        {
+            SetMaxHealth(maxHealth + 20);
+        }
+
+
+        //Delay slider
+        if (delayTimer > 0)
+        {
+            delayTimer -= Time.deltaTime;
+            timer = 0;
+        }
+        else
+        {
+            timer += Time.deltaTime;
+            float t = timer / delayDuration;
+            t = Mathf.Sin((t * Mathf.PI) / 2);                                      //https://easings.net/#easeOutSine
+            delaySlider.value = Mathf.Lerp(delaySlider.value, currentHealth, t);
         }
     }
 
-    public void damage(int damage, float hitstun)
+    public void Damage(int damage, float hitstun)
     {
-        curHealth -= damage;
+        currentHealth -= Mathf.Clamp(damage, 0, maxHealth);
+        SetHealth(currentHealth);
 
-        if (curHealth <= 0)
+        if (currentHealth <= 0)
         {
-            healthText.text = "Health: Passed out";
             player.currentState = PlayerMovement.playerState.dead;
         }
         else
         {
-            healthText.text = "Health: " + Mathf.Clamp(curHealth, 0, maxHealth);
             player.setDamageState(hitstun);
+        }
+
+        delayTimer = delayDuration;
+    }
+
+    public void FullHeal()
+    {
+        currentHealth = maxHealth;
+        HPSlider.value = maxHealth;
+        delaySlider.value = maxHealth;
+        healthText.text = currentHealth + "/" + maxHealth;
+    }
+
+    public void SetHealth(int health)
+    {
+        currentHealth = health;
+        HPSlider.value = health;
+        healthText.text = currentHealth + "/" + maxHealth;
+
+        if(health > delaySlider.value)
+        {
+            delaySlider.value = health;
         }
     }
 
-    public void fullHeal()
+    //Sets a new max health
+    public void SetMaxHealth(int health)
     {
-        curHealth = maxHealth;
-        healthText.text = "Health: " + Mathf.Clamp(curHealth, 0, maxHealth);
+        maxHealth = health;
+        HPSlider.maxValue = health;
+        healthText.text = currentHealth + "/" + maxHealth;
+
+        delaySlider.maxValue = health;
     }
 }

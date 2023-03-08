@@ -28,12 +28,16 @@ public class StageSpawn : MonoBehaviour
     private int wavesLeft;              //How mnay waves until the boss (0 = BossWave)
     private float waveDuration;         //Max time a wave lasts for
 
+    ComboMeter comboMeter;
+
 
     void Start()
     {
         wavesLeft = Random.Range(minWaveLength, maxWaveLength);
         waveDuration = 2f;
         currentState = StageState.waiting;
+
+        comboMeter = FindObjectOfType<ComboMeter>();
     }
 
     void Update()
@@ -91,7 +95,8 @@ public class StageSpawn : MonoBehaviour
         if(waveDuration > 0)
             waveDuration -= Time.deltaTime;
 
-        noEnemies = (GameObject.FindGameObjectsWithTag("Enemy").Length == 0) ? true : false;
+        noEnemies = (GameObject.FindGameObjectsWithTag("Enemy").Length == 0);
+        comboMeter.SetStop(noEnemies);
         //Debug.Log(GameObject.FindGameObjectsWithTag("Enemy").Length);
     }
 

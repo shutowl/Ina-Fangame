@@ -22,7 +22,7 @@ public class Hazard : MonoBehaviour
             if (active)
             {
                 if(damage > 0)
-                    col.GetComponentInParent<PlayerHealth>().damage(damage, hitstun);
+                    col.GetComponentInParent<PlayerHealth>().Damage(damage, hitstun);
             }
         }
     }
