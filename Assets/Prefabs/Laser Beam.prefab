@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletLevel: 2
   speed: 10
-  damage: 100
+  damage: 50
   lifeTime: 0.5
   lv2Acceleration: 0.01
   laserSize: 0.5

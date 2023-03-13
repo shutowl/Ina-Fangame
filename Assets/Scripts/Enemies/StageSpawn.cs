@@ -28,6 +28,8 @@ public class StageSpawn : MonoBehaviour
     private int wavesLeft;              //How mnay waves until the boss (0 = BossWave)
     private float waveDuration;         //Max time a wave lasts for
 
+    private float bossTimer = 0f;       //Used to prevent other waves from spawning during boss wave
+
     ComboMeter comboMeter;
 
 
@@ -54,6 +56,7 @@ public class StageSpawn : MonoBehaviour
             //Boss wave
             if (wavesLeft == 0)
             {
+                bossTimer = 10f;
                 switch (currentStage)
                 {
                     //Stage 1 Boss: KDTD
@@ -70,7 +73,7 @@ public class StageSpawn : MonoBehaviour
                 {
                     //Stage 1 Enemies: Takos, others
                     case 1:
-                        int wave = Random.Range(3, 7); //1-6
+                        int wave = Random.Range(1, 7); //1-6
                         StartCoroutine(SpawnStage1Wave(wave));
                         break;
                     //Stage 2 Enemies
@@ -84,12 +87,13 @@ public class StageSpawn : MonoBehaviour
         }
         else if(currentState == StageState.boss)
         {
-            if (noEnemies)
+            if (noEnemies && bossTimer <= 0)
             {
                 wavesLeft = Random.Range(minWaveLength, maxWaveLength);
                 waveDuration = 5f;
                 currentState = StageState.waiting;
             }
+            bossTimer -= Time.deltaTime;
         }
 
         if(waveDuration > 0)
@@ -273,6 +277,7 @@ public class StageSpawn : MonoBehaviour
     {
         spawner.GetComponent<Spawner>().SetSpawn(bosses[0], 4f);
         Instantiate(spawner, contoller.position + new Vector3(5, 1), Quaternion.identity);
+
         yield return null;
     }
 }

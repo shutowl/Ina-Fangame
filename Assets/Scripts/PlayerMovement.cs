@@ -158,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
                 walkDelayCounter = walkDelay;
                 speed = tempSpeed;
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
+                resetHitbox();
             }
 
             //Walk
@@ -252,8 +253,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 Bounce();
             }
-
-            resetHitbox();
         }
         //-----ROLL STATE-----
         else if(currentState == playerState.rolling)

@@ -17,18 +17,22 @@ public class Enemy : MonoBehaviour
     public enemyState currentState;
 
     public bool grounded;
+    public bool isBoss;
     public int maxHealth = 30;
     [SerializeField] private int currentHealth;
     [SerializeField] private float hitstunTimer = 0f;
     public float ghostDuration = 1f;                //Determines how long the enemy contact hitbox is disabled for (ex: the Hazard script)
     private float ghostTimer = 0f;                  //Named "ghost" since the player should be able to pass through enemies
     public bool stunned = false;
+    public string enemyName;
     ComboMeter comboMeter;
-    
+    protected BossHealthBar bossHealthBar;
+
     private void Awake()
     {
         currentHealth = maxHealth;
         comboMeter = FindObjectOfType<ComboMeter>();
+        bossHealthBar = FindObjectOfType<BossHealthBar>();
     }
 
     public void Update()
@@ -71,6 +75,7 @@ public class Enemy : MonoBehaviour
         }
 
         comboMeter.AddCombo();
+        if (isBoss) bossHealthBar.SetHP(currentHealth);
     }
 
     //damage taken (no hitstun)
@@ -84,6 +89,7 @@ public class Enemy : MonoBehaviour
         }
 
         comboMeter.AddCombo();
+        if (isBoss) bossHealthBar.SetHP(currentHealth);
     }
 
     public int getCurrentHealth()

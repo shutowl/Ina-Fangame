@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1441519280357491593}
   m_Layer: 0
   m_Name: Spawner
-  m_TagString: Enemy
+  m_TagString: Spawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,5 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6c19523818196d469ed092f6673efeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 1
-  enemy: {fileID: 3400607705881677324, guid: 39e06b5630529c945b413660e71986fa, type: 3}
+  delay: 0.5
+  enemy: {fileID: 4743889713346146840, guid: a2fcc46f70175da4f87dfb0e03ab9d36, type: 3}

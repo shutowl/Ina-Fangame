@@ -234,20 +234,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   grounded: 0
-  maxHealth: 3000
+  isBoss: 1
+  maxHealth: 2000
   currentHealth: 0
+  hitstunTimer: 0
   ghostDuration: 0.2
   stunned: 0
+  enemyName: KDTD??
   speed: 5
   jumpForce: 600
   minActionRate: 0.5
   maxActionRate: 1.5
   attack3Rate: 0.1
   difficulty: 0
-  player: {fileID: 0}
   bullets:
   - {fileID: 5126173865412392491, guid: cbfcd963f8b77e84997ee0a01001c371, type: 3}
   tako: {fileID: 3400607705881677324, guid: 39e06b5630529c945b413660e71986fa, type: 3}
+  healthBar: {fileID: 0}
 --- !u!114 &8986591528592699732
 MonoBehaviour:
   m_ObjectHideFlags: 0

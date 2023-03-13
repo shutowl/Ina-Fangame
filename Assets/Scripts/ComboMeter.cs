@@ -33,7 +33,7 @@ public class ComboMeter : MonoBehaviour
     {
         if(timer <= 0)
         {
-            rect.eulerAngles = new Vector2(0, 90);
+            rect.eulerAngles = new Vector2(0, 90);      //Disable combo meter (by making it invisible to player)
             ResetCombo();
         }
         else
@@ -66,5 +66,10 @@ public class ComboMeter : MonoBehaviour
         stopTime = stop;
 
         comboStopText.text = (stop) ? "Pause!" : "";
+    }
+
+    public float GetTime()
+    {
+        return timer;
     }
 }

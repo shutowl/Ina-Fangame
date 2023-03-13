@@ -27,6 +27,9 @@ public class KDTDMovement : Enemy
     private GameObject player;
     public GameObject[] bullets;
     public GameObject tako;
+    public GameObject healthBar;
+
+    
 
     void Start()
     {
@@ -37,6 +40,8 @@ public class KDTDMovement : Enemy
         currentState = enemyState.idle;
         centerPos = Camera.main.transform.position;
         player = GameObject.FindGameObjectWithTag("Player");
+
+        bossHealthBar.SetBoss(this.gameObject, maxHealth, enemyName);
     }
 
     new void Update()
@@ -241,7 +246,8 @@ public class KDTDMovement : Enemy
         else if (currentState == enemyState.dying)
         {
             rb.velocity = Vector2.zero;
-            rb.AddForce(new Vector2(200f * -direction, 200f));
+            direction = (FindObjectOfType<PlayerMovement>().transform.position.x - transform.position.x > 0) ? 1 : -1;
+            rb.AddForce(new Vector2(Random.Range(200f, 400f) * -direction, Random.Range(200f, 400f)));
             GetComponent<BoxCollider2D>().enabled = false;
             currentState = enemyState.dead;
         }
