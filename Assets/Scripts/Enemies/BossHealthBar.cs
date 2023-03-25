@@ -18,6 +18,10 @@ public class BossHealthBar : MonoBehaviour
     public Slider HPSlider;
     public Slider delayHPSlider;
     public TextMeshProUGUI bossNameText;
+    public TextMeshProUGUI bossHealthText;
+    public float HPDuration = 1f;
+    private float HPTimer = 0f;
+    private float lastHP = 0;
 
     private float delayDuration;
     private float delayTimer = 0f;
@@ -32,13 +36,15 @@ public class BossHealthBar : MonoBehaviour
 
         rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, -100);
         rectTimer2 = 10;
+
+        bossHealthText.enabled = false;
     }
 
     void Update()
     {
         if(boss != null)
         {
-            rectTimer += Time.deltaTime;
+            if(rectTimer < rectDuration) rectTimer += Time.deltaTime;
             float t = rectTimer / rectDuration;
             t = 1 - Mathf.Pow(1 - t, 3);
             float y = Mathf.Lerp(rectYHidden, rectYShown, t);
@@ -48,9 +54,9 @@ public class BossHealthBar : MonoBehaviour
         }
         else
         {
-            rectTimer2 += Time.deltaTime;
+            if (rectTimer2 < rectDuration) rectTimer2 += Time.deltaTime;
             float t = rectTimer2 / rectDuration;
-            t = t * t * t;
+            t = 1 - Mathf.Pow(1 - t, 3);
             float y = Mathf.Lerp(rectYShown, rectYHidden, t);
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, y); //hide boss bar
         }
@@ -58,7 +64,7 @@ public class BossHealthBar : MonoBehaviour
 
         if(comboMeter.GetTime() <= 0)
         {
-            delayTimer += Time.deltaTime;
+            if(delayTimer < delayDuration) delayTimer += Time.deltaTime;
             float t = delayTimer / delayDuration;
             t = Mathf.Sin((t * Mathf.PI) / 2);                                      //https://easings.net/#easeOutSine
             delayHPSlider.value = Mathf.Lerp(delayHPSlider.value, HPSlider.value, t);
@@ -68,6 +74,25 @@ public class BossHealthBar : MonoBehaviour
             delayTimer = 0;
         }
 
+        if(HPSlider.value <= 0)
+        {
+            bossHealthText.enabled = false;
+        }
+
+        //HP Text Lerp
+        if(lastHP != HPSlider.value)
+        {
+            if(HPTimer < HPDuration) HPTimer += Time.deltaTime;
+            float t = HPTimer / HPDuration;
+            t = Mathf.Sin((t * Mathf.PI) / 2);
+            int hp = Mathf.RoundToInt(Mathf.Lerp(lastHP, HPSlider.value, t));
+            bossHealthText.text = "" + hp;
+        }
+        else
+        {
+            lastHP = HPSlider.value;
+            HPTimer = 0f;
+        }
     }
 
     public void SetBoss(GameObject boss, float maxHealth, string name)
@@ -78,7 +103,9 @@ public class BossHealthBar : MonoBehaviour
         HPSlider.value = maxHealth;
         delayHPSlider.maxValue = maxHealth;
         delayHPSlider.value = maxHealth;
+        lastHP = HPSlider.value;
         bossNameText.text = name;
+
 
         Debug.Log("Boss set to: " + boss);
 
@@ -87,6 +114,14 @@ public class BossHealthBar : MonoBehaviour
 
     public void SetHP(float health)
     {
+        HPTimer = 0;
+        lastHP = HPSlider.value;
         HPSlider.value = health;
+
+        //Show text when below a certain percentage of health
+        if(health < HPSlider.maxValue * 0.3f)
+        {
+            bossHealthText.enabled = true;
+        }
     }
 }

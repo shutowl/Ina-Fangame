@@ -76,7 +76,7 @@ public class AOMovement : MonoBehaviour
                 if (autoFireRateTimer <= 0 && autoAmountCounter > 0 && autoCDTimer <= 0)
                 {
                     autoFireRateTimer = autoFireRate;
-                    Instantiate(bullets[0], player.transform.position + offset, Quaternion.Euler(new Vector3(0, 0, 90 * offset.x)));
+                    Instantiate(bullets[0], player.transform.position + offset, Quaternion.identity);
                     autoAmountCounter--;
                 }
                 if(autoAmountCounter <= 0)
@@ -122,7 +122,7 @@ public class AOMovement : MonoBehaviour
                 //Debug.Log("Fired Lv 0 shot");   //small spammable projectile
                 //instantiate a bullet in AO's direction and position
                 if (autoFireRateTimer <= 0)
-                    Instantiate(bullets[0], player.transform.position + offset, Quaternion.Euler(new Vector3(0, 0, 90 * offset.x)));
+                    Instantiate(bullets[0], player.transform.position + offset, Quaternion.identity);
                 break;
             case 1:
                 //Debug.Log("Fired Lv 2 shot");   //piercing laser

@@ -18,9 +18,12 @@ public class PlayerHealth : MonoBehaviour
     private float delayTimer = 0f;
     private float timer = 0f;
 
+    private ComboMeter comboMeter;
+
     void Start()
     {
         player = gameObject.GetComponent<PlayerMovement>();
+        comboMeter = FindObjectOfType<ComboMeter>();
         currentHealth = maxHealth;
         healthText.text = currentHealth + "/" + maxHealth;
         SetMaxHealth(maxHealth);
@@ -71,9 +74,12 @@ public class PlayerHealth : MonoBehaviour
         else
         {
             player.setDamageState(hitstun);
+            comboMeter.ResetCombo();
         }
 
         delayTimer = delayDuration;
+
+
     }
 
     public void FullHeal()

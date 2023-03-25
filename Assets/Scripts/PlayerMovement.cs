@@ -71,6 +71,10 @@ public class PlayerMovement : MonoBehaviour
     private int attackNum = -1;
     private float attackTimer = 0f;          //If attack is pressed again while active, goes into the next attack in the combo. Also acts as attack duration for single attack combos
     private float flipOffset = 0.1f;         //Player continues looking towards attack for [flipOffset] seconds longer.
+    private float bounceTimer = 0f;
+
+    [Header("Other")]
+    public ParticleSystem dust;
 
     //Animations
     private Animator anim;
@@ -102,6 +106,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        float lastDir = moveVal.x;  //detects changes in direction using (lastDir != moveVal.x)
+
         //-----MOVE STATE-----
         if (currentState == playerState.moving)
         {
@@ -110,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
             //Jump
             if (coyoteTimeCounter >= 0f && jumpBufferCounter > 0f)
             {
+                CreateDust();
                 rb.velocity = new Vector2(rb.velocity.x, 0f);
                 rb.AddForce(Vector2.up * jumpPower);
 
@@ -157,7 +164,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 walkDelayCounter = walkDelay;
                 speed = tempSpeed;
-                hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
                 resetHitbox();
             }
 
@@ -206,6 +212,7 @@ public class PlayerMovement : MonoBehaviour
             //Roll
             if (inputActions.Player.Roll.WasPressedThisFrame())
             {
+                if(grounded) CreateDust();
                 StopAllCoroutines();
                 attackTimer = -10;
 
@@ -248,11 +255,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 FindObjectOfType<AOMovement>().Fire();
             }
-
-            if (Keyboard.current.bKey.wasPressedThisFrame)
-            {
-                Bounce();
-            }
         }
         //-----ROLL STATE-----
         else if(currentState == playerState.rolling)
@@ -278,6 +280,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (damagediFramesCounter <= 0)
                 {
+                    if (grounded) CreateDust();
                     hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //DEBUG
                     hitbox.GetComponent<BoxCollider2D>().enabled = true;
                 }
@@ -304,6 +307,7 @@ public class PlayerMovement : MonoBehaviour
         //-----SLIDE STATE-----
         else if(currentState == playerState.sliding)
         {
+            CreateDust();
             if (slideCounter >= slideDuration - 0.1)   //Fixes the same bug as the roll bug
                 rb.velocity = Vector2.zero;
 
@@ -521,6 +525,12 @@ public class PlayerMovement : MonoBehaviour
             attackNum = -1;
         }
 
+        //Bounce
+        if(bounceTimer >= 0)
+        {
+            bounceTimer -= Time.deltaTime;
+        }
+
 
         //------Animations-------
         /* STATES:
@@ -543,6 +553,12 @@ public class PlayerMovement : MonoBehaviour
         //-----Others-----
         if (attackTimer <= 0 - flipOffset)    //prevent flipping on attacks (+ some leeway)
             transform.localScale = new Vector3(size * direction, size, size);   //flips sprite of this object and its children (like hurtbox)
+
+        //Particle system
+        if(lastDir != moveVal.x && moveVal.x != 0 && grounded)
+        {
+            CreateDust();
+        }
 
     }
 
@@ -648,12 +664,22 @@ public class PlayerMovement : MonoBehaviour
 
     public void Bounce()    //used for when DAir hits something
     {
-        rb.velocity = new Vector2(rb.velocity.x, 0);
-        rb.AddForce(new Vector2(0, jumpPower*2/3));
+        //Prevents "super bouncing" due to hitting multiple DAirs in 1 frame
+        if(bounceTimer <= 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+            rb.AddForce(new Vector2(0, jumpPower * 2 / 3));
+        }
+        bounceTimer = 0.3f;
     }
 
     public void resetAttackTimer()
     {
         attackTimer = -10;
+    }
+
+    public void CreateDust()
+    {
+        dust.Play();
     }
 }
