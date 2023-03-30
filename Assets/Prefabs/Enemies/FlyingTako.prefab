@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.8962264, g: 0.2325116, b: 0.27590406, a: 1}
   m_FlipX: 0
@@ -139,16 +139,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   grounded: 0
+  isBoss: 0
   maxHealth: 100
   currentHealth: 0
   hitstunTimer: 0
   ghostDuration: 1
   stunned: 0
+  enemyName: 
   duration: 7
   fireRate: 2
   bullets:
   - {fileID: 1025100289861873937, guid: 271ea3e98a51ab4439485eda9a6d5f28, type: 3}
   - {fileID: 4219144156338261470, guid: 2aa194b1e50075f41b8be0feb4578236, type: 3}
+  follow: 1
+  x: 0
+  y: -1
+  lifeTime: 100
 --- !u!114 &4743889713346146845
 MonoBehaviour:
   m_ObjectHideFlags: 0

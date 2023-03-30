@@ -8,9 +8,9 @@ public class KDTDMovement : Enemy
     public float speed = 10f;
     public float jumpForce = 300f;
     public float minActionRate = 0.5f;
-    public float maxActionRate = 2f;   //Performs an action every [1 to actionRate] seconds
+    public float maxActionRate = 2f;    // Performs an action every [1 to actionRate] seconds
     private int direction;
-    private int movesLeft;
+    private int movesLeft;              // Number of movement options left before making an attack
     private float rngCounter = 0f;
     private float moveTimer = 0f;
     private Vector2 centerPos = Vector2.zero;
@@ -27,9 +27,11 @@ public class KDTDMovement : Enemy
     private GameObject player;
     public GameObject[] bullets;
     public GameObject tako;
+    public GameObject flyingTako;
     public GameObject healthBar;
+    public GameObject spawner;
 
-    
+    private bool overdrive = false;
 
     void Start()
     {
@@ -134,11 +136,19 @@ public class KDTDMovement : Enemy
                         }
                     }
                     break;
-                //Attack 2: Summons about 3 takos around itself (maybe falls from the sky)
+                //Attack 2: Summons about 3 takos around itself
                 case 2:
                     if(attackStep == 1)         //For future attacks, step 1 can be used to setup charge values like this:
                     {
                         attackTimer = 3f;
+
+                        //Spawn up to 3 takos
+                        spawner.GetComponent<Spawner>().SetSpawn(tako, 3);
+                        for (int i = 0; i < 3 + difficulty / 5; i++)
+                        {
+                            Instantiate(spawner, transform.position + new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(0f, 2f)), Quaternion.identity);
+                        }
+
                         attackStep = 2;
                     }
                     if(attackStep == 2)         //Summon takos after a short delay
@@ -146,16 +156,11 @@ public class KDTDMovement : Enemy
                         attackTimer -= Time.deltaTime;
                         //Enable summoning animation
 
-                        if(attackTimer <= 0)
-                        {
-                            //Spawn up to 3 takos
-                            for(int i = 0; i < 3 + difficulty/5; i++)
-                            {
-                                Instantiate(tako, transform.position + new Vector3(Random.Range(-0.7f, 0.7f), Random.Range(0,2)), Quaternion.identity);
-                            }
+                       if(attackTimer <= 0)
+                       {
                             Debug.Log("KDTD Summon Tako finished (attack 2)");
                             currentState = enemyState.idle;
-                        }
+                       }
                     }
                     break;
                 //Attack 3: Goes to center of stage and shakes itself, releasing projectiles
@@ -163,7 +168,7 @@ public class KDTDMovement : Enemy
                     if(attackStep == 1)
                     {
                         direction = (transform.position.x < centerPos.x) ? 1 : -1;          //Faces camera (center)
-                        rb.AddForce(new Vector2((20 + 4*Mathf.Abs(transform.position.x - centerPos.x)) * direction, 80));                       //Jump towards center
+                        rb.AddForce(new Vector2((20 + 3*Mathf.Abs(transform.position.x - centerPos.x)) * direction, 80));       //Jump towards center
                         attackStep = 2;
                     }
                     if(attackStep == 2)
@@ -171,7 +176,7 @@ public class KDTDMovement : Enemy
                         if (grounded)
                         {
                             rb.velocity = Vector2.zero;
-                            if (transform.position.x < centerPos.x + 1 && transform.position.x > centerPos.x - 1)    //Check if near enough to center
+                            if (transform.position.x < centerPos.x + 1.5f && transform.position.x > centerPos.x - 1.5f)    //Check if near enough to center
                             {
                                 attackTimer = 1f;   //duration of delay
                                 attackStep = 3;
@@ -213,6 +218,143 @@ public class KDTDMovement : Enemy
                         if (attackTimer <= 0)
                         {
                             Debug.Log("KDTD Shake attack finished (attack 3)");
+                            currentState = enemyState.idle;
+                        }
+                    }
+                    break;
+                //Overdrive Attack 1: Make (3) consecutive jumps towards the player
+                case 4:
+                    if (attackStep == 1)  //Charge jump (Anticipation)
+                    {
+                        attackTimer -= Time.deltaTime;
+
+                        if (attackTimer <= 0)
+                        {
+                            rb.AddForce(new Vector2((Mathf.Abs(transform.position.x - player.transform.position.x)) * 30 * direction, jumpForce));   //distance based on distance to player
+                            attackStep = 2;
+                        }
+                    }
+                    if (attackStep == 2)   //Getting in position
+                    {
+                        if (!grounded && rb.velocity.y < 0.1f)
+                        {
+                            attackTimer = 0.5f;
+                            attackStep = 3;
+                        }
+                    }
+                    if (attackStep == 3)   //hover in air for a bit before slamming down
+                    {
+                        attackTimer -= Time.deltaTime;
+                        rb.velocity = Vector2.zero;
+
+                        if (attackTimer <= 0)
+                        {
+                            rb.AddForce(new Vector2(0, -jumpForce * 2));  //slam down
+                            attackStep = 4;
+                        }
+                    }
+                    if (attackStep == 4)   //create bullets upon landing
+                    {
+                        if (grounded)
+                        {
+                            //create bullets
+                            for (int i = 0; i < 20 + difficulty; i++)
+                            {
+                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
+                                bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(600f, 900f));
+                            }
+                            attackStep = 5;
+                            attackTimer = 0.5f;
+                            direction = (player.transform.position.x - transform.position.x > 0) ? 1 : -1;
+                        }
+                    }
+                    if (attackStep == 5)  //Charge jump (Anticipation)
+                    {
+                        attackTimer -= Time.deltaTime;
+
+                        if (attackTimer <= 0)
+                        {
+                            rb.AddForce(new Vector2((Mathf.Abs(transform.position.x - player.transform.position.x)) * 30 * direction, jumpForce));   //distance based on distance to player
+                            attackStep = 6;
+                        }
+                    } 
+                    if (attackStep == 6)   //Getting in position
+                    {
+                        if (!grounded && rb.velocity.y < 0.1f)
+                        {
+                            attackTimer = 0.5f;
+                            attackStep = 7;
+                        }
+                    }
+                    if (attackStep == 7)   //hover in air for a bit before slamming down
+                    {
+                        attackTimer -= Time.deltaTime;
+                        rb.velocity = Vector2.zero;
+
+                        if (attackTimer <= 0)
+                        {
+                            rb.AddForce(new Vector2(0, -jumpForce * 2));  //slam down
+                            attackStep = 8;
+                        }
+                    }
+                    if (attackStep == 8)   //create bullets upon landing
+                    {
+                        if (grounded)
+                        {
+                            //create bullets
+                            for (int i = 0; i < 20 + difficulty; i++)
+                            {
+                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
+                                bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(600f, 900f));
+                            }
+                            attackStep = 9;
+                            attackTimer = 0.5f;
+                            direction = (player.transform.position.x - transform.position.x > 0) ? 1 : -1;
+                        }
+                    }
+                    if (attackStep == 9)  //Charge jump (Anticipation)
+                    {
+                        attackTimer -= Time.deltaTime;
+
+                        if (attackTimer <= 0)
+                        {
+                            rb.AddForce(new Vector2((Mathf.Abs(transform.position.x - player.transform.position.x)) * 30 * direction, jumpForce));   //distance based on distance to player
+                            attackStep = 10;
+                        }
+                    }
+                    if (attackStep == 10)   //Getting in position
+                    {
+                        if (!grounded && rb.velocity.y < 0.1f)
+                        {
+                            attackTimer = 0.5f;
+                            attackStep = 11;
+                        }
+                    }
+                    if (attackStep == 11)   //hover in air for a bit before slamming down
+                    {
+                        attackTimer -= Time.deltaTime;
+                        rb.velocity = Vector2.zero;
+
+                        if (attackTimer <= 0)
+                        {
+                            rb.AddForce(new Vector2(0, -jumpForce * 2));  //slam down
+                            attackStep = 12;
+                        }
+                    }
+                    if (attackStep == 12)   //create bullets upon landing
+                    {
+                        if (grounded)
+                        {
+                            //create bullets
+                            for (int i = 0; i < 20 + difficulty; i++)
+                            {
+                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
+                                bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(600f, 900f));
+                            }
+                            Debug.Log("KDTD Overdrive leap attack finished (attack 4)");
                             currentState = enemyState.idle;
                         }
                     }
@@ -270,18 +412,42 @@ public class KDTDMovement : Enemy
                 attackTimer = 1f;
                 //weighted RNG for attacks
                 float RNG = Random.Range(0, 1f);
-                switch (RNG)
+                if (getCurrentHealth() > maxHealth * 0.3)    //above 30% HP
                 {
-                    case < 0.5f:  //50%
-                        attackNum = 1;
-                        break;
-                    case < 0.7f:  //20%
-                        attackNum = 2;
-                        break;
-                    default:    //30%
-                        attackNum = 3;
-                        break;
+                    switch (RNG)
+                    {
+                        case < 0.5f:  //50%
+                            attackNum = 1;
+                            break;
+                        case < 0.7f:  //20%
+                            attackNum = 2;
+                            break;
+                        default:    //30%
+                            attackNum = 3;
+                            break;
+                    }
                 }
+                else                                        //below 30% hp
+                {
+                    switch (RNG)
+                    {
+                        case < 0.6f:  //60%
+                            attackNum = 4;
+                            break;
+                        case < 0.8f:  //20%
+                            attackNum = 2;
+                            break;
+                        default:    //20%
+                            attackNum = 3;
+                            break;
+                    }
+                    if (!overdrive)
+                    {
+                        overdrive = true;
+                        difficulty += 5;
+                    }
+                }
+
                 //attackNum = Random.Range(0,3) + 1;  //1 to 3
                 attackStep = 1;                     //Reset attack step to 1
 

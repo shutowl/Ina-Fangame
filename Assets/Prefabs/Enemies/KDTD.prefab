@@ -250,7 +250,9 @@ MonoBehaviour:
   bullets:
   - {fileID: 5126173865412392491, guid: cbfcd963f8b77e84997ee0a01001c371, type: 3}
   tako: {fileID: 3400607705881677324, guid: 39e06b5630529c945b413660e71986fa, type: 3}
+  flyingTako: {fileID: 4743889713346146840, guid: a2fcc46f70175da4f87dfb0e03ab9d36, type: 3}
   healthBar: {fileID: 0}
+  spawner: {fileID: 1441519280357491592, guid: 6a4c4e8c612c6e248a1c78bd50ae75f8, type: 3}
 --- !u!114 &8986591528592699732
 MonoBehaviour:
   m_ObjectHideFlags: 0
