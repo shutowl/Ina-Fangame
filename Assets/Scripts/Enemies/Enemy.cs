@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     public bool isBoss;
     public int maxHealth = 30;
     [SerializeField] private int currentHealth;
-    [SerializeField] private float hitstunTimer = 0f;
+    private float hitstunTimer = 0f;
     public float ghostDuration = 1f;                //Determines how long the enemy contact hitbox is disabled for (ex: the Hazard script)
     private float ghostTimer = 0f;                  //Named "ghost" since the player should be able to pass through enemies
     public bool stunned = false;

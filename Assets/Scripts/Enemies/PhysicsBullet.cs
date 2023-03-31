@@ -35,24 +35,29 @@ public class PhysicsBullet : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
+/*
     private void OnTriggerEnter2D(Collider2D col)
     {
-        //Hits wall or exceeds lifetime
+        //Hits wall
         if (col.CompareTag("Ground"))
         {
             Destroy(this.gameObject);
         }
     }
-
-    public void setDirection(float x, float y)
+*/
+    public void SetDirection(float x, float y)
     {
         //Debug.Log("Set Direction: (" + x + ", " + y + ")");
         direction = new Vector2(x, y).normalized;
     }
 
-    public void setForce(float f)
+    public void SetForce(float f)
     {
         force = f;
+    }
+
+    public void SetGravity(float gravity)
+    {
+        rb.gravityScale = gravity;
     }
 }

@@ -44,6 +44,9 @@ public class KDTDMovement : Enemy
         player = GameObject.FindGameObjectWithTag("Player");
 
         bossHealthBar.SetBoss(this.gameObject, maxHealth, enemyName);
+        bossHealthBar.SetBarColor(new Color(0.588f, 0.287f, 0.811f),
+                                  new Color(1.000f, 0.600f, 0.994f),
+                                  new Color(0.519f, 0.174f, 0.498f));
     }
 
     new void Update()
@@ -128,8 +131,8 @@ public class KDTDMovement : Enemy
                             for (int i = 0; i < 20 + difficulty; i++)
                             {
                                 GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                                bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
-                                bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(600f, 900f));
+                                bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
                             }
                             Debug.Log("KDTD Leap attack finished (attack 1)");
                             currentState = enemyState.idle;
@@ -209,8 +212,8 @@ public class KDTDMovement : Enemy
                         if (attack3RateTimer < 0 + (difficulty/400f))    //difficulty 4 = 0.01f
                         {
                             GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                            bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
-                            bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(800f, 1000f));
+                            bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                            bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(800f, 1000f));
                             attack3RateTimer = attack3Rate;
                         }
 
@@ -261,8 +264,8 @@ public class KDTDMovement : Enemy
                             for (int i = 0; i < 20 + difficulty; i++)
                             {
                                 GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                                bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
-                                bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(600f, 900f));
+                                bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
                             }
                             attackStep = 5;
                             attackTimer = 0.5f;
@@ -306,8 +309,8 @@ public class KDTDMovement : Enemy
                             for (int i = 0; i < 20 + difficulty; i++)
                             {
                                 GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                                bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
-                                bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(600f, 900f));
+                                bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
                             }
                             attackStep = 9;
                             attackTimer = 0.5f;
@@ -351,8 +354,8 @@ public class KDTDMovement : Enemy
                             for (int i = 0; i < 20 + difficulty; i++)
                             {
                                 GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                                bullet.GetComponent<PhysicsBullet>().setDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
-                                bullet.GetComponent<PhysicsBullet>().setForce(Random.Range(600f, 900f));
+                                bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
                             }
                             Debug.Log("KDTD Overdrive leap attack finished (attack 4)");
                             currentState = enemyState.idle;
@@ -412,7 +415,7 @@ public class KDTDMovement : Enemy
                 attackTimer = 1f;
                 //weighted RNG for attacks
                 float RNG = Random.Range(0, 1f);
-                if (getCurrentHealth() > maxHealth * 0.3)    //above 30% HP
+                if (getCurrentHealth() > maxHealth * 0.5)    //above 50% HP
                 {
                     switch (RNG)
                     {
@@ -427,7 +430,7 @@ public class KDTDMovement : Enemy
                             break;
                     }
                 }
-                else                                        //below 30% hp
+                else                                        //below 50% hp
                 {
                     switch (RNG)
                     {

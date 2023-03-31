@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
 
 public class BossHealthBar : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class BossHealthBar : MonoBehaviour
     public float HPDuration = 1f;
     private float HPTimer = 0f;
     private float lastHP = 0;
+
+    public Image borderImage;
+    public Image fillImage;
+    public Image delayImage;
 
     private float delayDuration;
     private float delayTimer = 0f;
@@ -112,6 +117,13 @@ public class BossHealthBar : MonoBehaviour
         rectTimer = 0;
     }
 
+    public void SetBarColor(Color border, Color fill, Color delay)
+    {
+        borderImage.color = border;
+        fillImage.color = fill;
+        delayImage.color = delay;
+    }
+
     public void SetHP(float health)
     {
         HPTimer = 0;
@@ -119,9 +131,32 @@ public class BossHealthBar : MonoBehaviour
         HPSlider.value = health;
 
         //Show text when below a certain percentage of health
-        if(health < HPSlider.maxValue * 0.3f)
+        if(health < HPSlider.maxValue * 0.5f)
         {
             bossHealthText.enabled = true;
+        }
+    }
+
+    //Custom Inspector button to check bar colors
+    public void PrintColors()
+    {
+        Debug.Log("Border: " + borderImage.color);
+        Debug.Log("Fill: " + fillImage.color);
+        Debug.Log("Delay: " + delayImage.color);
+    }
+}
+
+[CustomEditor(typeof(BossHealthBar))]
+public class BossHealthBarEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        BossHealthBar bossHealthBar = (BossHealthBar)target;
+        if (GUILayout.Button("Print Colors"))
+        {
+            bossHealthBar.PrintColors();
         }
     }
 }

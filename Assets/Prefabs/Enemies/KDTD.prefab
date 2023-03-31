@@ -237,14 +237,13 @@ MonoBehaviour:
   isBoss: 1
   maxHealth: 2000
   currentHealth: 0
-  hitstunTimer: 0
   ghostDuration: 0.2
   stunned: 0
   enemyName: KDTD??
   speed: 5
   jumpForce: 600
-  minActionRate: 0.5
-  maxActionRate: 1.5
+  minActionRate: 1
+  maxActionRate: 2
   attack3Rate: 0.1
   difficulty: 0
   bullets:

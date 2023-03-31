@@ -37,7 +37,7 @@ public class NormalBulletNoFollow : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
+/*
     private void OnTriggerEnter2D(Collider2D col)
     {
         //Hits wall or exceeds lifetime
@@ -46,7 +46,7 @@ public class NormalBulletNoFollow : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
+*/
     public void SetDirection(float x, float y)
     {
         direction = new Vector2(x, y).normalized;
