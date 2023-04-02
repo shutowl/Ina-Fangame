@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour
     public bool stunned = false;
     public string enemyName;
     ComboMeter comboMeter;
+    private Rigidbody2D rbBase;
     protected BossHealthBar bossHealthBar;
 
     private void Awake()
@@ -33,6 +34,7 @@ public class Enemy : MonoBehaviour
         currentHealth = maxHealth;
         comboMeter = FindObjectOfType<ComboMeter>();
         bossHealthBar = FindObjectOfType<BossHealthBar>();
+        rbBase = GetComponent<Rigidbody2D>();
     }
 
     public void Update()
@@ -66,6 +68,7 @@ public class Enemy : MonoBehaviour
         if(currentHealth <= 0)
         {
             GetComponent<Hazard>().setActive(false);
+            rbBase.constraints = RigidbodyConstraints2D.FreezeRotation;
             currentState = enemyState.dying;
         }
         else
@@ -85,6 +88,8 @@ public class Enemy : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            GetComponent<Hazard>().setActive(false);
+            rbBase.constraints = RigidbodyConstraints2D.FreezeRotation;
             currentState = enemyState.dying;
         }
 

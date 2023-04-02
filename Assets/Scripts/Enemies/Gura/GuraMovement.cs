@@ -30,6 +30,9 @@ public class GuraMovement : Enemy
     private float fireRateTimer = 0f;   // Used for spiral attack
     private float bulletOffset = 0f;    // Used for spiral attack
 
+    GameObject laserIndicator;
+    Vector3 delayedPos = Vector2.zero;
+
     void Start()
     {
         direction = -1; //start facing left;
@@ -43,6 +46,7 @@ public class GuraMovement : Enemy
         bossHealthBar.SetBarColor(new Color(0.286f, 0.313f, 0.812f),
                                   new Color(0.600f, 0.907f, 1.000f),
                                   new Color(0.134f, 0.204f, 0.481f));
+
     }
 
     // Update is called once per frame
@@ -117,10 +121,47 @@ public class GuraMovement : Enemy
                             bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;
                             bullet.GetComponent<NormalBulletNoFollow>().SetDirection(1, -2);
 
+                            if(difficulty >= 5)
+                            {
+                                attackStep = 4;
+                            }
+                            else
+                            {
+                                currentState = enemyState.idle;
+                            }
+                        }
+                    }
+                    if(attackStep == 4) //Jump one more time if at a higher difficulty
+                    {
+                        if (!grounded && rb.velocity.y < -4f)
+                        {
+                            rb.velocity = Vector2.zero;
+                            rb.AddForce(new Vector2(100 * -direction, 300));
+
+                            GameObject bullet = Instantiate(bullets[1], transform.position, Quaternion.identity);
+                            bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;
+                            bullet.GetComponent<NormalBulletNoFollow>().SetDirection(-1, -2);
+
+                            bullet = Instantiate(bullets[1], transform.position, Quaternion.identity);
+                            bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;
+                            bullet.GetComponent<NormalBulletNoFollow>().SetDirection(0, -2);
+
+                            bullet = Instantiate(bullets[1], transform.position, Quaternion.identity);
+                            bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;
+                            bullet.GetComponent<NormalBulletNoFollow>().SetDirection(1, -2);
+
+                            bullet = Instantiate(bullets[1], transform.position, Quaternion.identity);
+                            bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;
+                            bullet.GetComponent<NormalBulletNoFollow>().SetDirection(-2, -2);
+
+                            bullet = Instantiate(bullets[1], transform.position, Quaternion.identity);
+                            bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;
+                            bullet.GetComponent<NormalBulletNoFollow>().SetDirection(2, -2);
+
+
                             currentState = enemyState.idle;
                         }
                     }
-                    
                     break;
 
                 //Attack 2: Lob a few projectiles at the player, when projectiles land, they create a damaging geyser from the floor
@@ -138,16 +179,24 @@ public class GuraMovement : Enemy
                         {
                             //Fire a few bullets towards player (Replace with geyser bullets later)
                             GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                            bullet.GetComponent<PhysicsBullet>().SetForce(900f);
-                            bullet.GetComponent<PhysicsBullet>().SetDirection(player.transform.position.x - transform.position.x, 20);
+                            bullet.GetComponent<PhysicsBullet>().SetForce(760f);
+                            bullet.GetComponent<PhysicsBullet>().SetDirection(2 * direction, 30);
+
+                            bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
+                            bullet.GetComponent<PhysicsBullet>().SetForce(770f);
+                            bullet.GetComponent<PhysicsBullet>().SetDirection(5 * direction, 30);
+
+                            bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
+                            bullet.GetComponent<PhysicsBullet>().SetForce(800f);
+                            bullet.GetComponent<PhysicsBullet>().SetDirection(10 * direction, 30);
+
+                            bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
+                            bullet.GetComponent<PhysicsBullet>().SetForce(850f);
+                            bullet.GetComponent<PhysicsBullet>().SetDirection(15 * direction, 30);
 
                             bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
                             bullet.GetComponent<PhysicsBullet>().SetForce(900f);
-                            bullet.GetComponent<PhysicsBullet>().SetDirection(player.transform.position.x - transform.position.x, 30);
-
-                            bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                            bullet.GetComponent<PhysicsBullet>().SetForce(900f);
-                            bullet.GetComponent<PhysicsBullet>().SetDirection(player.transform.position.x - transform.position.x, 40);
+                            bullet.GetComponent<PhysicsBullet>().SetDirection(20 * direction, 30);
 
                             currentState = enemyState.idle;
                         }
@@ -182,9 +231,9 @@ public class GuraMovement : Enemy
                         attackTimer -= Time.deltaTime;
 
                         //Shoot spiral bullets
-                        float fireRate = 0.3f;
-                        int density = 5;
-                        float offsetRate = 0.5f;
+                        float fireRate = 0.3f - Mathf.Clamp((difficulty / 200), 0, 0.2f);   //difficulty alters fireRate
+                        int density = 4 + (int)(Mathf.Log10(difficulty) * 2);               //and density
+                        float offsetRate = 0.5f - Mathf.Clamp((difficulty / 200), 0, 0.3f); //and offsetRate
 
                         if (fireRateTimer > 0) fireRateTimer -= Time.deltaTime;
                         else
@@ -213,23 +262,108 @@ public class GuraMovement : Enemy
                     }
                     break;
 
-                //Attack 4: Shoots 3 lasers in a row at the player, the last laser creates bullets on impact
+                //Attack 4: Jump and shoot 3 lasers in a row at the player, the last laser creates bullets on impact
                 case 4:
+                    if(attackStep == 1) //Jump
+                    {
+                        rb.AddForce(new Vector2(0, jumpForce));
 
+                        attackTimer = 0.5f;
+                        attackStep = 2;
+                    }
+                    if(attackStep == 2) //Freeze position
+                    {
+                        attackTimer -= Time.deltaTime;
+
+                        if(rb.velocity.y <= 0.1f && attackTimer <= 0)
+                        {
+                            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                            attackTimer = 1f - Mathf.Clamp((difficulty / 200), 0, 0.7f); ;   //laser charge time
+                            attackStep = 3;
+
+                            laserIndicator = Instantiate(bullets[2], transform.position, Quaternion.identity);
+                            laserIndicator.GetComponent<GuraLaser>().indicator = true;
+                            delayedPos = player.transform.position;
+                        }
+                    }
+                    if(attackStep == 3)    
+                    {
+                        attackTimer -= Time.deltaTime;
+
+                        //laser indicator follows player
+                        Vector3 smoothedPos = Vector3.Lerp(delayedPos, player.transform.position, 2f * Time.deltaTime);
+                        delayedPos = smoothedPos;
+                        laserIndicator.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
+
+                        if (attackTimer <= 0)
+                        {
+                            //Fire 1st laser
+                            GameObject laser = Instantiate(bullets[2], transform.position, Quaternion.identity);
+                            laser.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
+                            laser.GetComponent<GuraLaser>().SetLifeTime(1f);
+                            attackTimer = 1f - Mathf.Clamp((difficulty / 200), 0, 0.7f); ;   //laser charge time
+                            attackStep = 4;
+                        }
+                    }
+                    if(attackStep == 4)
+                    {
+                        attackTimer -= Time.deltaTime;
+
+                        //laser indicator follows player
+                        Vector3 smoothedPos = Vector3.Lerp(delayedPos, player.transform.position, 2f * Time.deltaTime);
+                        delayedPos = smoothedPos;
+                        laserIndicator.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
+
+                        if (attackTimer <= 0)
+                        {
+                            //Fire 2nd laser
+                            GameObject laser = Instantiate(bullets[2], transform.position, Quaternion.identity);
+                            laser.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
+                            laser.GetComponent<GuraLaser>().SetLifeTime(1f);
+                            attackTimer = 2f - Mathf.Clamp((difficulty / 100), 0, 1.5f); ;   //laser charge time
+                            attackStep = 5;
+                        }
+                    }
+                    if (attackStep == 5)
+                    {
+                        attackTimer -= Time.deltaTime;
+
+                        //laser indicator follows player
+                        Vector3 smoothedPos = Vector3.Lerp(delayedPos, player.transform.position, 2f * Time.deltaTime);
+                        delayedPos = smoothedPos;
+                        laserIndicator.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
+
+                        if (attackTimer <= 0)
+                        {
+                            //Fire last laser
+                            GameObject laser = Instantiate(bullets[2], transform.position, Quaternion.identity);
+                            laser.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
+                            laser.GetComponent<GuraLaser>().SetLifeTime(2f);
+                            laser.GetComponent<GuraLaser>().SetWidth(4f);
+                            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                            currentState = enemyState.idle;
+                            Destroy(laserIndicator);
+                        }
+                    }
                     break;
 
-                //Attack 5: Causes waterfalls (vertical bullets) to fall from the ceiling
+                //Attack 5: Dives underwater (under arena) then pop out after a delay with bullets spraying everywhere
                 case 5:
 
                     break;
 
-                //[Overdrive] Attack 6: Combines waterfall attack and laser attack
+                //Attack 6: Causes waterfalls (vertical bullets) to fall from the ceiling
                 case 6:
 
                     break;
 
-                //[Overdrive] Attack 7 (one time only): Causes the stage to rain bullets from the ceiling at random spots until boss is defeated
+                //[Overdrive] Attack 7: Combines waterfall attack and laser attack
                 case 7:
+
+                    break;
+
+                //[Overdrive] Attack 10 (one time only): Causes the stage to rain bullets from the ceiling at random spots until boss is defeated
+                case 10:
                     if(attackStep == 1)
                     {
                         attackTimer = 3f;
@@ -281,14 +415,17 @@ public class GuraMovement : Enemy
             {
                 switch (RNG)
                 {
-                    case <= 0.5f:
+                    case <= 0.4f:
                         attackNum = 1;
                         break;
-                    case <= 0.8f:
+                    case <= 0.6f:
                         attackNum = 2;
                         break;
-                    default: 
+                    case <= 0.8f:
                         attackNum = 3;
+                        break;
+                    default: 
+                        attackNum = 4;
                         break;
                 }
             }
@@ -296,14 +433,17 @@ public class GuraMovement : Enemy
             {
                 switch (RNG)
                 {
-                    case <= 0.5f:
+                    case <= 0.4f:
                         attackNum = 1;
                         break;
-                    case <= 0.8f:
+                    case <= 0.6f:
                         attackNum = 2;
                         break;
-                    default:
+                    case <= 0.8f:
                         attackNum = 3;
+                        break;
+                    default:
+                        attackNum = 4;
                         break;
                 }
                 if (!overdrive)
@@ -313,9 +453,10 @@ public class GuraMovement : Enemy
                 }
                 if (!bulletRainOn)
                 {
-                    attackNum = 7;
+                    attackNum = 10;
                 }
             }
+            //attackNum = 2;  //Debug for testing specific attacks
 
             attackStep = 1;                     //Reset attack step to 1
 

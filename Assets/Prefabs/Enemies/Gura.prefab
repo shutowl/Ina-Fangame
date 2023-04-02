@@ -164,6 +164,7 @@ MonoBehaviour:
   bullets:
   - {fileID: 5126173865412392491, guid: dbb46f055236e5f4ab4df3896b62dd03, type: 3}
   - {fileID: 4219144156338261470, guid: f8edb747bbb23624b8e8f247dfc86ce9, type: 3}
+  - {fileID: 8092659225986951766, guid: 8a77599b552fe7647964dd6d9675f897, type: 3}
   healthBar: {fileID: 0}
   bulletRainRate: 0.2
 --- !u!114 &8601657668906471246
