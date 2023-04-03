@@ -30,14 +30,15 @@ public class GuraMovement : Enemy
     private float fireRateTimer = 0f;   // Used for spiral attack
     private float bulletOffset = 0f;    // Used for spiral attack
 
+    public GameObject dangerIndicator;
     GameObject laserIndicator;
+    GameObject danger;
     Vector3 delayedPos = Vector2.zero;
 
     void Start()
     {
         direction = -1; //start facing left;
         rb = GetComponent<Rigidbody2D>();
-        enabled = false;
         currentState = enemyState.idle;
         centerPos = Camera.main.transform.position;
         player = GameObject.FindGameObjectWithTag("Player");
@@ -283,6 +284,7 @@ public class GuraMovement : Enemy
 
                             laserIndicator = Instantiate(bullets[2], transform.position, Quaternion.identity);
                             laserIndicator.GetComponent<GuraLaser>().indicator = true;
+                            laserIndicator.GetComponent<GuraLaser>().lifeTime = 5f;
                             delayedPos = player.transform.position;
                         }
                     }
@@ -320,7 +322,7 @@ public class GuraMovement : Enemy
                             GameObject laser = Instantiate(bullets[2], transform.position, Quaternion.identity);
                             laser.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
                             laser.GetComponent<GuraLaser>().SetLifeTime(1f);
-                            attackTimer = 2f - Mathf.Clamp((difficulty / 100), 0, 1.5f); ;   //laser charge time
+                            attackTimer = 2f - Mathf.Clamp((difficulty / 100), 0, 1.5f);   //laser charge time
                             attackStep = 5;
                         }
                     }
@@ -349,7 +351,58 @@ public class GuraMovement : Enemy
 
                 //Attack 5: Dives underwater (under arena) then pop out after a delay with bullets spraying everywhere
                 case 5:
+                    if(attackStep == 1) //Short hop and dive under
+                    {
+                        rb.velocity = Vector2.zero;
+                        rb.AddForce(new Vector2(25f * direction, 400f));
+                        GetComponent<BoxCollider2D>().enabled = false;
+                        comboMeter.SetStop(true);
 
+                        attackTimer = 4f - Mathf.Clamp((difficulty / 20), 0, 1.5f);
+
+                        danger = Instantiate(dangerIndicator, new Vector2(-100, -100), Quaternion.identity);
+                        danger.GetComponent<DangerIndicator>().lifeTime = attackTimer;
+
+                        attackStep = 2;
+                    }
+                    if(attackStep == 2) //Jump back up after a short delay
+                    {
+                        attackTimer -= Time.deltaTime;
+
+                        //show indicator for attack
+                        if(transform.position.y <= -2f)
+                        {
+                            Vector3 smoothedPos = Vector3.Lerp(delayedPos, player.transform.position, 1f * Time.deltaTime);
+                            delayedPos = smoothedPos;
+                            danger.transform.position = new Vector3(delayedPos.x, -1.5f);
+                        }
+
+                        if (attackTimer <= 0)
+                        {
+                            transform.position = new Vector2(delayedPos.x, -6f);
+                            rb.velocity = Vector2.zero;
+                            rb.AddForce(Vector2.up * 1000f);
+
+                            attackStep = 3;
+                        }
+                    }
+                    if(attackStep == 3) //re-enable collider
+                    {
+                        if(transform.position.y >= -1f)
+                        {
+                            //Spray bullets like a fountain
+                            for (int i = 0; i < 20 + (difficulty / 3); i++)
+                            {
+                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
+                                bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1.5f, 1.5f), Random.Range(2f, 3f));
+                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
+                            }
+
+                            GetComponent<BoxCollider2D>().enabled = true;
+                            comboMeter.SetStop(false);
+                            currentState = enemyState.idle;
+                        }
+                    }
                     break;
 
                 //Attack 6: Causes waterfalls (vertical bullets) to fall from the ceiling
@@ -410,10 +463,10 @@ public class GuraMovement : Enemy
             attackTimer = 1f;
 
             //weighted RNG for attacks
-            float RNG = Random.Range(0, 1f);
+            int RNG = Random.Range(1, 6);
             if (getCurrentHealth() > maxHealth * 0.5)    //above 50% HP
             {
-                switch (RNG)
+                /*switch (RNG)
                 {
                     case <= 0.4f:
                         attackNum = 1;
@@ -427,11 +480,12 @@ public class GuraMovement : Enemy
                     default: 
                         attackNum = 4;
                         break;
-                }
+                }*/
+                attackNum = RNG;
             }
             else                                        //below 50% hp (overdrive)
             {
-                switch (RNG)
+                /*switch (RNG)
                 {
                     case <= 0.4f:
                         attackNum = 1;
@@ -445,7 +499,8 @@ public class GuraMovement : Enemy
                     default:
                         attackNum = 4;
                         break;
-                }
+                }*/
+                attackNum = RNG;
                 if (!overdrive)
                 {
                     overdrive = true;
@@ -456,11 +511,11 @@ public class GuraMovement : Enemy
                     attackNum = 10;
                 }
             }
-            //attackNum = 2;  //Debug for testing specific attacks
+            //attackNum = 5;  //Debug for testing specific attacks
 
             attackStep = 1;                     //Reset attack step to 1
 
-            direction = (player.transform.position.x - transform.position.x > 0) ? 1 : -1;  //if player is right of enemy, face right on next action, else do opposite.
+            direction = (player.transform.position.x - transform.position.x > 0) ? 1 : -1;  //enemy faces towards player upon landing
         }
 
         //Bullet Rain
@@ -477,7 +532,7 @@ public class GuraMovement : Enemy
             }
         }
     }
-
+/*
     private void OnBecameVisible()
     {
         enabled = true;
@@ -486,4 +541,5 @@ public class GuraMovement : Enemy
     {
         enabled = false;
     }
+*/
 }

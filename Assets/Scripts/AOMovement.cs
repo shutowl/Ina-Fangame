@@ -126,15 +126,23 @@ public class AOMovement : MonoBehaviour
                 break;
             case 1:
                 //Debug.Log("Fired Lv 2 shot");   //piercing laser
-                Instantiate(bullets[2], player.transform.position + offset, Quaternion.identity);
+                GameObject laser = Instantiate(bullets[2], player.transform.position + offset, Quaternion.identity);
+                if(direction.y > 0)
+                    laser.GetComponent<aoBullet>().SetPositions(Vector2.zero, Vector2.up * 30);
+                else
+                    laser.GetComponent<aoBullet>().SetPositions(Vector2.zero, 30 * direction.x * Vector2.right);
                 break;
             default:
                 //Debug.Log("Fired Lv 3 shot");   //stronger piercing laser
-                Instantiate(bullets[2], player.transform.position + offset, Quaternion.identity);
+                GameObject laser2 = Instantiate(bullets[2], player.transform.position + offset, Quaternion.identity);
+                if (direction.y > 0)
+                    laser2.GetComponent<aoBullet>().SetPositions(Vector2.zero, Vector2.up * 30);
+                else
+                    laser2.GetComponent<aoBullet>().SetPositions(Vector2.zero, 30 * direction.x * Vector2.right);
                 break;
         }
         chargeTime = 0f;
-        autoFireRateTimer = autoFireRate/2;
+        if(autoFireRateTimer <= 0) autoFireRateTimer = autoFireRate;
         autoCDTimer = autoCD/2;
         autoAmountCounter = autoAmount;
 

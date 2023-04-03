@@ -11,10 +11,12 @@ public class ComboMeter : MonoBehaviour
     public Slider comboSlider;
     public TextMeshProUGUI comboText;
     public TextMeshProUGUI comboStopText;
+    public TextMeshProUGUI bonusDMGText;
     private bool stopTime = false;
     RectTransform rect;
     public float maxTime = 10f;
     private int hitCount = 0;
+    private int bonusDMG = 0;
     private float timer = 0f;
 
 
@@ -51,8 +53,11 @@ public class ComboMeter : MonoBehaviour
         rect.eulerAngles = Vector2.zero;
         timer = maxTime;
         hitCount++;
+        bonusDMG = Mathf.Clamp(hitCount/2, 0, 50);
 
         comboText.text = hitCount + " HITS!";
+        bonusDMGText.text = "+" + bonusDMG + "% DMG";
+
     }
 
     public void ResetCombo()
@@ -71,5 +76,10 @@ public class ComboMeter : MonoBehaviour
     public float GetTime()
     {
         return timer;
+    }
+
+    public int GetBonusDMG()
+    {
+        return bonusDMG;
     }
 }

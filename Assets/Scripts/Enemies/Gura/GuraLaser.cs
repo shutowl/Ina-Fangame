@@ -47,7 +47,6 @@ public class GuraLaser : MonoBehaviour
             line.LineColor = new Color(0f, 0.5f, 0.5f, 1f);
             line.LightSaberFactor = 0.9f;
             line.LineWidth = 0.5f;
-            lifeTimeTimer = 999f;
         }
         else
         {

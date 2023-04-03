@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
     private float ghostTimer = 0f;                  //Named "ghost" since the player should be able to pass through enemies
     public bool stunned = false;
     public string enemyName;
-    ComboMeter comboMeter;
+    protected ComboMeter comboMeter;
     private Rigidbody2D rbBase;
     protected BossHealthBar bossHealthBar;
 
@@ -63,9 +63,9 @@ public class Enemy : MonoBehaviour
     //damage taken (includes hitstun)
     public void TakeDamage(int damage, float hitstun)
     {
-        currentHealth -= damage;
+        currentHealth -= damage + (int)(damage * comboMeter.GetBonusDMG() / 100);
 
-        if(currentHealth <= 0)
+        if (currentHealth <= 0)
         {
             GetComponent<Hazard>().setActive(false);
             rbBase.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -84,7 +84,7 @@ public class Enemy : MonoBehaviour
     //damage taken (no hitstun)
     public void TakeDamageNoStun(int damage)
     {
-        currentHealth -= damage;
+        currentHealth -= damage + (int)(damage * comboMeter.GetBonusDMG()/100);
 
         if (currentHealth <= 0)
         {
@@ -116,6 +116,7 @@ public class Enemy : MonoBehaviour
             else
             {
                 TakeDamageNoStun(damage);
+                Destroy(col.gameObject);
             }
         }
     }
