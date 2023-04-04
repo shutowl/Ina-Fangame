@@ -13,10 +13,11 @@ public class GuraMovement : Enemy
     private float rngCounter = 0f;
     private Vector2 centerPos = Vector2.zero;
     private float attackTimer;          // Used for attack timings (such as delays or charges)
-    private int attackNum = 1;          // Determines which attack is used
+    private int attackNum = 0;          // Determines which attack is used
     private int attackStep = 1;         // Current step of the current attack
     public int difficulty = 1;
     private bool overdrive = false;
+    public bool attackInOrder = false;
 
     private Rigidbody2D rb;
     private GameObject player;
@@ -29,6 +30,8 @@ public class GuraMovement : Enemy
     private Vector2 lastPosition;
     private float fireRateTimer = 0f;   // Used for spiral attack
     private float bulletOffset = 0f;    // Used for spiral attack
+    float wFireRateTimer = 0f;          // Used for waterfall attack
+
 
     public GameObject dangerIndicator;
     GameObject laserIndicator;
@@ -47,11 +50,10 @@ public class GuraMovement : Enemy
         bossHealthBar.SetBarColor(new Color(0.286f, 0.313f, 0.812f),
                                   new Color(0.600f, 0.907f, 1.000f),
                                   new Color(0.134f, 0.204f, 0.481f));
-
     }
 
     // Update is called once per frame
-    new void Update()
+    void FixedUpdate()
     {
         base.Update();
         //-----IDLE STATE-----
@@ -367,7 +369,8 @@ public class GuraMovement : Enemy
                         {
                             Vector3 smoothedPos = Vector3.Lerp(delayedPos, player.transform.position, 1f * Time.deltaTime);
                             delayedPos = smoothedPos;
-                            danger.transform.position = new Vector3(delayedPos.x, -1.5f);
+                            if(danger != null)  //Prevents MissingReferenceException
+                                danger.transform.position = new Vector3(delayedPos.x, -1.5f);
                         }
 
                         if (attackTimer <= 0)
@@ -400,7 +403,73 @@ public class GuraMovement : Enemy
 
                 //Attack 6: Causes waterfalls (vertical bullets) to fall from the ceiling
                 case 6:
+                    if(attackStep == 1){    //Set up attack
+                        attackTimer = 1f;
+                        attackStep = 2;
+                    }
+                    if(attackStep == 2){    //Charge up attack
+                        attackTimer -= Time.deltaTime;
 
+                        if(attackTimer <= 0){
+                            attackTimer = 2f;
+                            attackStep = 3;
+                        }
+                    }
+                    if(attackStep == 3){    //Fire bullets into air
+                        attackTimer -= Time.deltaTime;
+                        
+                        float wFireRate = 0.05f;
+                        if(wFireRateTimer > 0) wFireRateTimer -= Time.deltaTime;
+                        else{
+                            GameObject bullet = Instantiate(bullets[1], transform.position, Quaternion.identity);
+                            bullet.GetComponent<NormalBulletNoFollow>().speed = 20f;
+                            bullet.GetComponent<NormalBulletNoFollow>().SetDirection(Random.Range(0f, 7f) * direction, 20f);
+
+                            wFireRateTimer = wFireRate;  //Fire Rate
+                        }
+
+                        if(attackTimer <= 0){   //Show Ceiling Indicators
+                            attackTimer = 1.5f;
+                            
+                            float gapSize = 3f;
+                            for(int i = -10; i < 10; i++){
+                                danger = Instantiate(dangerIndicator, new Vector2(player.transform.position.x + i*gapSize, 8f), Quaternion.identity);
+                                danger.GetComponent<DangerIndicator>().lifeTime = attackTimer;
+                            }
+                            delayedPos = new Vector2(player.transform.position.x, 8f);
+
+                            attackStep = 4;
+                        }
+                    }
+                    if(attackStep == 4){       //Wait for Ceiling Indicators
+                        attackTimer -= Time.deltaTime;
+                        
+                        if(attackTimer <= 0){
+                            attackTimer = 2f;
+                            attackStep = 5;
+                        }
+                    }
+                    if(attackStep == 5){        //Waterfall attack
+                        attackTimer -= Time.deltaTime;
+
+                        float wFireRate = 0.05f;
+                        float gapSize = 3f; //should be equal to the last step
+
+                        if(wFireRateTimer > 0) wFireRateTimer -= Time.deltaTime;
+                        else{
+                            for(int i = -10; i < 10; i++){
+                                GameObject bullet = Instantiate(bullets[1], new Vector2(delayedPos.x + i*gapSize, delayedPos.y + 2f), Quaternion.identity);
+                                bullet.GetComponent<NormalBulletNoFollow>().speed = 15f;
+                                bullet.GetComponent<NormalBulletNoFollow>().SetDirection(0, -1);
+                                bullet.GetComponent<NormalBulletNoFollow>().lifeTime = 1.5f;
+                            }
+                            wFireRateTimer = wFireRate;
+                        }
+
+                        if(attackTimer <= 0){
+                            currentState = enemyState.idle;
+                        }
+                    }
                     break;
 
                 //[Overdrive] Attack 7: Combines waterfall attack and laser attack
@@ -474,7 +543,12 @@ public class GuraMovement : Enemy
                         attackNum = 4;
                         break;
                 }*/
-                attackNum = RNG;
+                if(attackInOrder){
+                    attackNum = Mathf.Clamp((attackNum + 1) % 7, 1, 6);
+                }
+                else{
+                    attackNum = RNG;
+                }
             }
             else                                        //below 50% hp (overdrive)
             {
@@ -493,7 +567,13 @@ public class GuraMovement : Enemy
                         attackNum = 4;
                         break;
                 }*/
-                attackNum = RNG;
+                if(attackInOrder){
+                    attackNum = Mathf.Clamp((attackNum + 1) % 7, 1, 6);
+                }
+                else{
+                    attackNum = RNG;
+                }
+                
                 if (!overdrive)
                 {
                     overdrive = true;
@@ -504,7 +584,7 @@ public class GuraMovement : Enemy
                     attackNum = 10;
                 }
             }
-            //attackNum = 2;  //Debug for testing specific attacks
+            attackNum = 5;  //Debug for testing specific attacks
 
             attackStep = 1;                     //Reset attack step to 1
 
@@ -521,6 +601,7 @@ public class GuraMovement : Enemy
                 GameObject bullet = Instantiate(bullets[0], new Vector2(Random.Range(centerPos.x-11, centerPos.x+11), centerPos.y+6.5f), Quaternion.identity);
                 bullet.GetComponent<PhysicsBullet>().SetDirection(0, -1);
                 bullet.GetComponent<PhysicsBullet>().SetGravity(0.5f);
+                if(difficulty > 100) bullet.GetComponent<PhysicsBullet>().geyser = true;
                 bulletRainTimer = bulletRainRate;
             }
         }

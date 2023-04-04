@@ -161,6 +161,7 @@ MonoBehaviour:
   minActionRate: 0.5
   maxActionRate: 1.5
   difficulty: 1
+  attackInOrder: 0
   bullets:
   - {fileID: 5126173865412392491, guid: dbb46f055236e5f4ab4df3896b62dd03, type: 3}
   - {fileID: 4219144156338261470, guid: f8edb747bbb23624b8e8f247dfc86ce9, type: 3}
