@@ -415,7 +415,7 @@ public class KDTDMovement : Enemy
                 attackTimer = 1f;
                 //weighted RNG for attacks
                 float RNG = Random.Range(0, 1f);
-                if (getCurrentHealth() > maxHealth * 0.5)    //above 50% HP
+                if (GetCurrentHealth() > maxHealth * 0.5)    //above 50% HP
                 {
                     switch (RNG)
                     {

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 8986591527670671252}
   - component: {fileID: 8986591527670671255}
   - component: {fileID: 8986591527670671254}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GroundedCheck
-  m_TagString: Untagged
+  m_TagString: IgnoreBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
   currentState: 0
   grounded: 0
   isBoss: 1
-  maxHealth: 2000
+  maxHealth: 3000
   currentHealth: 0
   ghostDuration: 0.2
   stunned: 0

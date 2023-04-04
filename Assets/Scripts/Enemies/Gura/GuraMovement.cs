@@ -180,24 +180,17 @@ public class GuraMovement : Enemy
                         {
                             //Fire a few bullets towards player (Replace with geyser bullets later)
                             GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                            bullet.GetComponent<PhysicsBullet>().SetForce(760f);
-                            bullet.GetComponent<PhysicsBullet>().SetDirection(2 * direction, 30);
+                            bullet.GetComponent<PhysicsBullet>().SetForce(600f);
+                            bullet.GetComponent<PhysicsBullet>().SetDirection(10 * direction, 80f);
+                            bullet.GetComponent<PhysicsBullet>().geyser = true;
 
-                            bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                            bullet.GetComponent<PhysicsBullet>().SetForce(770f);
-                            bullet.GetComponent<PhysicsBullet>().SetDirection(5 * direction, 30);
-
-                            bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                            bullet.GetComponent<PhysicsBullet>().SetForce(800f);
-                            bullet.GetComponent<PhysicsBullet>().SetDirection(10 * direction, 30);
-
-                            bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                            bullet.GetComponent<PhysicsBullet>().SetForce(850f);
-                            bullet.GetComponent<PhysicsBullet>().SetDirection(15 * direction, 30);
-
-                            bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                            bullet.GetComponent<PhysicsBullet>().SetForce(900f);
-                            bullet.GetComponent<PhysicsBullet>().SetDirection(20 * direction, 30);
+                            for (int i = 0; i < 4; i++)
+                            {
+                                bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
+                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(700f, 1000f));
+                                bullet.GetComponent<PhysicsBullet>().SetDirection(10 * direction, Random.Range(20f, 50f));
+                                bullet.GetComponent<PhysicsBullet>().geyser = true;
+                            }
 
                             currentState = enemyState.idle;
                         }
@@ -464,7 +457,7 @@ public class GuraMovement : Enemy
 
             //weighted RNG for attacks
             int RNG = Random.Range(1, 6);
-            if (getCurrentHealth() > maxHealth * 0.5)    //above 50% HP
+            if (GetCurrentHealth() > maxHealth * 0.5)    //above 50% HP
             {
                 /*switch (RNG)
                 {
@@ -511,7 +504,7 @@ public class GuraMovement : Enemy
                     attackNum = 10;
                 }
             }
-            //attackNum = 5;  //Debug for testing specific attacks
+            //attackNum = 2;  //Debug for testing specific attacks
 
             attackStep = 1;                     //Reset attack step to 1
 

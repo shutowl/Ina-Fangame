@@ -10,6 +10,8 @@ public class GuraLaser : MonoBehaviour
     public float lifeTime = 2f;
     private float lifeTimeTimer = 0f;
     public float width = 3f;
+    public float delay = 0f;
+    private float delayTime = 0f;
     public Vector3 startPos;
     public Vector3 endPos;
     public bool explode = false;    //creates a fountain of bullets at contact with ground
@@ -24,6 +26,7 @@ public class GuraLaser : MonoBehaviour
         hurtbox.SetPoints(new List<Vector2>() { startPos, endPos });
 
         lifeTimeTimer = lifeTime;
+        delayTime = delay;
 
         if (indicator)
         {
@@ -36,29 +39,46 @@ public class GuraLaser : MonoBehaviour
         {
             hurtbox.enabled = true;
         }
+
+        if (delayTime > 0)
+        {
+            line.LineWidth = 0;
+            hurtbox.edgeRadius = 0;
+            hurtbox.enabled = false;
+        }
     }
 
     void Update()
     {
-        lifeTimeTimer -= Time.deltaTime;
-
-        if (indicator)
+        if(delayTime > 0)
         {
-            line.LineColor = new Color(0f, 0.5f, 0.5f, 1f);
-            line.LightSaberFactor = 0.9f;
-            line.LineWidth = 0.5f;
+            delayTime -= Time.deltaTime;
+            line.LineWidth = 0;
+            hurtbox.enabled = false;
         }
         else
         {
-            line.LineWidth = (1 - Mathf.Pow(1 - lifeTimeTimer / lifeTime, 5)) * width;
-            hurtbox.edgeRadius = (1 - Mathf.Pow(1 - lifeTimeTimer / lifeTime, 5)) * width * 0.15f;
-        }
+            lifeTimeTimer -= Time.deltaTime;
 
-        line.SetStartAndEndPoints(startPos, endPos);
+            if (indicator)
+            {
+                line.LineColor = new Color(0f, 0.5f, 0.5f, 1f);
+                line.LightSaberFactor = 0.9f;
+                line.LineWidth = 0.5f;
+            }
+            else
+            {
+                hurtbox.enabled = true;
+                line.LineWidth = (1 - Mathf.Pow(1 - lifeTimeTimer / lifeTime, 5)) * width;
+                hurtbox.edgeRadius = (1 - Mathf.Pow(1 - lifeTimeTimer / lifeTime, 5)) * width * 0.15f;
+            }
 
-        if (lifeTimeTimer <= 0)
-        {
-            Destroy(this.gameObject);
+            line.SetStartAndEndPoints(startPos, endPos);
+
+            if (lifeTimeTimer <= 0)
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -82,4 +102,5 @@ public class GuraLaser : MonoBehaviour
     {
         line.LightSaberFactor = light;
     }
+
 }

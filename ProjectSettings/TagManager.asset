@@ -12,6 +12,7 @@ TagManager:
   - Player Bullet
   - RespawnPoint
   - Spawner
+  - IgnoreBullet
   layers:
   - Default
   - TransparentFX
@@ -22,8 +23,8 @@ TagManager:
   - Enemy
   - Ground
   - Bullet
-  - 
-  - 
+  - PlayerBullet
+  - EnemyGroundCheck
   - 
   - 
   - 

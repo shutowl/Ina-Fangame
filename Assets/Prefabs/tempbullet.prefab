@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3292435871963340837}
   - component: {fileID: 3292435871963340835}
   - component: {fileID: 3292435871963340838}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: tempbullet
   m_TagString: Player Bullet
   m_Icon: {fileID: 0}
@@ -129,4 +129,6 @@ MonoBehaviour:
   damage: 10
   lifeTime: 1
   lv2Acceleration: 0.01
-  laserSize: 0.5
+  startPos: {x: 0, y: 0, z: 0}
+  endPos: {x: 0, y: 0, z: 0}
+  width: 2

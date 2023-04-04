@@ -152,3 +152,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeTime: 3
+  geyser: 0
+  laser: {fileID: 8092659225986951766, guid: 8a77599b552fe7647964dd6d9675f897, type: 3}

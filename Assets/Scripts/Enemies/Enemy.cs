@@ -97,7 +97,7 @@ public class Enemy : MonoBehaviour
         if (isBoss) bossHealthBar.SetHP(currentHealth);
     }
 
-    public int getCurrentHealth()
+    public int GetCurrentHealth()
     {
         return currentHealth;
     }
