@@ -64,7 +64,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void Damage(int damage, float hitstun)
     {
-        currentHealth -= Mathf.Clamp(damage, 0, maxHealth);
+        if(player.currentState != PlayerMovement.playerState.hitstun) currentHealth -= Mathf.Clamp(damage, 0, maxHealth);
         SetHealth(currentHealth);
 
         if (currentHealth <= 0)

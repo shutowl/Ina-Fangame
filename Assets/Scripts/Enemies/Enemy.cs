@@ -52,11 +52,11 @@ public class Enemy : MonoBehaviour
         if(ghostTimer > 0)
         {
             ghostTimer -= Time.deltaTime;
-            GetComponent<Hazard>().setActive(false);
+            GetComponent<Hazard>().SetActive(false);
         }
         else
         {
-            GetComponent<Hazard>().setActive(true);
+            GetComponent<Hazard>().SetActive(true);
         }
     }
 
@@ -67,7 +67,7 @@ public class Enemy : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            GetComponent<Hazard>().setActive(false);
+            GetComponent<Hazard>().SetActive(false);
             rbBase.constraints = RigidbodyConstraints2D.FreezeRotation;
             currentState = enemyState.dying;
         }
@@ -88,7 +88,7 @@ public class Enemy : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            GetComponent<Hazard>().setActive(false);
+            GetComponent<Hazard>().SetActive(false);
             rbBase.constraints = RigidbodyConstraints2D.FreezeRotation;
             currentState = enemyState.dying;
         }
