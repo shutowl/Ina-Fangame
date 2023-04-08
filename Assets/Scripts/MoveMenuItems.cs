@@ -15,7 +15,7 @@ public class MoveMenuItems : MonoBehaviour
 
     void Start()
     {
-        hiddenPosition = optionsBox.anchoredPosition;
+        optionsBox.anchoredPosition = hiddenPosition;
     }
 /*
     void Update()
