@@ -7,6 +7,7 @@ public class NormalBulletNoFollow : MonoBehaviour
 {
     public float speed = 10f;           //Projectile speed of
     public float lifeTime = 3f;         //Time before bullet destroys itself
+    public bool follow = false;
     private float lifeTimeTimer = 0f;
 
     private Rigidbody2D rb;
@@ -21,12 +22,27 @@ public class NormalBulletNoFollow : MonoBehaviour
     void Start()
     {
         lifeTimeTimer = lifeTime;
-
         rb = GetComponent<Rigidbody2D>();
-        Vector3 rotation = -direction;
-        rb.velocity = direction * speed;
-        float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, rot + 90);
+
+        if (!follow)
+        {
+            Vector3 rotation = -direction;
+            rb.velocity = direction * speed;
+            float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, rot + 90);
+        }
+        else
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            rb = GetComponent<Rigidbody2D>();
+            Vector3 playerPos = player.transform.position;
+            Vector3 direction = playerPos - transform.position;
+            Vector3 rotation = transform.position - playerPos;
+            rb.velocity = new Vector2(direction.x, direction.y).normalized * speed;
+            float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, rot + 90);
+        }
+
     }
 
     void Update()
