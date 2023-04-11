@@ -149,7 +149,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             //Jump Gravity
-                if (rb.velocity.y < 0)
+            if (rb.velocity.y < 0)
             {
                 rb.gravityScale = gravityScale * fallGravityMultiplier;
             }
