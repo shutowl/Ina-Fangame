@@ -47,6 +47,7 @@ public class MainMenuController : MonoBehaviour
         input.UI.Enable();
         state = menuState.main;
         optionsBox.SetActive(false);
+        Time.timeScale = 1;
     }
 
     void Update()
@@ -122,6 +123,8 @@ public class MainMenuController : MonoBehaviour
                 menuIndex = Mathf.Clamp(--menuIndex, 0, 7);
                 optionsLeftText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
                 optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
+
+                if(changeVol) changeVol = false;
             }
         }
         if (input.UI.Down.WasPressedThisFrame())
@@ -141,6 +144,8 @@ public class MainMenuController : MonoBehaviour
                 menuIndex = Mathf.Clamp(++menuIndex, 0, 7);
                 optionsLeftText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
                 optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
+
+                if(changeVol) changeVol = false;
             }
         }
         if (input.UI.Left.WasPressedThisFrame())
@@ -315,13 +320,45 @@ public class MainMenuController : MonoBehaviour
         volIndex = index;
     }
 
-    private void OnEnable()
-    {
-        input.Player.Enable();
+    private int BoolToInt(bool boolean){
+        return (boolean) ? 1 : 0;
     }
 
+    private bool IntToBool(int integer){
+        return (integer == 1) ? true : false;
+    }
+
+    //Load variables on entering scene
+    private void OnEnable()
+    {
+        option1 = IntToBool(PlayerPrefs.GetInt("option1"));
+        option2 = IntToBool(PlayerPrefs.GetInt("option2"));
+        option3 = IntToBool(PlayerPrefs.GetInt("option3"));
+        masterVol = PlayerPrefs.GetInt("mVol");
+        BGMVol = PlayerPrefs.GetInt("bgmVol");
+        SFXVol = PlayerPrefs.GetInt("sfxVol");
+
+        optionsRightText[0].GetComponent<TextMeshProUGUI>().text = (option1) ? "Yes" : "No";
+        optionsRightText[1].GetComponent<TextMeshProUGUI>().text = (option2) ? "Yes" : "No";
+        optionsRightText[2].GetComponent<TextMeshProUGUI>().text = (option3) ? "Yes" : "No";
+        optionsRightText[5].GetComponent<TextMeshProUGUI>().text = masterVol + "%";
+        optionsRightText[6].GetComponent<TextMeshProUGUI>().text = BGMVol + "%";
+        optionsRightText[7].GetComponent<TextMeshProUGUI>().text = SFXVol + "%";
+
+        Debug.Log("Variables loaded: " + option1 + " " + option2 + " " + option3 + " " + masterVol + " " + BGMVol + " " + SFXVol);
+    }
+
+    //Save variables on exiting scene
     private void OnDisable()
     {
-        input.Player.Disable();
+        PlayerPrefs.SetInt("option1", BoolToInt(option1));
+        PlayerPrefs.SetInt("option2", BoolToInt(option2));
+        PlayerPrefs.SetInt("option3", BoolToInt(option3));
+
+        PlayerPrefs.SetInt("mVol", masterVol);
+        PlayerPrefs.SetInt("bgmVol", BGMVol);
+        PlayerPrefs.SetInt("sfxVol", SFXVol);
+
+        Debug.Log("Variables saved: " + option1 + " " + option2 + " " + option3 + " " + masterVol + " " + BGMVol + " " + SFXVol);
     }
 }
