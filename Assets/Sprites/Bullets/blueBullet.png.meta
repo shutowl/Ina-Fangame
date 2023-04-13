@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4900c7bdaa0a79a4dbc935f4a59ebd08
+guid: c0a3756da6d0a6f44a432900d5530628
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -117,13 +117,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ina_Idle_0
+      name: blueBullet_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,20 +131,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ca9a9efd9e3728b4db7a1e74d982af93
-      internalID: 1239365601
+      spriteID: 2a3f551bc5809704fbc2ddfc17b40fc6
+      internalID: -706312276
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle_1
+      name: blueBullet_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 157c121564b5f3c4dab803740300cb2e
+      internalID: 1002490554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blueBullet_2
       rect:
         serializedVersion: 2
         x: 32
         y: 0
-        width: 32
-        height: 32
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -152,20 +173,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 88229eb34e3bbe84a93afe4b016a4040
-      internalID: 1238339934
+      spriteID: d7de097d0e4b6c54bb27699a279431fd
+      internalID: -1853981388
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle_2
+      name: blueBullet_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cdd19621bddd4804aafd1c1abd8fc844
+      internalID: 1603860086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blueBullet_4
       rect:
         serializedVersion: 2
         x: 64
         y: 0
-        width: 32
-        height: 32
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -173,71 +215,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f9bf8c2fc8fd5cd439d11c98f51f3285
-      internalID: -1437271841
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ina_Idle_3
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9c86a850a05c90e4f873393c097d68b5
-      internalID: 2075441948
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ina_Idle_4
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8dd0b2c043a62e84dbf211446f8f62cc
-      internalID: 1098143259
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ina_Idle_5
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 43fe45db10f76a54fb7ffbb7b617abb6
-      internalID: 692452525
+      spriteID: 8c095787cb2137741b4fcf58bc58b7d1
+      internalID: 1877233402
       vertices: []
       indices: 
       edges: []
@@ -253,12 +232,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Ina_Idle_0: 1239365601
-      Ina_Idle_1: 1238339934
-      Ina_Idle_2: -1437271841
-      Ina_Idle_3: 2075441948
-      Ina_Idle_4: 1098143259
-      Ina_Idle_5: 692452525
+      blueBullet_0: -706312276
+      blueBullet_1: 1002490554
+      blueBullet_2: -1853981388
+      blueBullet_3: 1603860086
+      blueBullet_4: 1877233402
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

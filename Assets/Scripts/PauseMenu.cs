@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -68,14 +69,18 @@ public class PauseMenu : MonoBehaviour
             if (input.UI.Up.WasPressedThisFrame())
             {
                 pauseMenuButtons[pauseIndex].GetComponent<Image>().sprite = defaultButtonBG;
+                pauseMenuButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
                 pauseIndex = Mathf.Clamp(--pauseIndex, 0, 2);
                 pauseMenuButtons[pauseIndex].GetComponent<Image>().sprite = selectedButtonBG;
+                pauseMenuButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
             }
             if (input.UI.Down.WasPressedThisFrame())
             {
                 pauseMenuButtons[pauseIndex].GetComponent<Image>().sprite = defaultButtonBG;
+                pauseMenuButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
                 pauseIndex = Mathf.Clamp(++pauseIndex, 0, 2);
                 pauseMenuButtons[pauseIndex].GetComponent<Image>().sprite = selectedButtonBG;
+                pauseMenuButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
             }
             if (input.UI.Left.WasPressedThisFrame())
             {
@@ -129,8 +134,10 @@ public class PauseMenu : MonoBehaviour
     public void MouseOverButton(int index)
     {
         pauseMenuButtons[pauseIndex].GetComponent<Image>().sprite = defaultButtonBG;
+        pauseMenuButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
         pauseIndex = index;
         pauseMenuButtons[pauseIndex].GetComponent<Image>().sprite = selectedButtonBG;
+        pauseMenuButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
     }
 
     private void OnEnable()

@@ -21,6 +21,8 @@ public class AOMovement : MonoBehaviour
     private float chargeTime;
     [SerializeField] private int chargeLevel;
     private Vector2 direction;
+    private Animator anim;
+    private float scale = 0.75f;
 
     public GameObject[] bullets = new GameObject[4];
 
@@ -29,6 +31,8 @@ public class AOMovement : MonoBehaviour
         savedOffset = offset;
         savedSpeed = smoothSpeed;
         autoAmountCounter = autoAmount;
+
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -57,8 +61,16 @@ public class AOMovement : MonoBehaviour
                 if(direction.y > 0) //aim upwards
                 {
                     offset = new Vector3(0, 1.25f, 0);
+                    transform.localScale = new Vector2(direction.x * scale, scale);
+                    if (direction.x > 0) transform.localEulerAngles = new Vector3(0, 0, 90);
+                    else transform.localEulerAngles = new Vector3(0, 0, -90);
                 }
-                else { offset = new Vector3(direction.x * 1.25f, 0, 0); }  //aim left
+                else
+                { //aim left or right
+                    offset = new Vector3(direction.x * 1.25f, 0, 0);
+                    transform.localEulerAngles = Vector3.zero;
+                    transform.localScale = new Vector2(direction.x * scale, scale);
+                } 
 
                 if (chargeTime < 3.0f)
                     chargeTime += Time.deltaTime;
@@ -98,17 +110,15 @@ public class AOMovement : MonoBehaviour
             if (autoCDTimer > 0)
                 autoCDTimer -= Time.deltaTime;
         }
-        else
-        {
 
-        }
-
+        //Animations
+        anim.SetBool("charging", isCharging);
     }
 
     public void Charge()
     {
         firePosDelayCounter = firePosDelay;
-        smoothSpeed = savedSpeed * 3;
+        smoothSpeed = savedSpeed * 2;
         isCharging = true;
     }
     
@@ -147,6 +157,7 @@ public class AOMovement : MonoBehaviour
         autoAmountCounter = autoAmount;
 
         //offset = savedOffset;
+        transform.localEulerAngles = Vector3.zero;
     }
 
     public Vector2 getDirection()

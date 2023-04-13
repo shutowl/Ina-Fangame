@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4900c7bdaa0a79a4dbc935f4a59ebd08
+guid: ec873329aaa1e7d4e957e46c45b6bd9a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -117,12 +117,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ina_Idle_0
+      name: ina_run_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
+        width: 48
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -131,19 +131,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ca9a9efd9e3728b4db7a1e74d982af93
-      internalID: 1239365601
+      spriteID: 5ed632317b941624a95b49e5945984de
+      internalID: -1320925315
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle_1
+      name: ina_run_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 48
         y: 0
-        width: 32
+        width: 48
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -152,40 +152,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 88229eb34e3bbe84a93afe4b016a4040
-      internalID: 1238339934
+      spriteID: 1cda7f30c71d1624ebfa7cd03cbc433f
+      internalID: 1542538532
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle_2
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f9bf8c2fc8fd5cd439d11c98f51f3285
-      internalID: -1437271841
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Ina_Idle_3
+      name: ina_run_2
       rect:
         serializedVersion: 2
         x: 96
         y: 0
-        width: 32
+        width: 48
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -194,19 +173,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9c86a850a05c90e4f873393c097d68b5
-      internalID: 2075441948
+      spriteID: b07e2ed6972c1ed4a87fdbcb907878d3
+      internalID: 644421101
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle_4
+      name: ina_run_3
       rect:
         serializedVersion: 2
-        x: 128
+        x: 144
         y: 0
-        width: 32
+        width: 48
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -215,19 +194,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8dd0b2c043a62e84dbf211446f8f62cc
-      internalID: 1098143259
+      spriteID: ddd955ef1031a2c4a9808eeb231eb810
+      internalID: -330753816
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle_5
+      name: ina_run_4
       rect:
         serializedVersion: 2
-        x: 160
+        x: 192
         y: 0
-        width: 32
+        width: 48
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -236,8 +215,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43fe45db10f76a54fb7ffbb7b617abb6
-      internalID: 692452525
+      spriteID: f81aa2fc1f5793d4287e79868badfda0
+      internalID: 170155472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ina_run_5
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 48
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49878510d952d214297e3138331e6618
+      internalID: -1025946920
       vertices: []
       indices: 
       edges: []
@@ -253,12 +253,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Ina_Idle_0: 1239365601
-      Ina_Idle_1: 1238339934
-      Ina_Idle_2: -1437271841
-      Ina_Idle_3: 2075441948
-      Ina_Idle_4: 1098143259
-      Ina_Idle_5: 692452525
+      ina_run_0: -1320925315
+      ina_run_1: 1542538532
+      ina_run_2: 644421101
+      ina_run_3: -330753816
+      ina_run_4: 170155472
+      ina_run_5: -1025946920
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

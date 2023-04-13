@@ -3,7 +3,7 @@ guid: c2a043c7f6371b8459164666027991cf
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -63,13 +63,14 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -651,31 +652,31 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      tilemap_0: 1112049088
+      tilemap_1: 1676273382
+      tilemap_10: -258749241
+      tilemap_11: 1985324490
+      tilemap_12: -1015523878
       tilemap_13: -330559805
-      tilemap_23: 1453491854
       tilemap_14: -1410333625
       tilemap_15: 1487894214
-      tilemap_20: -732626075
-      tilemap_7: -1302053906
-      tilemap_19: -514813900
-      tilemap_8: 526211056
-      tilemap_5: 312378857
-      tilemap_2: -1959516341
-      tilemap_3: -265952710
-      tilemap_12: -1015523878
       tilemap_16: -1068082953
-      tilemap_24: -1792823485
-      tilemap_10: -258749241
-      tilemap_0: 1112049088
-      tilemap_18: -102741260
       tilemap_17: -1838038317
-      tilemap_22: 27298434
-      tilemap_6: 1564440665
-      tilemap_9: 392967555
-      tilemap_11: 1985324490
-      tilemap_4: -764365745
+      tilemap_18: -102741260
+      tilemap_19: -514813900
+      tilemap_2: -1959516341
+      tilemap_20: -732626075
       tilemap_21: -1111512245
-      tilemap_1: 1676273382
+      tilemap_22: 27298434
+      tilemap_23: 1453491854
+      tilemap_24: -1792823485
+      tilemap_3: -265952710
+      tilemap_4: -764365745
+      tilemap_5: 312378857
+      tilemap_6: 1564440665
+      tilemap_7: -1302053906
+      tilemap_8: 526211056
+      tilemap_9: 392967555
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

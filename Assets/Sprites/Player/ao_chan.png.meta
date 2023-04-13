@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4900c7bdaa0a79a4dbc935f4a59ebd08
+guid: 8da798cce22efb74ca573a8bb37f2023
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -117,7 +117,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ina_Idle_0
+      name: ao_chan_0
       rect:
         serializedVersion: 2
         x: 0
@@ -131,14 +131,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ca9a9efd9e3728b4db7a1e74d982af93
-      internalID: 1239365601
+      spriteID: c38f99a24ddbf844a9360e8b7974234a
+      internalID: 765718381
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle_1
+      name: ao_chan_1
       rect:
         serializedVersion: 2
         x: 32
@@ -152,14 +152,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 88229eb34e3bbe84a93afe4b016a4040
-      internalID: 1238339934
+      spriteID: ce35fdb0ddc2eda4ba640e6204e36176
+      internalID: -16730482
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle_2
+      name: ao_chan_2
       rect:
         serializedVersion: 2
         x: 64
@@ -173,14 +173,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f9bf8c2fc8fd5cd439d11c98f51f3285
-      internalID: -1437271841
+      spriteID: 74af543f301ffea48b0b7b63bff16037
+      internalID: -1529671813
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle_3
+      name: ao_chan_3
       rect:
         serializedVersion: 2
         x: 96
@@ -194,14 +194,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9c86a850a05c90e4f873393c097d68b5
-      internalID: 2075441948
+      spriteID: 8885daebf5f5ac14ab23e2925c6e4f20
+      internalID: 141841400
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle_4
+      name: ao_chan_4
       rect:
         serializedVersion: 2
         x: 128
@@ -215,14 +215,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8dd0b2c043a62e84dbf211446f8f62cc
-      internalID: 1098143259
+      spriteID: 347e2703d6bf927428714036f12bafa0
+      internalID: -1367961441
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle_5
+      name: ao_chan_5
       rect:
         serializedVersion: 2
         x: 160
@@ -236,8 +236,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43fe45db10f76a54fb7ffbb7b617abb6
-      internalID: 692452525
+      spriteID: 2e5f42b93cc0e754499bf2c403d2aff1
+      internalID: -1890511347
       vertices: []
       indices: 
       edges: []
@@ -253,12 +253,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Ina_Idle_0: 1239365601
-      Ina_Idle_1: 1238339934
-      Ina_Idle_2: -1437271841
-      Ina_Idle_3: 2075441948
-      Ina_Idle_4: 1098143259
-      Ina_Idle_5: 692452525
+      ao_chan_0: 765718381
+      ao_chan_1: -16730482
+      ao_chan_2: -1529671813
+      ao_chan_3: 141841400
+      ao_chan_4: -1367961441
+      ao_chan_5: -1890511347
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

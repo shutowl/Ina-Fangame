@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using TMPro;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -13,151 +15,245 @@ public class MainMenuController : MonoBehaviour
         difficulty,
         options
     }
-    public menuState currentState;
-    /* General Arrow Indexes:
-     * MAIN MENU
-     * 0 = Start Game
-     * 1 = Practice
-     * 2 = Options
-     * 3 = Exit Game
-     * STAGES
-     * 4 = Tutorial
-     * 5 = Stage 1
-     * DIFFICULTIES
-     * 6 = Easy
-     * 7 = Normal
-     * 8 = Hard
-     * 9 = Impossible
-     */
-    public GameObject arrow;
-    public List<Vector2> arrowPositions;
-    public GameObject stages;
-    public GameObject difficulties;
-    private int arrowIndex;
-    private MoveMenuItems moveMenu;
+    public menuState state;
 
-    void Start()
+
+    public Sprite selectedButtonBG;
+    public Sprite defaultButtonBG;
+    public GameObject[] mainMenuButtons;
+    public GameObject optionsBox;
+    public GameObject[] optionsLeftText;
+    public GameObject[] optionsRightText;
+    private int menuIndex = 0;
+
+    [Header("Options Variables")]
+    public bool option1 = true;
+    public bool option2 = true;
+    public bool option3 = false;
+    public int resolution = 0;
+    public int fullscreen = 0;
+    public int masterVol = 100;
+    public int BGMVol = 100;
+    public int SFXVol = 100;
+    bool changeVol = false;
+    bool volIncrease = false;
+    int volIndex = 0;
+
+    private InputActions input;
+
+    void Awake()
     {
-        moveMenu = GetComponent<MoveMenuItems>();
-        arrowIndex = 0;
-        arrow.GetComponent<RectTransform>().anchoredPosition = arrowPositions[arrowIndex];
-        currentState = menuState.main;
+        input = new InputActions();
+        input.UI.Enable();
+        state = menuState.main;
+        optionsBox.SetActive(false);
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))    //Navigate Up
+        if (input.UI.Confirm.WasPressedThisFrame())
         {
-            if (currentState == menuState.main)
+            if (state == menuState.options)
             {
-                if (arrowIndex == 0) arrowIndex = 3;    //If at top, loop back to bottom
-                else arrowIndex = Mathf.Clamp(--arrowIndex, 0, 3);
+                switch (menuIndex)
+                {
+                    case 0:
+                        option1 = !option1;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option1) ? "Yes" : "No";
+                        break;
+                    case 1:
+                        option2 = !option2;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option2) ? "Yes" : "No";
+                        break;
+                    case 2:
+                        option3 = !option3;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option3) ? "Yes" : "No";
+                        break;
+                }
             }
-            else if (currentState == menuState.stage)
+            if (state == menuState.main)
             {
-                if (arrowIndex == 4) arrowIndex = 5;
-                else arrowIndex = Mathf.Clamp(--arrowIndex, 4, 5);
-            }
-            else if (currentState == menuState.difficulty)
-            {
-                if (arrowIndex == 6) arrowIndex = 9;
-                else arrowIndex = Mathf.Clamp(--arrowIndex, 6, 9);
+                switch (menuIndex)
+                {
+                    case 0:
+                        StartGame();
+                        break;
+                    case 1:
+                        Practice();
+                        break;
+                    case 2:
+                        OpenOptions();
+                        break;
+                    case 3:
+                        ExitGame();
+                        break;
+                }
             }
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))    //Navigate Down
+        if (input.UI.Cancel.WasPressedThisFrame())
         {
-            if (currentState == menuState.main)
+            if (state == menuState.main)
             {
-                if (arrowIndex == 3) arrowIndex = 0;    //If at bottom, loop back to top
-                else arrowIndex = Mathf.Clamp(++arrowIndex, 0, 3);
+                mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
+                mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                menuIndex = 3; //Moves to exit
+                mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
+                mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
             }
-            else if (currentState == menuState.stage)
+            if (state == menuState.options)
             {
-                if (arrowIndex == 5) arrowIndex = 4;
-                else arrowIndex = Mathf.Clamp(++arrowIndex, 4, 5);
-            }
-            else if (currentState == menuState.difficulty)
-            {
-                if (arrowIndex == 9) arrowIndex = 6;
-                else arrowIndex = Mathf.Clamp(++arrowIndex, 6, 9);
-            }
-
-        }
-        arrow.GetComponent<RectTransform>().anchoredPosition = arrowPositions[arrowIndex];  //Moves between first and last positions
-
-        //Main Inputs
-        if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Space))  //Select Current Option
-        {
-            switch (arrowIndex)
-            {
-                //MAIN
-                case 0:
-                    stages.SetActive(true);
-                    currentState = menuState.stage;
-                    arrowIndex = 4;
-                    break;
-                case 1:
-                    EnterBossRush();
-                    break;
-                case 2:
-                    OpenOptions();
-                    break;
-                case 3:
-                    ExitGame();
-                    break;
-                //STAGES
-                case 4: //Tutorial
-                    difficulties.SetActive(true);
-                    currentState = menuState.difficulty;
-                    arrowIndex = 6;
-                    break;
-                case 5: //Stage 1
-                    difficulties.SetActive(true);
-                    currentState = menuState.difficulty;
-                    arrowIndex = 6;
-                    break;
-                //DIFFICULTIES
-                case 6:
-                    StartGame();
-                    break;
-                case 7:
-                    StartGame();
-                    break;
-                case 8:
-                    StartGame();
-                    break;
-                case 9:
-                    StartGame();
-                    break;
+                CloseOptions();
             }
         }
-
-        //Back Button
-        if ((Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Escape)))
+        if (input.UI.Up.WasPressedThisFrame())
         {
-            if(!moveMenu.OptionsIsHidden())
-                OpenOptions();
-            else if (currentState == menuState.stage)
+            if(state == menuState.main)
             {
-                stages.SetActive(false);
-                currentState = menuState.main;
-                arrowIndex = 0;
+                mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
+                mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                menuIndex = Mathf.Clamp(--menuIndex, 0, 3);
+                mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
+                mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
             }
-            else if(currentState == menuState.difficulty)
+            if(state == menuState.options)
             {
-                difficulties.SetActive(false);
-                currentState = menuState.stage;
-                arrowIndex = 4;
+                optionsLeftText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(0.7f, 0.7f, 0.7f);
+                optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(0.7f, 0.7f, 0.7f);
+                menuIndex = Mathf.Clamp(--menuIndex, 0, 7);
+                optionsLeftText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
+                optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
             }
         }
-
-        //Stage Menu Inputs
-
-
-        //Options Menu Inputs
-        if ((Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Space)) && !moveMenu.OptionsIsHidden())
+        if (input.UI.Down.WasPressedThisFrame())
         {
-            
+            if (state == menuState.main)
+            {
+                mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
+                mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                menuIndex = Mathf.Clamp(++menuIndex, 0, 3);
+                mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
+                mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+            }
+            if (state == menuState.options)
+            {
+                optionsLeftText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(0.7f, 0.7f, 0.7f);
+                optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(0.7f, 0.7f, 0.7f);
+                menuIndex = Mathf.Clamp(++menuIndex, 0, 7);
+                optionsLeftText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
+                optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
+            }
+        }
+        if (input.UI.Left.WasPressedThisFrame())
+        {
+            if (state == menuState.options)
+            {
+                switch (menuIndex)
+                {
+                    case 0: //Option 1
+                        option1 = !option1;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option1) ? "Yes" : "No";
+                        break;
+                    case 1: //Option 2
+                        option2 = !option2;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option2) ? "Yes" : "No";
+                        break;
+                    case 2: //Option 3
+                        option3 = !option3;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option3) ? "Yes" : "No";
+                        break;
+                    case 3: //Resolution
+
+                        break;
+                    case 4: //Display
+
+                        break;
+                    case 5: //Master Vol
+                        ChangeVolume(false, 0);
+                        break;
+                    case 6: //BGM Vol
+                        ChangeVolume(false, 1);
+                        break;
+                    case 7: //SFX Vol
+                        ChangeVolume(false, 2);
+                        break;
+                }
+            }
+        }
+        if (input.UI.Right.WasPressedThisFrame())
+        {
+            if (state == menuState.options)
+            {
+                switch (menuIndex)
+                {
+                    case 0: //Option 1
+                        option1 = !option1;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option1) ? "Yes" : "No";
+                        break;
+                    case 1: //Option 2
+                        option2 = !option2;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option2) ? "Yes" : "No";
+                        break;
+                    case 2: //Option 3
+                        option3 = !option3;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option3) ? "Yes" : "No";
+                        break;
+                    case 3: //Resolution
+
+                        break;
+                    case 4: //Display
+
+                        break;
+                    case 5: //Master Vol
+                        ChangeVolume(true, 0);
+                        break;
+                    case 6: //BGM Vol
+                        ChangeVolume(true, 1);
+                        break;
+                    case 7: //SFX Vol
+                        ChangeVolume(true, 2);
+                        break;
+                }
+            }
+        }
+        if (input.UI.Left.WasReleasedThisFrame() || input.UI.Right.WasReleasedThisFrame())
+        {
+            if(state == menuState.options)
+            {
+                switch (menuIndex)
+                {
+                    case 5: //Master Vol
+                    case 6: //BGM Vol
+                    case 7: //SFX Vol
+                        changeVol = false;
+                        break;
+                }
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        //Changes volume value accordingly
+        if (changeVol)
+        {
+            switch (volIndex)
+            {
+                case 0: //Master
+                    if (volIncrease) masterVol = Mathf.Clamp(++masterVol, 0, 100);
+                    else masterVol = Mathf.Clamp(--masterVol, 0, 100);
+                    optionsRightText[5].GetComponent<TextMeshProUGUI>().text = masterVol + "%";
+                    break;
+                case 1: //BGM
+                    if (volIncrease) BGMVol = Mathf.Clamp(++BGMVol, 0, 100);
+                    else BGMVol = Mathf.Clamp(--BGMVol, 0, 100);
+                    optionsRightText[6].GetComponent<TextMeshProUGUI>().text = BGMVol + "%";
+                    break;
+                case 2: //SFX
+                    if (volIncrease) SFXVol = Mathf.Clamp(++SFXVol, 0, 100);
+                    else SFXVol = Mathf.Clamp(--SFXVol, 0, 100);
+                    optionsRightText[7].GetComponent<TextMeshProUGUI>().text = SFXVol + "%";
+                    break;
+            }
         }
     }
 
@@ -167,16 +263,35 @@ public class MainMenuController : MonoBehaviour
         Debug.Log("Start Button Clicked");
     }
 
-    public void EnterBossRush()
+    public void Practice()
     {
-        Debug.Log("Boss Rush Button Clicked");
+        Debug.Log("Practice Button Clicked");
     }
 
     public void OpenOptions()
     {
-        moveMenu.MoveOptionsBox();
+        mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
+        mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        state = menuState.options;
+        menuIndex = 0;
+        optionsBox.SetActive(true);
+        optionsLeftText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
+        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
         Debug.Log("Options Button Clicked");
     }
+
+    public void CloseOptions()
+    {
+        optionsLeftText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(0.7f, 0.7f, 0.7f);
+        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(0.7f, 0.7f, 0.7f);
+        state = menuState.main;
+        menuIndex = 0;
+        optionsBox.SetActive(false);
+        mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
+        mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+        Debug.Log("Options Menu Closed");
+    }
+
 
     public void ExitGame()
     {
@@ -186,29 +301,27 @@ public class MainMenuController : MonoBehaviour
 
     public void MouseOverButton(int index)
     {
-        arrowIndex = index;
+        mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
+        mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        menuIndex = index;
+        mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
+        mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
     }
 
-
-
-    //Custom Inspector button to add current arrow position into the list
-    public void AddArrowPosition()
+    private void ChangeVolume(bool increase, int index)
     {
-        arrowPositions.Add(arrow.GetComponent<RectTransform>().anchoredPosition);
+        changeVol = true;
+        volIncrease = increase;
+        volIndex = index;
     }
-}
 
-[CustomEditor(typeof(MainMenuController))]
-public class TitleScreenEditor : Editor
-{
-    public override void OnInspectorGUI()
+    private void OnEnable()
     {
-        DrawDefaultInspector();
+        input.Player.Enable();
+    }
 
-        MainMenuController titleScript = (MainMenuController)target;
-        if (GUILayout.Button("Add Arrow Position"))
-        {
-            titleScript.AddArrowPosition();
-        }
+    private void OnDisable()
+    {
+        input.Player.Disable();
     }
 }
