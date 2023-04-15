@@ -53,12 +53,12 @@ public class AOMovement : MonoBehaviour
             {
                 offset = new Vector3(-direction.x, savedOffset.y, 0);
                 smoothSpeed = savedSpeed;
+                transform.localEulerAngles = Vector3.zero;
             }
-
             //Charge and Fire Mechanics
             if (isCharging)
             {
-                if(direction.y > 0) //aim upwards
+                if (direction.y > 0) //aim upwards
                 {
                     offset = new Vector3(0, 1.25f, 0);
                     transform.localScale = new Vector2(direction.x * scale, scale);
@@ -98,6 +98,7 @@ public class AOMovement : MonoBehaviour
                 }
             }
 
+
             if (chargeTime > 0f && chargeTime <= 1f) chargeLevel = 0;
             else if (chargeTime > 1.5f && chargeTime <= 3f) chargeLevel = 1;
             else if (chargeTime > 3f) chargeLevel = 2;
@@ -112,7 +113,7 @@ public class AOMovement : MonoBehaviour
         }
 
         //Animations
-        anim.SetBool("charging", isCharging);
+        anim.SetBool("charging", isCharging || firePosDelayCounter > 0);
     }
 
     public void Charge()
@@ -157,7 +158,6 @@ public class AOMovement : MonoBehaviour
         autoAmountCounter = autoAmount;
 
         //offset = savedOffset;
-        transform.localEulerAngles = Vector3.zero;
     }
 
     public Vector2 getDirection()

@@ -48,6 +48,14 @@ public class MainMenuController : MonoBehaviour
         state = menuState.main;
         optionsBox.SetActive(false);
         Time.timeScale = 1;
+
+        //Set Default Values
+        PlayerPrefs.GetInt("option1", 1);
+        PlayerPrefs.GetInt("option2", 1);
+        PlayerPrefs.GetInt("option3", 1);
+        PlayerPrefs.GetInt("mVol", 70);
+        PlayerPrefs.GetInt("bgmVol", 70);
+        PlayerPrefs.GetInt("sfxVol", 70);
     }
 
     void Update()

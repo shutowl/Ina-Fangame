@@ -75,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Other")]
     public ParticleSystem dust;
+    bool paused = false;
 
     //Animations
     private Animator anim;
@@ -109,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
         float lastDir = moveVal.x;  //detects changes in direction using (lastDir != moveVal.x)
 
         //-----MOVE STATE-----
-        if (currentState == playerState.moving)
+        if (currentState == playerState.moving && !paused)
         {
             moveVal = inputActions.Player.Move.ReadValue<Vector2>();
 
@@ -450,7 +451,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //-----CUTSCENE STATE-----
-        else if(currentState == playerState.inCutscene)
+        /*else if(currentState == playerState.inCutscene)
         {
             hitbox.GetComponent<BoxCollider2D>().enabled = false;
             rb.velocity = new Vector2(0, rb.velocity.y);
@@ -466,7 +467,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 cutsceneDelay -= Time.deltaTime;
             }
-        }
+        }*/
 
         //------DEAD STATE-----
         else if(currentState == playerState.dead)
@@ -554,7 +555,7 @@ public class PlayerMovement : MonoBehaviour
         if (attackTimer <= 0 - flipOffset)    //prevent flipping on attacks (+ some leeway)
             transform.localScale = new Vector3(size * direction, size, size);   //flips sprite of this object and its children (like hurtbox)
 
-        //Particle system
+        //Particle system (Creates dust upon changing directions on ground)
         if(lastDir != moveVal.x && moveVal.x != 0 && grounded)
         {
             CreateDust();
@@ -617,6 +618,12 @@ public class PlayerMovement : MonoBehaviour
     {
         currentState = playerState.inCutscene;
         cutsceneDelay = delay;            
+    }
+
+    public IEnumerator PausePlayer(bool paused)
+    {
+        yield return new WaitForEndOfFrame();
+        this.paused = paused;
     }
 
     public Vector2 getMoveVal()

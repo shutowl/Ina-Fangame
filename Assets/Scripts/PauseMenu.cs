@@ -102,6 +102,7 @@ public class PauseMenu : MonoBehaviour
             Time.timeScale = 0;
             paused = true;
             pauseUI.SetActive(true);
+            StartCoroutine(FindObjectOfType<PlayerMovement>().PausePlayer(true));
             Debug.Log("Game Paused");
         }
         else
@@ -109,6 +110,7 @@ public class PauseMenu : MonoBehaviour
             Time.timeScale = 1;
             paused = false;
             pauseUI.SetActive(false);
+            StartCoroutine(FindObjectOfType<PlayerMovement>().PausePlayer(false));
             Debug.Log("Game Unpaused");
         }
 

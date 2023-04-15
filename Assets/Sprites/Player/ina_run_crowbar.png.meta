@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 352df16dd1e124d4f868a784bae22620
+guid: 2833e44c981933e42a61e9fade9cd707
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -117,7 +117,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ina_Idle 1_0
+      name: ina_run_crowbar_0
       rect:
         serializedVersion: 2
         x: 0
@@ -131,14 +131,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0e100e68cc3a09d40a9eff24f56d6195
-      internalID: 1078447411
+      spriteID: 4679c0709657f9240a370916b7d67b2d
+      internalID: -601552930
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle 1_1
+      name: ina_run_crowbar_1
       rect:
         serializedVersion: 2
         x: 48
@@ -152,14 +152,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 96f0b082574dcc24cabc138d948e7870
-      internalID: 1576277845
+      spriteID: eab3486ea1d5ef4468520cac1313b294
+      internalID: -586436829
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle 1_2
+      name: ina_run_crowbar_2
       rect:
         serializedVersion: 2
         x: 96
@@ -173,14 +173,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9f967c1f4e65dd443bd9293b4259fce0
-      internalID: 1520402370
+      spriteID: b93b2ad2c3bf915459c10ecf8efdc484
+      internalID: 56598274
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle 1_3
+      name: ina_run_crowbar_3
       rect:
         serializedVersion: 2
         x: 144
@@ -194,14 +194,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5d961855d5d45604482cdc779da77259
-      internalID: 1474785761
+      spriteID: e3c84aeb744cdfd47b64a012a8448a19
+      internalID: -1213686120
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle 1_4
+      name: ina_run_crowbar_4
       rect:
         serializedVersion: 2
         x: 192
@@ -215,14 +215,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 066f5a7b7a0089c4994c4b43f2824f72
-      internalID: -1569874507
+      spriteID: 622f4a4fa07f64c4f9d331636b72057b
+      internalID: -738101831
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ina_Idle 1_5
+      name: ina_run_crowbar_5
       rect:
         serializedVersion: 2
         x: 240
@@ -236,8 +236,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a47073e095f6caa44880f289270860b2
-      internalID: 1948388845
+      spriteID: 5717572e2965c1a458fadb02bfc4dacb
+      internalID: -1228544927
       vertices: []
       indices: 
       edges: []
@@ -253,12 +253,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Ina_Idle 1_0: 1078447411
-      Ina_Idle 1_1: 1576277845
-      Ina_Idle 1_2: 1520402370
-      Ina_Idle 1_3: 1474785761
-      Ina_Idle 1_4: -1569874507
-      Ina_Idle 1_5: 1948388845
+      ina_run_crowbar_0: -601552930
+      ina_run_crowbar_1: -586436829
+      ina_run_crowbar_2: 56598274
+      ina_run_crowbar_3: -1213686120
+      ina_run_crowbar_4: -738101831
+      ina_run_crowbar_5: -1228544927
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

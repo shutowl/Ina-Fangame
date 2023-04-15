@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ec873329aaa1e7d4e957e46c45b6bd9a
+guid: 09f5776f1609a2548aff44850f6f2f4e
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -117,7 +117,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ina_run_0
+      name: ina_run 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -131,14 +131,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5ed632317b941624a95b49e5945984de
-      internalID: -1320925315
+      spriteID: 9f02b002f81445043980d1fa6e2070b7
+      internalID: -877257957
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_run_1
+      name: ina_run 1_1
       rect:
         serializedVersion: 2
         x: 48
@@ -152,14 +152,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1cda7f30c71d1624ebfa7cd03cbc433f
-      internalID: 1542538532
+      spriteID: 896c248871521404dabe6b3e5e9955b4
+      internalID: -987605357
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_run_2
+      name: ina_run 1_2
       rect:
         serializedVersion: 2
         x: 96
@@ -173,14 +173,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b07e2ed6972c1ed4a87fdbcb907878d3
-      internalID: 644421101
+      spriteID: 062ab882a04da504cb30a7efa95da8d5
+      internalID: 1174737244
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_run_3
+      name: ina_run 1_3
       rect:
         serializedVersion: 2
         x: 144
@@ -194,14 +194,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ddd955ef1031a2c4a9808eeb231eb810
-      internalID: -330753816
+      spriteID: a6c7966e4983ca1409a4702e3f7bc633
+      internalID: -205544475
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_run_4
+      name: ina_run 1_4
       rect:
         serializedVersion: 2
         x: 192
@@ -215,14 +215,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f81aa2fc1f5793d4287e79868badfda0
-      internalID: 170155472
+      spriteID: 5494e54f74b24ff468dbf80f884cf3c4
+      internalID: -355049760
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_run_5
+      name: ina_run 1_5
       rect:
         serializedVersion: 2
         x: 240
@@ -236,8 +236,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 49878510d952d214297e3138331e6618
-      internalID: -1025946920
+      spriteID: cc1c779aedcd1f748b9d454f54cb3ebc
+      internalID: 1091938303
       vertices: []
       indices: 
       edges: []
@@ -253,12 +253,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ina_run_0: -1320925315
-      ina_run_1: 1542538532
-      ina_run_2: 644421101
-      ina_run_3: -330753816
-      ina_run_4: 170155472
-      ina_run_5: -1025946920
+      ina_run 1_0: -877257957
+      ina_run 1_1: -987605357
+      ina_run 1_2: 1174737244
+      ina_run 1_3: -205544475
+      ina_run 1_4: -355049760
+      ina_run 1_5: 1091938303
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
