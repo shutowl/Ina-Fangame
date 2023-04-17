@@ -386,7 +386,7 @@ public class GuraMovement : Enemy
                         if(transform.position.y >= -1f)
                         {
                             //Spray bullets like a fountain
-                            for (int i = 0; i < 20 + (difficulty / 5); i++)
+                            for (int i = 0; i < 20 + Mathf.Clamp((difficulty / 5), 0, 30); i++)
                             {
                                 GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
                                 bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1.5f, 1.5f), Random.Range(2f, 3f));
@@ -430,8 +430,8 @@ public class GuraMovement : Enemy
                         if(attackTimer <= 0){   //Show Ceiling Indicators
                             attackTimer = 1.5f;
                             
-                            float gapSize = 3f - Mathf.Clamp(difficulty/150f, 0, 2f);
-                            for(int i = -10; i < 10; i++){
+                            float gapSize = 3f - Mathf.Clamp(difficulty/150f, 0, 1.75f);
+                            for(int i = -20; i < 20; i++){
                                 danger = Instantiate(dangerIndicator, new Vector2(player.transform.position.x + i*gapSize, 8f), Quaternion.identity);
                                 danger.GetComponent<DangerIndicator>().lifeTime = attackTimer;
                             }
