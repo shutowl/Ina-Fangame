@@ -274,7 +274,7 @@ public class PlayerMovement : MonoBehaviour
             }
             if(rolliFramesCounter > 0)
             {
-                hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later
+                //hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later
                 hitbox.GetComponent<BoxCollider2D>().enabled = false;
             }
             else
@@ -282,7 +282,7 @@ public class PlayerMovement : MonoBehaviour
                 if (damagediFramesCounter <= 0)
                 {
                     if (grounded) CreateDust();
-                    hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //DEBUG
+                    //hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //DEBUG
                     hitbox.GetComponent<BoxCollider2D>().enabled = true;
                 }
             }
@@ -421,7 +421,7 @@ public class PlayerMovement : MonoBehaviour
         //-----DAMAGED STATE-----
         else if(currentState == playerState.hitstun)
         {
-            hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later
+            //hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later
 
             //knockback            
             if(hitstunCounter < (hitstun - knockbackLimit) && grounded) //prevents player from constantly sliding backwards

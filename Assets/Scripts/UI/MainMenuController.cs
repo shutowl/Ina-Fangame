@@ -272,7 +272,7 @@ public class MainMenuController : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("StageTest");
+        SceneManager.LoadScene("LoadingScreen");
         Debug.Log("Start Button Clicked");
     }
 

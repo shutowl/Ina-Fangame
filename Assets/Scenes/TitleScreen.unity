@@ -1985,7 +1985,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Display
+  m_text: 'Display (WIP)
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3ee63b712e27c144db1123f8e05eeb89, type: 2}
   m_sharedMaterial: {fileID: -1518014600338474591, guid: 3ee63b712e27c144db1123f8e05eeb89, type: 2}
@@ -3641,7 +3643,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Resolution
+  m_text: 'Resolution (WIP)
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3ee63b712e27c144db1123f8e05eeb89, type: 2}
   m_sharedMaterial: {fileID: -1518014600338474591, guid: 3ee63b712e27c144db1123f8e05eeb89, type: 2}
@@ -4548,7 +4552,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2146410069
 RectTransform:
   m_ObjectHideFlags: 0
