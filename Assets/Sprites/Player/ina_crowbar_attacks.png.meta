@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2d43bde3fa9d3134b97d087404289bad
+guid: 2c4df29b18d054e40b3eabec73f05a0a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -117,7 +117,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ina_roll_crowbar_0
+      name: ina_crowbar_attacks_0
       rect:
         serializedVersion: 2
         x: 0
@@ -131,14 +131,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e4b776fdad1c0bb4787f01c0521e29ef
-      internalID: 1797567450
+      spriteID: 40a90ed0a191651469701e5e5508417a
+      internalID: -1704222571
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_crowbar_1
+      name: ina_crowbar_attacks_1
       rect:
         serializedVersion: 2
         x: 64
@@ -152,14 +152,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: abab54bbf27277944babb2ae726ee9d3
-      internalID: -850526322
+      spriteID: 62cea6ac1fe88a648bb72aeaa399602d
+      internalID: 732068117
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_crowbar_2
+      name: ina_crowbar_attacks_2
       rect:
         serializedVersion: 2
         x: 128
@@ -173,14 +173,35 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c50dfa1a82466da43813cee88ba45978
-      internalID: -1814359309
+      spriteID: db19aab982d2bee46885997ef12aa067
+      internalID: -1667096928
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_crowbar_3
+      name: ina_crowbar_attacks_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 581279ed6cd91054c986e74cbcd1b4f6
+      internalID: -236633520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ina_crowbar_attacks_4
       rect:
         serializedVersion: 2
         x: 256
@@ -194,14 +215,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8577ddba318f7b945b730c9cd04fc501
-      internalID: 63973023
+      spriteID: bed8742937de61e43a3d4a09ea993207
+      internalID: -1007908691
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_crowbar_4
+      name: ina_crowbar_attacks_5
       rect:
         serializedVersion: 2
         x: 320
@@ -215,14 +236,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 116e241015198f44fa6388e63219022b
-      internalID: 1151593780
+      spriteID: 5502d146e95f3e24899f710186a0818a
+      internalID: -1197941577
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_crowbar_5
+      name: ina_crowbar_attacks_6
       rect:
         serializedVersion: 2
         x: 384
@@ -236,14 +257,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 29252aed017e2fc49897354ed67b0638
-      internalID: 1349666194
+      spriteID: 29d836899feac6246ae5868972f680e6
+      internalID: -1427595078
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_crowbar_6
+      name: ina_crowbar_attacks_7
       rect:
         serializedVersion: 2
         x: 448
@@ -257,8 +278,134 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6dd60345760bd0548814d5553c6d159c
-      internalID: -824682806
+      spriteID: 63e8c5db6c00d634bbe2eed3ca1352d5
+      internalID: -1793083285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ina_crowbar_attacks_8
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 64
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c3aaeb5747ce2a48930a70e233e2a3c
+      internalID: -1079514452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ina_crowbar_attacks_9
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 64
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3506b2df12a79642ba5fe7bb27253f6
+      internalID: -2006678883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ina_crowbar_attacks_10
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 64
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e90532c228ddf8b4286114bced0fcae3
+      internalID: -2035020448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ina_crowbar_attacks_11
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 64
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be387c5dd9e866445bba370fcb28782d
+      internalID: 888842447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ina_crowbar_attacks_12
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 64
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4057967fb1b91e4e84f07ae6f913029
+      internalID: -1391145754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ina_crowbar_attacks_13
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 64
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77bea1f65621c0a4aaed877b9bf323e6
+      internalID: -921087947
       vertices: []
       indices: 
       edges: []
@@ -274,13 +421,20 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ina_roll_crowbar_0: 1797567450
-      ina_roll_crowbar_1: -850526322
-      ina_roll_crowbar_2: -1814359309
-      ina_roll_crowbar_3: 63973023
-      ina_roll_crowbar_4: 1151593780
-      ina_roll_crowbar_5: 1349666194
-      ina_roll_crowbar_6: -824682806
+      ina_crowbar_attacks_0: -1704222571
+      ina_crowbar_attacks_1: 732068117
+      ina_crowbar_attacks_10: -2035020448
+      ina_crowbar_attacks_11: 888842447
+      ina_crowbar_attacks_12: -1391145754
+      ina_crowbar_attacks_13: -921087947
+      ina_crowbar_attacks_2: -1667096928
+      ina_crowbar_attacks_3: -236633520
+      ina_crowbar_attacks_4: -1007908691
+      ina_crowbar_attacks_5: -1197941577
+      ina_crowbar_attacks_6: -1427595078
+      ina_crowbar_attacks_7: -1793083285
+      ina_crowbar_attacks_8: -1079514452
+      ina_crowbar_attacks_9: -2006678883
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

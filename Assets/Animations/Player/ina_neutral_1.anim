@@ -77,36 +77,19 @@ AnimationClip:
     path: CrowbarHurtbox
     classID: 61
     script: {fileID: 0}
+  m_PPtrCurves:
   - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: Infinity
-        outSlope: Infinity
-        tangentMode: 103
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 0.2
-        value: 0
-        inSlope: Infinity
-        outSlope: Infinity
-        tangentMode: 103
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_Enabled
-    path: CrowbarHurtbox
+    - time: 0
+      value: {fileID: 732068117, guid: 2c4df29b18d054e40b3eabec73f05a0a, type: 3}
+    - time: 0.05
+      value: {fileID: -1667096928, guid: 2c4df29b18d054e40b3eabec73f05a0a, type: 3}
+    - time: 0.1
+      value: {fileID: -236633520, guid: 2c4df29b18d054e40b3eabec73f05a0a, type: 3}
+    attribute: m_Sprite
+    path: Crowbar
     classID: 212
     script: {fileID: 0}
-  m_PPtrCurves: []
-  m_SampleRate: 10
+  m_SampleRate: 20
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -135,13 +118,16 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 2009576268
-      attribute: 3305885265
+      path: 3394318673
+      attribute: 0
       script: {fileID: 0}
       typeID: 212
-      customType: 0
-      isPPtrCurve: 0
-    pptrCurveMapping: []
+      customType: 23
+      isPPtrCurve: 1
+    pptrCurveMapping:
+    - {fileID: 732068117, guid: 2c4df29b18d054e40b3eabec73f05a0a, type: 3}
+    - {fileID: -1667096928, guid: 2c4df29b18d054e40b3eabec73f05a0a, type: 3}
+    - {fileID: -236633520, guid: 2c4df29b18d054e40b3eabec73f05a0a, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -190,34 +176,6 @@ AnimationClip:
     attribute: m_Enabled
     path: CrowbarHurtbox
     classID: 61
-    script: {fileID: 0}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: Infinity
-        outSlope: Infinity
-        tangentMode: 103
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 0.2
-        value: 0
-        inSlope: Infinity
-        outSlope: Infinity
-        tangentMode: 103
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_Enabled
-    path: CrowbarHurtbox
-    classID: 212
     script: {fileID: 0}
   - curve:
       serializedVersion: 2

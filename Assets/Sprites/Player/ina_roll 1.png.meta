@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d9a0a2061c7708e48890a809ea694061
+guid: de8d176653d373842a3e4b9f4b337680
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -117,7 +117,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ina_roll_0
+      name: ina_roll 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -131,14 +131,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 26a4dca0e49768847814b0b87bebcece
-      internalID: 367903856
+      spriteID: a18d42c9ed9a39742be4193f06314de1
+      internalID: 76619446
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_1
+      name: ina_roll 1_1
       rect:
         serializedVersion: 2
         x: 64
@@ -152,14 +152,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f08e82cfe7c102d4ea51c45d81216028
-      internalID: 933099347
+      spriteID: 726ab16af3a047c459b6967a5f442c18
+      internalID: -885878248
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_2
+      name: ina_roll 1_2
       rect:
         serializedVersion: 2
         x: 128
@@ -173,14 +173,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1bae889b3beed094ab8bc002a0102b57
-      internalID: 955633750
+      spriteID: 177dea0ff1213c6499371f3aae01be6e
+      internalID: 1163643309
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_3
+      name: ina_roll 1_3
       rect:
         serializedVersion: 2
         x: 192
@@ -194,14 +194,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 18ee52bf48bcac648b3d8383dfdda6e0
-      internalID: -102586860
+      spriteID: 69f2b62ee8988be40a13dea58e68373e
+      internalID: -1140583848
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_4
+      name: ina_roll 1_4
       rect:
         serializedVersion: 2
         x: 256
@@ -215,14 +215,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2bcd504a6fef49e43ad3aebc518bee82
-      internalID: -820858570
+      spriteID: 9a88ce95b05caee408b1469cd653a3fa
+      internalID: -1141628381
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_5
+      name: ina_roll 1_5
       rect:
         serializedVersion: 2
         x: 320
@@ -236,14 +236,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c23725df443d4c24a8a92530343137c9
-      internalID: 1967155497
+      spriteID: cbe6e5e87201bae4088b177ca60d37a5
+      internalID: 171552009
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_6
+      name: ina_roll 1_6
       rect:
         serializedVersion: 2
         x: 384
@@ -257,14 +257,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b1a19368dee6c7e459ac0a7d4533a3d3
-      internalID: 516032327
+      spriteID: b8556d2449ec1ce46b46be7e251e7397
+      internalID: -273524601
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ina_roll_7
+      name: ina_roll 1_7
       rect:
         serializedVersion: 2
         x: 448
@@ -278,8 +278,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aa809da466166684ab03ed0fa093ce62
-      internalID: -311234308
+      spriteID: 33dd1f195b883264b99d62f3b28b0d39
+      internalID: -680490106
       vertices: []
       indices: 
       edges: []
@@ -295,14 +295,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ina_roll_0: 367903856
-      ina_roll_1: 933099347
-      ina_roll_2: 955633750
-      ina_roll_3: -102586860
-      ina_roll_4: -820858570
-      ina_roll_5: 1967155497
-      ina_roll_6: 516032327
-      ina_roll_7: -311234308
+      ina_roll 1_0: 76619446
+      ina_roll 1_1: -885878248
+      ina_roll 1_2: 1163643309
+      ina_roll 1_3: -1140583848
+      ina_roll 1_4: -1141628381
+      ina_roll 1_5: 171552009
+      ina_roll 1_6: -273524601
+      ina_roll 1_7: -680490106
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
