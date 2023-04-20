@@ -21,8 +21,6 @@ public class KDTDMovement : Enemy
     public float attack3Rate = 0.2f;    // Fire rate of shake attack (attack 3)
     private float attack3RateTimer = 0f;
 
-    public int difficulty = 1;
-
     private Rigidbody2D rb;
     private GameObject player;
     public GameObject[] bullets;
@@ -33,8 +31,10 @@ public class KDTDMovement : Enemy
 
     private bool overdrive = false;
 
-    void Start()
+    new void Start()
     {
+        base.Start();
+
         direction = -1; //start facing left;
         movesLeft = Random.Range(1,4); //starts with 1-3 movement options
         rb = GetComponent<Rigidbody2D>();

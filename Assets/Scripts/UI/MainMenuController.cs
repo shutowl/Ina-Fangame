@@ -22,9 +22,19 @@ public class MainMenuController : MonoBehaviour
     public Sprite defaultButtonBG;
     public GameObject[] mainMenuButtons;
     public GameObject optionsBox;
+    public RectTransform optionsBG;
+    public float optionsOpenDuration = 0.2f;
+    private bool optionBoxIsMoving = false;
     public GameObject[] optionsLeftText;
     public GameObject[] optionsRightText;
     private int menuIndex = 0;
+
+    public GameObject difficultyBox;
+    public RectTransform difficultyBG;
+    public float difficultyOpenDuration = 0.2f;
+    public GameObject[] difficultyText;
+    public TextMeshProUGUI difficultyDescription;
+    private int difficultyLevel = 0;
 
     [Header("Options Variables")]
     public bool option1 = true;
@@ -47,6 +57,7 @@ public class MainMenuController : MonoBehaviour
         input.UI.Enable();
         state = menuState.main;
         optionsBox.SetActive(false);
+        difficultyBox.SetActive(false);
         Time.timeScale = 1;
 
         //Set Default Values
@@ -80,18 +91,23 @@ public class MainMenuController : MonoBehaviour
                         break;
                 }
             }
-            if (state == menuState.main)
+            else if(state == menuState.difficulty)
+            {
+                StartGame();
+            }
+            else if (state == menuState.main)
             {
                 switch (menuIndex)
                 {
                     case 0:
-                        StartGame();
+                        OpenDifficulty();
                         break;
                     case 1:
                         Practice();
                         break;
                     case 2:
-                        OpenOptions();
+                        if(!optionBoxIsMoving)
+                            OpenOptions();
                         break;
                     case 3:
                         ExitGame();
@@ -111,7 +127,12 @@ public class MainMenuController : MonoBehaviour
             }
             if (state == menuState.options)
             {
-                CloseOptions();
+                if (!optionBoxIsMoving)
+                    CloseOptions();
+            }
+            if(state == menuState.difficulty)
+            {
+                CloseDifficulty();
             }
         }
         if (input.UI.Up.WasPressedThisFrame())
@@ -134,6 +155,34 @@ public class MainMenuController : MonoBehaviour
 
                 if(changeVol) changeVol = false;
             }
+            if(state == menuState.difficulty)
+            {
+                Color color = difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color;
+                difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(color.r, color.g, color.b, 0.5f);
+                menuIndex = Mathf.Clamp(--menuIndex, 0, 3);
+                difficultyLevel = Mathf.Clamp(--difficultyLevel, 0, 3);
+                color = difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color;
+                difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(color.r, color.g, color.b, 1f);
+
+                switch (menuIndex)
+                {
+                    case 0:
+                        difficultyDescription.text = "Taking it easy!\nRecommended for players who are new to action and bullet hell games. " +
+                            "Enemies will attack slower and fire less projectiles than normal.";
+                        break;
+                    case 1:
+                        difficultyDescription.text = "The intended difficulty!\nRecommended for players experienced with action and bullet hell " +
+                            "games.";
+                        break;
+                    case 2:
+                        difficultyDescription.text = "Getting tougher!\nFor tough players looking for a challenge. " +
+                            "Enemy attack patterns and speed are buffed!";
+                        break;
+                    case 3:
+                        difficultyDescription.text = "Take at your own risk...";
+                        break;
+                }
+            }
         }
         if (input.UI.Down.WasPressedThisFrame())
         {
@@ -154,6 +203,34 @@ public class MainMenuController : MonoBehaviour
                 optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
 
                 if(changeVol) changeVol = false;
+            }
+            if (state == menuState.difficulty)
+            {
+                Color color = difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color;
+                difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(color.r, color.g, color.b, 0.5f);
+                menuIndex = Mathf.Clamp(++menuIndex, 0, 3);
+                difficultyLevel = Mathf.Clamp(++difficultyLevel, 0, 3);
+                color = difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color;
+                difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(color.r, color.g, color.b, 1f);
+
+                switch (menuIndex)
+                {
+                    case 0:
+                        difficultyDescription.text = "Taking it easy!\nRecommended for players who are new to action and bullet hell games. " +
+                            "Enemies will attack slower and fire less projectiles than normal.";
+                        break;
+                    case 1:
+                        difficultyDescription.text = "The intended difficulty!\nRecommended for players experienced with action and bullet hell " +
+                            "games.";
+                        break;
+                    case 2:
+                        difficultyDescription.text = "Getting tougher!\nFor tough players looking for a challenge. " +
+                            "Enemy attack patterns and speed are buffed!";
+                        break;
+                    case 3:
+                        difficultyDescription.text = "Take at your own risk...";
+                        break;
+                }
             }
         }
         if (input.UI.Left.WasPressedThisFrame())
@@ -272,13 +349,44 @@ public class MainMenuController : MonoBehaviour
 
     public void StartGame()
     {
+        PlayerPrefs.SetInt("difficulty", difficultyLevel);
         SceneManager.LoadScene("LoadingScreen");
-        Debug.Log("Start Button Clicked");
+        Debug.Log("Started game with difficulty level: " + difficultyLevel);
     }
 
     public void Practice()
     {
         Debug.Log("Practice Button Clicked");
+    }
+
+    void OpenDifficulty()
+    {
+        mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
+        mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        state = menuState.difficulty;
+        menuIndex = 0;
+        difficultyLevel = 0;
+        difficultyBox.SetActive(true);
+        Color color = difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color;
+        difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(color.r, color.g, color.b, 1);
+        difficultyDescription.text = "Taking it easy!\nRecommended for players who are new to action and bullet hell games. " +
+                    "Enemies will attack slower and fire less projectiles than normal.";
+
+        StartCoroutine(MoveDifficultyBox(true, difficultyOpenDuration));
+        Debug.Log("Difficulty Menu Opened");
+    }
+
+    void CloseDifficulty()
+    {
+        Color color = difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color;
+        difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(color.r, color.g, color.b, 0.5f);
+        state = menuState.main;
+        menuIndex = 0;
+        mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
+        mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+        StartCoroutine(MoveDifficultyBox(false, difficultyOpenDuration));
+        Debug.Log("Difficulty Menu Closed");
     }
 
     public void OpenOptions()
@@ -290,7 +398,9 @@ public class MainMenuController : MonoBehaviour
         optionsBox.SetActive(true);
         optionsLeftText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
-        Debug.Log("Options Button Clicked");
+
+        StartCoroutine(MoveOptionsBox(true, optionsOpenDuration));
+        Debug.Log("Options Button Opened");
     }
 
     public void CloseOptions()
@@ -299,9 +409,10 @@ public class MainMenuController : MonoBehaviour
         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(0.7f, 0.7f, 0.7f);
         state = menuState.main;
         menuIndex = 0;
-        optionsBox.SetActive(false);
         mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
         mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+        StartCoroutine(MoveOptionsBox(false, optionsOpenDuration));
         Debug.Log("Options Menu Closed");
     }
 
@@ -333,7 +444,7 @@ public class MainMenuController : MonoBehaviour
     }
 
     private bool IntToBool(int integer){
-        return (integer == 1) ? true : false;
+        return (integer == 1);
     }
 
     //Load variables on entering scene
@@ -368,5 +479,100 @@ public class MainMenuController : MonoBehaviour
         PlayerPrefs.SetInt("sfxVol", SFXVol);
 
         Debug.Log("Variables saved: " + option1 + " " + option2 + " " + option3 + " " + masterVol + " " + BGMVol + " " + SFXVol);
+    }
+
+    IEnumerator MoveOptionsBox(bool on, float duration)
+    {
+        optionBoxIsMoving = true;
+
+        if (on) //Open Options box
+        {
+            float startPos = 0;
+            float endPos = 586;
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / duration;
+                t = Mathf.Sin((t * Mathf.PI) / 2);
+                optionsBG.sizeDelta = new Vector2(2560, Mathf.LerpUnclamped(startPos, endPos, t));
+                //optionsBG.GetComponent<RectTransform>() = Vector2.LerpUnclamped(startPosition, targetPosition, t);
+                yield return null;
+            }
+            optionsBG.sizeDelta = new Vector2(2560, 586);
+        }
+        else    //Close Options box
+        {
+            float startPos = 586;
+            float endPos = 0;
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / duration;
+                t = Mathf.Sin((t * Mathf.PI) / 2);
+                optionsBG.sizeDelta = new Vector2(2560, Mathf.LerpUnclamped(startPos, endPos, t));
+                //optionsBG.GetComponent<RectTransform>() = Vector2.LerpUnclamped(startPosition, targetPosition, t);
+                yield return null;
+            }
+            optionsBG.sizeDelta = new Vector2(2560, 586);
+            optionsBox.SetActive(false);
+        }
+
+        optionBoxIsMoving = false;
+    }
+
+    IEnumerator MoveDifficultyBox(bool on, float duration)
+    {
+        optionBoxIsMoving = true;
+
+        if (on) //Open Options box
+        {
+            float startPos = 0;
+            float endPos = 586;
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / duration;
+                t = Mathf.Sin((t * Mathf.PI) / 2);
+                difficultyBG.sizeDelta = new Vector2(2560, Mathf.LerpUnclamped(startPos, endPos, t));
+                //optionsBG.GetComponent<RectTransform>() = Vector2.LerpUnclamped(startPosition, targetPosition, t);
+                yield return null;
+            }
+            difficultyBG.sizeDelta = new Vector2(2560, 586);
+        }
+        else    //Close Options box
+        {
+            float startPos = 586;
+            float endPos = 0;
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / duration;
+                t = Mathf.Sin((t * Mathf.PI) / 2);
+                difficultyBG.sizeDelta = new Vector2(2560, Mathf.LerpUnclamped(startPos, endPos, t));
+                //optionsBG.GetComponent<RectTransform>() = Vector2.LerpUnclamped(startPosition, targetPosition, t);
+                yield return null;
+            }
+            difficultyBG.sizeDelta = new Vector2(2560, 586);
+            difficultyBox.SetActive(false);
+        }
+
+        optionBoxIsMoving = false;
+    }
+
+    public int GetDifficultyLevel()
+    {
+        return difficultyLevel;
     }
 }

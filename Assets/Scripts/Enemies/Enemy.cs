@@ -25,11 +25,12 @@ public class Enemy : MonoBehaviour
     private float ghostTimer = 0f;                  //Named "ghost" since the player should be able to pass through enemies
     public bool stunned = false;
     public string enemyName;
+    public int difficulty = 1;
     protected ComboMeter comboMeter;
     private Rigidbody2D rbBase;
     protected BossHealthBar bossHealthBar;
 
-    private void Awake()
+    public void Start()
     {
         currentHealth = maxHealth;
         comboMeter = FindObjectOfType<ComboMeter>();
@@ -102,7 +103,6 @@ public class Enemy : MonoBehaviour
         return currentHealth;
     }
 
-
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player Bullet") && currentState != enemyState.dead)
@@ -118,6 +118,26 @@ public class Enemy : MonoBehaviour
                 TakeDamageNoStun(damage);
                 Destroy(col.gameObject);
             }
+        }
+    }
+
+    private void OnEnable()
+    {
+        Debug.Log(PlayerPrefs.GetInt("difficulty"));
+        switch (PlayerPrefs.GetInt("difficulty"))
+        {
+            case 0: //Casual
+                difficulty = -30;
+                break;
+            case 1: //Normal
+                difficulty = 1;
+                break;
+            case 2: //Hard
+                difficulty = 70;
+                break;
+            case 3: //Impossible
+                difficulty = 200;
+                break;
         }
     }
 }

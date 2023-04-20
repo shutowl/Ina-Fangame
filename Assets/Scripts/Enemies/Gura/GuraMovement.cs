@@ -15,7 +15,6 @@ public class GuraMovement : Enemy
     private float attackTimer;          // Used for attack timings (such as delays or charges)
     private int attackNum = 0;          // Determines which attack is used
     private int attackStep = 1;         // Current step of the current attack
-    public int difficulty = 1;
     private bool overdrive = false;
     public bool attackInOrder = false;
 
@@ -37,8 +36,10 @@ public class GuraMovement : Enemy
     GameObject danger;
     Vector3 delayedPos = Vector2.zero;
 
-    void Start()
+    new void Start()
     {
+        base.Start();
+
         direction = -1; //start facing left;
         rb = GetComponent<Rigidbody2D>();
         currentState = enemyState.idle;
@@ -185,7 +186,7 @@ public class GuraMovement : Enemy
                             bullet.GetComponent<PhysicsBullet>().SetDirection(10 * direction, 80f);
                             bullet.GetComponent<PhysicsBullet>().geyser = true;
 
-                            for (int i = 0; i < 4; i++)
+                            for (int i = 0; i < 4 + Mathf.Clamp(difficulty / 20, -2, 10); i++)
                             {
                                 bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
                                 bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(700f, 1000f));
@@ -227,7 +228,11 @@ public class GuraMovement : Enemy
 
                         //Shoot spiral bullets
                         float fireRate = 0.3f - Mathf.Clamp((difficulty / 200), 0, 0.2f);   //difficulty alters fireRate
-                        int density = 4 + (int)(Mathf.Log10(difficulty) * 2);               //and density
+                        int density = 4 + Mathf.Clamp((int)(Mathf.Log10(Mathf.Abs(difficulty)) * 2), -1, 20);      //and density
+                        if (difficulty < 0)
+                        {
+                            density = 4 + Mathf.Clamp((int)-(Mathf.Log10(Mathf.Abs(difficulty)) * 2), -1, 20);      //and density
+                        }
                         float offsetRate = 0.5f - Mathf.Clamp((difficulty / 200), 0, 0.3f); //and offsetRate
 
                         if (fireRateTimer > 0) fireRateTimer -= Time.deltaTime;
@@ -273,7 +278,7 @@ public class GuraMovement : Enemy
                         if(rb.velocity.y <= 0.1f && attackTimer <= 0)
                         {
                             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-                            attackTimer = 1f - Mathf.Clamp((difficulty / 200), 0, 0.7f); ;   //laser charge time
+                            attackTimer = 1f - Mathf.Clamp((difficulty / 200), -1f, 0.7f); ;   //laser charge time
                             attackStep = 3;
 
                             laserIndicator = Instantiate(bullets[2], transform.position, Quaternion.identity);
@@ -287,7 +292,7 @@ public class GuraMovement : Enemy
                         attackTimer -= Time.deltaTime;
 
                         //laser indicator follows player
-                        Vector3 smoothedPos = Vector3.Lerp(delayedPos, player.transform.position, (2f + Mathf.Clamp((difficulty/50), 0, 2f)) * Time.deltaTime);
+                        Vector3 smoothedPos = Vector3.Lerp(delayedPos, player.transform.position, (2f + Mathf.Clamp((difficulty/50), -1f, 2f)) * Time.deltaTime);
                         delayedPos = smoothedPos;
                         laserIndicator.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
 
@@ -297,7 +302,7 @@ public class GuraMovement : Enemy
                             GameObject laser = Instantiate(bullets[2], transform.position, Quaternion.identity);
                             laser.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
                             laser.GetComponent<GuraLaser>().SetLifeTime(1f);
-                            attackTimer = 1f - Mathf.Clamp((difficulty / 200), 0, 0.7f); ;   //laser charge time
+                            attackTimer = 1f - Mathf.Clamp((difficulty / 200), -1f, 0.7f); ;   //laser charge time
                             attackStep = 4;
                         }
                     }
@@ -306,7 +311,7 @@ public class GuraMovement : Enemy
                         attackTimer -= Time.deltaTime;
 
                         //laser indicator follows player
-                        Vector3 smoothedPos = Vector3.Lerp(delayedPos, player.transform.position, (2f + Mathf.Clamp((difficulty / 50), 0, 2f)) * Time.deltaTime);
+                        Vector3 smoothedPos = Vector3.Lerp(delayedPos, player.transform.position, (2f + Mathf.Clamp((difficulty / 50), -1f, 2f)) * Time.deltaTime);
                         delayedPos = smoothedPos;
                         laserIndicator.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
 
@@ -316,7 +321,7 @@ public class GuraMovement : Enemy
                             GameObject laser = Instantiate(bullets[2], transform.position, Quaternion.identity);
                             laser.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
                             laser.GetComponent<GuraLaser>().SetLifeTime(1f);
-                            attackTimer = 2f - Mathf.Clamp((difficulty / 100), 0, 1.5f);   //laser charge time
+                            attackTimer = 2f - Mathf.Clamp((difficulty / 100), -1f, 1.5f);   //laser charge time
                             attackStep = 5;
                         }
                     }
@@ -325,7 +330,7 @@ public class GuraMovement : Enemy
                         attackTimer -= Time.deltaTime;
 
                         //laser indicator follows player
-                        Vector3 smoothedPos = Vector3.Lerp(delayedPos, player.transform.position, (2f + Mathf.Clamp((difficulty / 50), 0, 2f)) * Time.deltaTime);
+                        Vector3 smoothedPos = Vector3.Lerp(delayedPos, player.transform.position, (2f + Mathf.Clamp((difficulty / 50), -1f, 2f)) * Time.deltaTime);
                         delayedPos = smoothedPos;
                         laserIndicator.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
 
@@ -352,7 +357,7 @@ public class GuraMovement : Enemy
                         GetComponent<BoxCollider2D>().enabled = false;
                         comboMeter.SetStop(true);
 
-                        attackTimer = 4f - Mathf.Clamp((difficulty / 20), 0, 1.5f);
+                        attackTimer = 4f - Mathf.Clamp((difficulty / 20), -1, 1.5f);
 
                         danger = Instantiate(dangerIndicator, new Vector2(-100, -100), Quaternion.identity);
                         danger.GetComponent<DangerIndicator>().lifeTime = attackTimer;
@@ -386,7 +391,7 @@ public class GuraMovement : Enemy
                         if(transform.position.y >= -1f)
                         {
                             //Spray bullets like a fountain
-                            for (int i = 0; i < 20 + Mathf.Clamp((difficulty / 5), 0, 30); i++)
+                            for (int i = 0; i < 20 + Mathf.Clamp((difficulty / 5), -10, 20); i++)
                             {
                                 GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
                                 bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1.5f, 1.5f), Random.Range(2f, 3f));
@@ -430,7 +435,7 @@ public class GuraMovement : Enemy
                         if(attackTimer <= 0){   //Show Ceiling Indicators
                             attackTimer = 1.5f;
                             
-                            float gapSize = 3f - Mathf.Clamp(difficulty/150f, 0, 1.75f);
+                            float gapSize = 3f - Mathf.Clamp(difficulty/150f, -1.5f, 1.75f);
                             for(int i = -20; i < 20; i++){
                                 danger = Instantiate(dangerIndicator, new Vector2(player.transform.position.x + i*gapSize, 8f), Quaternion.identity);
                                 danger.GetComponent<DangerIndicator>().lifeTime = attackTimer;
@@ -452,7 +457,7 @@ public class GuraMovement : Enemy
                         attackTimer -= Time.deltaTime;
 
                         float wFireRate = 0.05f;
-                        float gapSize = 3f - Mathf.Clamp(difficulty / 150f, 0, 2f); //should be equal to the last step
+                        float gapSize = 3f - Mathf.Clamp(difficulty / 150f, -1f, 2f); //should be equal to the last step
 
                         if (wFireRateTimer > 0) wFireRateTimer -= Time.deltaTime;
                         else{
@@ -576,7 +581,7 @@ public class GuraMovement : Enemy
                 if (!overdrive)
                 {
                     overdrive = true;
-                    difficulty += 5;
+                    difficulty += 10;
                 }
                 if (!bulletRainOn)
                 {

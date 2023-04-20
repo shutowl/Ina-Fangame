@@ -23,8 +23,10 @@ public class Bloop : Enemy
     private GameObject player;
     public GameObject bullet;
 
-    void Start()
+    new void Start()
     {
+        base.Start();
+
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player");
         xDir = (FindObjectOfType<PlayerMovement>().transform.position.x - transform.position.x > 0) ? 1 : -1;

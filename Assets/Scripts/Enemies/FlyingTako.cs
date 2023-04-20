@@ -26,8 +26,10 @@ public class FlyingTako : Enemy
     private Rigidbody2D rb;
 
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
+        base.Start();
+
         centerPos = Camera.main.transform.position;
         rb = GetComponent<Rigidbody2D>();
 

@@ -13,8 +13,10 @@ public class Tako : Enemy
 
     private Rigidbody2D rb;
 
-    void Start()
+    new void Start()
     {
+        base.Start();
+
         direction = -1; //start facing left;
         rb = GetComponent<Rigidbody2D>();
         enabled = false;
