@@ -351,7 +351,7 @@ public class MainMenuController : MonoBehaviour
     {
         PlayerPrefs.SetInt("difficulty", difficultyLevel);
         SceneManager.LoadScene("LoadingScreen");
-        Debug.Log("Started game with difficulty level: " + difficultyLevel);
+        //Debug.Log("Started game with difficulty level: " + difficultyLevel);
     }
 
     public void Practice()
@@ -373,7 +373,7 @@ public class MainMenuController : MonoBehaviour
                     "Enemies will attack slower and fire less projectiles than normal.";
 
         StartCoroutine(MoveDifficultyBox(true, difficultyOpenDuration));
-        Debug.Log("Difficulty Menu Opened");
+        //Debug.Log("Difficulty Menu Opened");
     }
 
     void CloseDifficulty()
@@ -386,7 +386,7 @@ public class MainMenuController : MonoBehaviour
         mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
 
         StartCoroutine(MoveDifficultyBox(false, difficultyOpenDuration));
-        Debug.Log("Difficulty Menu Closed");
+        //Debug.Log("Difficulty Menu Closed");
     }
 
     public void OpenOptions()
@@ -400,7 +400,7 @@ public class MainMenuController : MonoBehaviour
         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
 
         StartCoroutine(MoveOptionsBox(true, optionsOpenDuration));
-        Debug.Log("Options Button Opened");
+        //Debug.Log("Options Button Opened");
     }
 
     public void CloseOptions()
@@ -413,7 +413,7 @@ public class MainMenuController : MonoBehaviour
         mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
 
         StartCoroutine(MoveOptionsBox(false, optionsOpenDuration));
-        Debug.Log("Options Menu Closed");
+        //Debug.Log("Options Menu Closed");
     }
 
 

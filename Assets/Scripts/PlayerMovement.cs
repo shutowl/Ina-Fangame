@@ -68,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Attacking")]
     public Transform hurtbox;
+    public float animOffset;
     private int attackNum = -1;
     private float attackTimer = 0f;          //If attack is pressed again while active, goes into the next attack in the combo. Also acts as attack duration for single attack combos
     private float flipOffset = 0.1f;         //Player continues looking towards attack for [flipOffset] seconds longer.
@@ -83,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
     private float cutsceneDelay;
     public bool grounded;
     private Rigidbody2D rb;
+    AnimationClip[] clips;
 
     //Store Input Values
     private InputActions inputActions;
@@ -93,6 +95,7 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         anim = GetComponent<Animator>();
+        clips = anim.runtimeAnimatorController.animationClips;
         inputActions = new InputActions();
         rb = GetComponent<Rigidbody2D>();
         if (rb is null)
@@ -165,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 walkDelayCounter = walkDelay;
                 speed = tempSpeed;
-                resetHitbox();
+                ResetHitbox();
             }
 
             //Walk
@@ -186,10 +189,11 @@ public class PlayerMovement : MonoBehaviour
                     if (attackNum == -1)
                     {
                         attackNum = 1;
-                        StartCoroutine(Attack(0, 0.2f, attackNum));
+                        StartCoroutine(Attack(0, GetAnimationClipLength("ina_neutral_1") - animOffset, attackNum));
                     }
                     else if (attackNum == 1 || attackNum == 2)
                     {
+                        attackTimer += 2 * Time.deltaTime;  //+2 frames to hopefully remove attack bug
                         currentState = playerState.attacking;
                     }
                 }
@@ -199,12 +203,12 @@ public class PlayerMovement : MonoBehaviour
                     //Downwards Aerial: Quick swing downwards. Bounces up upon hit.
                     if (inputActions.Player.Move.ReadValue<Vector2>().y == -1)
                     {
-                        StartCoroutine(Attack(0, 0.3f, 5));
+                        StartCoroutine(Attack(0, GetAnimationClipLength("ina_dair") - animOffset, 5));
                     }
                     //Neutral Aerial: Quick swing forward
                     else
                     {
-                        StartCoroutine(Attack(0, 0.3f, 4));
+                        StartCoroutine(Attack(0, GetAnimationClipLength("ina_nair") - animOffset, 4));
                     }
                 }
 
@@ -322,7 +326,7 @@ public class PlayerMovement : MonoBehaviour
             if (slideCounter <= 0)
             {
                 currentState = playerState.moving;
-                resetHitbox();
+                ResetHitbox();
 
             }
 
@@ -358,12 +362,12 @@ public class PlayerMovement : MonoBehaviour
             //Neutral Attack 2: Quick swing forwards
             if (attackNum == 1)
             {
-                StartCoroutine(Attack(attackTimer, 0.2f, 2));
+                StartCoroutine(Attack(attackTimer, GetAnimationClipLength("ina_neutral_2") - animOffset, 2));
             }
             //Neutral Attack 3: Throws crowbar out and hits multiple times
             if(attackNum == 2 && inputActions.Player.Attack.WasPressedThisFrame())
             {
-                StartCoroutine(Attack(attackTimer, 0.7f, 3));
+                StartCoroutine(Attack(attackTimer, GetAnimationClipLength("ina_neutral_3") - animOffset, 3));
             }
 
             if (attackNum == -1) currentState = playerState.moving;
@@ -408,12 +412,12 @@ public class PlayerMovement : MonoBehaviour
                     //Downwards Aerial: Quick swing downwards. Bounces up upon hit.
                     if (inputActions.Player.Move.ReadValue<Vector2>().y == -1)
                     {
-                        StartCoroutine(Attack(0, 0.3f, 5));
+                        StartCoroutine(Attack(0, GetAnimationClipLength("ina_dair") - animOffset, 5));
                     }
                     //Neutral Aerial: Quick swing forward
                     else
                     {
-                        StartCoroutine(Attack(0, 0.3f, 4));
+                        StartCoroutine(Attack(0, GetAnimationClipLength("ina_nair") - animOffset, 4));
                     }
                 }
             }
@@ -435,7 +439,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (hitstunCounter <= 0)
             {
-                resetHitbox();
+                ResetHitbox();
                 currentState = playerState.moving;
             }
 
@@ -585,6 +589,21 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    //Gets the Animation Clip length of a given name (invalid names return error)
+    float GetAnimationClipLength(string name)
+    {
+        foreach (AnimationClip clip in clips)
+        {
+            if (clip.name == name)
+            {
+                return clip.length;
+            }
+        }
+
+        Debug.LogError("Animation clip name not found!: " + name);
+        return 0f;
+    }
+
     private void OnEnable()
     {
         inputActions.Player.Enable();
@@ -626,17 +645,17 @@ public class PlayerMovement : MonoBehaviour
         this.paused = paused;
     }
 
-    public Vector2 getMoveVal()
+    public Vector2 GetMoveVal()
     {
         return moveVal;
     }
 
-    public InputActions getInputActions()
+    public InputActions GetInputActions()
     {
         return inputActions;
     }
 
-    private void resetHitbox(){
+    private void ResetHitbox(){
         hitboxTransform.localPosition = new Vector2(0, -0.125f);    //reset hitbox position
         hitboxTransform.localScale = new Vector2(hitboxSize, hitboxSize);   //reset size
         hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);    //turn off color
@@ -645,6 +664,7 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator Attack(float lastDuration, float duration, int attackNum)
     {
+        attackTimer = lastDuration;
         yield return new WaitForSeconds(Mathf.Clamp(lastDuration, 0, lastDuration));  //wait until last attack is finished
 
         attackTimer = duration;
@@ -680,7 +700,7 @@ public class PlayerMovement : MonoBehaviour
         bounceTimer = 0.3f;
     }
 
-    public void resetAttackTimer()
+    public void ResetAttackTimer()
     {
         attackTimer = -10;
     }

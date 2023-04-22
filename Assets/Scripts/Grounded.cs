@@ -18,7 +18,7 @@ public class Grounded : MonoBehaviour
 		if (col.CompareTag("Ground"))
 		{
 			player.grounded = true;
-			player.resetAttackTimer();
+			player.ResetAttackTimer();
 			player.CreateDust();
 		}
 	}

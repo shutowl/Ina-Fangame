@@ -62,7 +62,7 @@ public class DialogueTrigger : MonoBehaviour
         {
             if (FindObjectOfType<PlayerMovement>().currentState == PlayerMovement.playerState.moving)
             {
-                if (FindObjectOfType<PlayerMovement>().getInputActions().Player.Interact.WasPressedThisFrame())
+                if (FindObjectOfType<PlayerMovement>().GetInputActions().Player.Interact.WasPressedThisFrame())
                 {
                     StartCoroutine(TriggerDialogue(0f, (int)sections[repeat].x, (int)sections[repeat].y));
 
