@@ -124,7 +124,7 @@ public class GuraMovement : Enemy
                             bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;
                             bullet.GetComponent<NormalBulletNoFollow>().SetDirection(1, -2);
 
-                            if(difficulty >= 5)
+                            if(difficulty >= 10)
                             {
                                 attackStep = 4;
                             }
@@ -161,6 +161,32 @@ public class GuraMovement : Enemy
                             bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;
                             bullet.GetComponent<NormalBulletNoFollow>().SetDirection(2, -2);
 
+                            if (difficulty >= 75) 
+                            {
+                                danger = Instantiate(dangerIndicator, new Vector2(-100, -100), Quaternion.identity);
+                                danger.GetComponent<DangerIndicator>().lifeTime = 0.7f;
+                                attackStep = 5;
+                            }
+                            else
+                            {
+                                currentState = enemyState.idle;
+                            }
+                        }
+                    }
+                    if (attackStep == 5) //Shoot a laser downwards at even higher difficulties
+                    {
+                        //Show indicator
+                        if (danger != null)  //Prevents MissingReferenceException
+                            danger.transform.position = new Vector3(transform.position.x, -1.5f);
+
+                        if (!grounded && rb.velocity.y < -5f)
+                        {
+                            rb.velocity = Vector2.zero;
+                            rb.AddForce(new Vector2(100 * direction, 400));
+
+                            GameObject laser = Instantiate(bullets[2], transform.position, Quaternion.identity);
+                            laser.GetComponent<GuraLaser>().SetPositions(Vector2.zero, Vector2.down * 10f);
+                            laser.GetComponent<GuraLaser>().SetLifeTime(1f);
 
                             currentState = enemyState.idle;
                         }
@@ -219,7 +245,7 @@ public class GuraMovement : Enemy
                         if(attackTimer >= 2)
                         {
                             attackStep = 3;
-                            attackTimer = 5f;
+                            attackTimer = 4f;
                         }
                     }
                     if(attackStep == 3)
@@ -227,7 +253,7 @@ public class GuraMovement : Enemy
                         attackTimer -= Time.deltaTime;
 
                         //Shoot spiral bullets
-                        float fireRate = 0.3f - Mathf.Clamp((difficulty / 200), 0, 0.2f);   //difficulty alters fireRate
+                        float fireRate = 0.3f - Mathf.Clamp((difficulty / 200f), 0, 0.2f);   //difficulty alters fireRate
                         int density = 4 + Mathf.Clamp((int)(Mathf.Log10(Mathf.Abs(difficulty)) * 2), -1, 20);      //and density
                         if (difficulty < 0)
                         {

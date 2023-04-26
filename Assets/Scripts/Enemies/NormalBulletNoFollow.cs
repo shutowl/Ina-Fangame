@@ -13,6 +13,7 @@ public class NormalBulletNoFollow : MonoBehaviour
     private Rigidbody2D rb;
     public float x = 0, y = -1;
     private Vector2 direction;
+    private float followOffset = 0;
 
     private void Awake()
     {
@@ -36,7 +37,12 @@ public class NormalBulletNoFollow : MonoBehaviour
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             rb = GetComponent<Rigidbody2D>();
             Vector3 playerPos = player.transform.position;
-            Vector3 direction = playerPos - transform.position;
+
+            float radius = (playerPos - transform.position).magnitude;
+            float angle = Mathf.Atan2((playerPos - transform.position).y, (playerPos - transform.position).x) * Mathf.Rad2Deg;
+
+            Vector3 direction = radius * new Vector3(Mathf.Cos((angle + followOffset) * Mathf.Deg2Rad), Mathf.Sin((angle + followOffset) * Mathf.Deg2Rad));
+
             Vector3 rotation = transform.position - playerPos;
             rb.velocity = new Vector2(direction.x, direction.y).normalized * speed;
             float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
@@ -66,5 +72,10 @@ public class NormalBulletNoFollow : MonoBehaviour
     public void SetDirection(float x, float y)
     {
         direction = new Vector2(x, y).normalized;
+    }
+
+    public void SetOffset(float degrees)
+    {
+        followOffset = degrees;
     }
 }

@@ -9,6 +9,8 @@ public class Bloop : Enemy
     float lifeTimeTimer = 0f;
     public float fireRate = 1f;
     float fireRateTimer = 0f;
+    private float bulletOffset = 0f;
+    float offsetRate = 0.5f;
     public int density = 8;
     public float speed = 5f;
     float x, y;                 //Position of x and y positions
@@ -35,7 +37,7 @@ public class Bloop : Enemy
         y = transform.position.y;
         startYPos = y;
         lifeTimeTimer = lifeTime;
-        fireRateTimer = fireRate;
+        fireRateTimer = fireRate - Mathf.Clamp((difficulty / 200), 0, 1f);
     }
 
     new void Update()
@@ -91,9 +93,9 @@ public class Bloop : Enemy
         if (currentState == enemyState.attacking)
         {
             //Spiral attack
-            for (int i = 0; i < density; i++)
+            for (int i = 0; i < density + Mathf.Clamp((int)(Mathf.Log10(Mathf.Abs(difficulty)) * 2), 0, 15); i++)
             {
-                float angle = (i * Mathf.PI * 2 / density);
+                float angle = i * Mathf.PI * 2 / (density + Mathf.Clamp((int)(Mathf.Log10(Mathf.Abs(difficulty)) * 2), 0, 15)) + bulletOffset;
                 float x = Mathf.Cos(angle);
                 float y = Mathf.Sin(angle);
                 Vector2 pos = (Vector2)transform.position + new Vector2(x, y);
@@ -102,9 +104,11 @@ public class Bloop : Enemy
 
                 GameObject bullet = Instantiate(this.bullet, pos, rot);
                 bullet.GetComponent<NormalBulletNoFollow>().SetDirection(x, y);
-                fireRateTimer = fireRate;
+                bullet.GetComponent<NormalBulletNoFollow>().lifeTime = 8f;
             }
+            bulletOffset += offsetRate;
 
+            fireRateTimer = fireRate - Mathf.Clamp((difficulty / 150f), 0, 1.3f);
             currentState = enemyState.moving;
         }
         //-----DYING STATE-----

@@ -155,9 +155,10 @@ MonoBehaviour:
   ghostDuration: 1
   stunned: 0
   enemyName: Bloop
+  difficulty: 1
   lifeTime: 15
-  fireRate: 1
-  density: 8
+  fireRate: 1.5
+  density: 5
   speed: 2
   amplitude: 1
   duration: 2

@@ -127,10 +127,10 @@ public class Enemy : MonoBehaviour
         switch (PlayerPrefs.GetInt("difficulty"))
         {
             case 0: //Casual
-                difficulty = -30;
+                difficulty = 1;
                 break;
             case 1: //Normal
-                difficulty = 1;
+                difficulty = 40;
                 break;
             case 2: //Hard
                 difficulty = 70;

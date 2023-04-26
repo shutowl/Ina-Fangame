@@ -41,14 +41,14 @@ public class Shrimp : Enemy
             
             if(actionTimer <= 0)
             {
-                switch (Random.Range(0, 2))
+                switch (Random.Range(0, 2 + (difficulty/50)))
                 {
                     //Jump
                     case 0:
                         currentState = enemyState.jumping;
                         break;
                     //Attack
-                    case 1:
+                    default:
                         attackStep = 0;
                         currentState = enemyState.attacking;
                         break;
@@ -78,6 +78,7 @@ public class Shrimp : Enemy
             {
                 if(!grounded && rb.velocity.y < -2f)
                 {
+
                     //Jump backwards a bit and fire bullet at player
                     direction = (FindObjectOfType<PlayerMovement>().transform.position.x - transform.position.x > 0) ? 1 : -1;
                     rb.velocity = Vector2.zero;
@@ -86,8 +87,30 @@ public class Shrimp : Enemy
                     GameObject bullet = Instantiate(this.bullet, transform.position, Quaternion.identity);
                     bullet.GetComponent<NormalBulletNoFollow>().follow = true;
 
+                    if(difficulty >= 70)    //+ Hard difficulty modifier
+                    {
+                        bullet = Instantiate(this.bullet, transform.position, Quaternion.identity);
+                        bullet.GetComponent<NormalBulletNoFollow>().follow = true;
+                        bullet.GetComponent<NormalBulletNoFollow>().SetOffset(-20);
+
+                        bullet = Instantiate(this.bullet, transform.position, Quaternion.identity);
+                        bullet.GetComponent<NormalBulletNoFollow>().follow = true;
+                        bullet.GetComponent<NormalBulletNoFollow>().SetOffset(20);
+                    }
+                    if (difficulty >= 200)   //+ Impossible difficulty modifier
+                    {
+                        bullet = Instantiate(this.bullet, transform.position, Quaternion.identity);
+                        bullet.GetComponent<NormalBulletNoFollow>().follow = true;
+                        bullet.GetComponent<NormalBulletNoFollow>().SetOffset(-40);
+
+                        bullet = Instantiate(this.bullet, transform.position, Quaternion.identity);
+                        bullet.GetComponent<NormalBulletNoFollow>().follow = true;
+                        bullet.GetComponent<NormalBulletNoFollow>().SetOffset(40);
+                    }
+
+
                     currentState = enemyState.idle;
-                    actionTimer = Random.Range(actionRate, actionRate + 0.5f);
+                    actionTimer = Random.Range(actionRate - Mathf.Clamp(difficulty/100, 0, 1f), actionRate + 0.5f - Mathf.Clamp(difficulty / 100, 0, 1f));
                 }
             }
         }
