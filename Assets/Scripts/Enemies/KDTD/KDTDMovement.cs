@@ -128,11 +128,17 @@ public class KDTDMovement : Enemy
                         if (grounded)
                         {
                             //create bullets
-                            for (int i = 0; i < 20 + difficulty; i++)
+                            for (int i = 0; i < 20 + difficulty/2; i++)
                             {
-                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                                bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
-                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
+                                GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                if (bullet != null)
+                                {
+                                    bullet.transform.position = transform.position;
+                                    bullet.SetActive(true);
+                                    bullet.GetComponent<PhysicsBullet>().ResetBullet();
+                                    bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                    bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
+                                }
                             }
                             Debug.Log("KDTD Leap attack finished (attack 1)");
                             currentState = enemyState.idle;
@@ -211,9 +217,15 @@ public class KDTDMovement : Enemy
                         //Spawn bullets at a random angle (above a certain point) every [rate] seconds at varying speeds
                         if (attack3RateTimer < 0 + (difficulty/400f))    //difficulty 4 = 0.01f
                         {
-                            GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                            bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
-                            bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(800f, 1000f));
+                            GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                            if (bullet != null)
+                            {
+                                bullet.transform.position = transform.position;
+                                bullet.SetActive(true);
+                                bullet.GetComponent<PhysicsBullet>().ResetBullet();
+                                bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(800f, 1000f));
+                            }
                             attack3RateTimer = attack3Rate;
                         }
 
@@ -263,9 +275,15 @@ public class KDTDMovement : Enemy
                             //create bullets
                             for (int i = 0; i < 20 + difficulty; i++)
                             {
-                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                                bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
-                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
+                                GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                if (bullet != null)
+                                {
+                                    bullet.transform.position = transform.position;
+                                    bullet.SetActive(true);
+                                    bullet.GetComponent<PhysicsBullet>().ResetBullet();
+                                    bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                    bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
+                                }
                             }
                             attackStep = 5;
                             attackTimer = 0.5f;
@@ -308,9 +326,15 @@ public class KDTDMovement : Enemy
                             //create bullets
                             for (int i = 0; i < 20 + difficulty; i++)
                             {
-                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                                bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
-                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
+                                GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                if (bullet != null)
+                                {
+                                    bullet.transform.position = transform.position;
+                                    bullet.SetActive(true);
+                                    bullet.GetComponent<PhysicsBullet>().ResetBullet();
+                                    bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                    bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
+                                }
                             }
                             attackStep = 9;
                             attackTimer = 0.5f;
@@ -353,9 +377,15 @@ public class KDTDMovement : Enemy
                             //create bullets
                             for (int i = 0; i < 20 + difficulty; i++)
                             {
-                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                                bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
-                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
+                                GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                if (bullet != null)
+                                {
+                                    bullet.transform.position = transform.position;
+                                    bullet.SetActive(true);
+                                    bullet.GetComponent<PhysicsBullet>().ResetBullet();
+                                    bullet.GetComponent<PhysicsBullet>().SetDirection(Random.Range(-1f, 1f), Random.Range(2f, 3f));
+                                    bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(600f, 900f));
+                                }
                             }
                             Debug.Log("KDTD Overdrive leap attack finished (attack 4)");
                             currentState = enemyState.idle;

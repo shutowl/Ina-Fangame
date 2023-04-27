@@ -145,7 +145,7 @@ public class BossHealthBar : MonoBehaviour
         Debug.Log("Delay: " + delayImage.color);
     }
 }
-
+/*
 [CustomEditor(typeof(BossHealthBar))]
 public class BossHealthBarEditor : Editor
 {
@@ -160,3 +160,4 @@ public class BossHealthBarEditor : Editor
         }
     }
 }
+*/

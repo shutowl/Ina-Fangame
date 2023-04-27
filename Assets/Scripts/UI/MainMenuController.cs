@@ -103,13 +103,16 @@ public class MainMenuController : MonoBehaviour
                         OpenDifficulty();
                         break;
                     case 1:
-                        Practice();
+                        OpenTutorial();
                         break;
                     case 2:
                         if(!optionBoxIsMoving)
                             OpenOptions();
                         break;
                     case 3:
+                        OpenCredits();
+                        break;
+                    case 4:
                         ExitGame();
                         break;
                 }
@@ -141,7 +144,7 @@ public class MainMenuController : MonoBehaviour
             {
                 mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
                 mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
-                menuIndex = Mathf.Clamp(--menuIndex, 0, 3);
+                menuIndex = Mathf.Clamp(--menuIndex, 0, mainMenuButtons.Length);
                 mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
                 mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
             }
@@ -190,7 +193,7 @@ public class MainMenuController : MonoBehaviour
             {
                 mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
                 mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
-                menuIndex = Mathf.Clamp(++menuIndex, 0, 3);
+                menuIndex = Mathf.Clamp(++menuIndex, 0, mainMenuButtons.Length);
                 mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
                 mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
             }
@@ -354,9 +357,9 @@ public class MainMenuController : MonoBehaviour
         //Debug.Log("Started game with difficulty level: " + difficultyLevel);
     }
 
-    public void Practice()
+    public void OpenTutorial()
     {
-        Debug.Log("Practice Button Clicked");
+        Debug.Log("Tutorial Button Clicked");
     }
 
     void OpenDifficulty()
@@ -416,6 +419,10 @@ public class MainMenuController : MonoBehaviour
         //Debug.Log("Options Menu Closed");
     }
 
+    public void OpenCredits()
+    {
+        Debug.Log("Credits Button Clicked");
+    }
 
     public void ExitGame()
     {

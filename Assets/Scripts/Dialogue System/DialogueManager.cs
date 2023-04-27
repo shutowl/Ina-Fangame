@@ -160,7 +160,7 @@ public class DialogueManager : MonoBehaviour
     }
 
 }
-
+/*
 [CustomEditor(typeof(DialogueManager))]
 public class CustomInspector : Editor
 {
@@ -179,3 +179,4 @@ public class CustomInspector : Editor
         }
     }
 }
+*/

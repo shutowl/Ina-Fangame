@@ -34,7 +34,7 @@ public class PhysicsBullet : MonoBehaviour
         lifeTimeTimer += Time.deltaTime;
         if (lifeTimeTimer > lifeTime)
         {
-            Destroy(this.gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -53,7 +53,7 @@ public class PhysicsBullet : MonoBehaviour
             laser.GetComponent<GuraLaser>().lifeTime = 0.5f;
             laser.GetComponent<GuraLaser>().SetPositions(Vector2.down * 2f, Vector2.up * 20f);
 
-            Destroy(this.gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -73,4 +73,9 @@ public class PhysicsBullet : MonoBehaviour
         rb.gravityScale = gravity;
     }
 
+    public void ResetBullet()
+    {
+        lifeTimeTimer = 0;
+        launched = false;
+    }
 }
