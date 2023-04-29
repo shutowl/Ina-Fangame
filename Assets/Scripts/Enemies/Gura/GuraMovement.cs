@@ -16,6 +16,7 @@ public class GuraMovement : Enemy
     private float attackTimer;          // Used for attack timings (such as delays or charges)
     private int attackNum = 0;          // Determines which attack is used
     private int attackStep = 1;         // Current step of the current attack
+    private int lastAttack = 0;         // The last attack performed (prevents repeat attacks)
     private bool overdrive = false;
     public bool attackInOrder = false;
 
@@ -41,6 +42,7 @@ public class GuraMovement : Enemy
     {
         base.Start();
 
+        lastAttack = 1;
         direction = -1; //start facing left;
         rb = GetComponent<Rigidbody2D>();
         currentState = enemyState.idle;
@@ -543,7 +545,7 @@ public class GuraMovement : Enemy
         else if (currentState == enemyState.dead)
         {
             tag = "Untagged";
-            Destroy(this.gameObject, 3f);
+            Destroy(this.gameObject, 2.5f);
         }
 
 
@@ -556,7 +558,7 @@ public class GuraMovement : Enemy
             attackTimer = 1f;
 
             //weighted RNG for attacks
-            int RNG = Random.Range(1, 6);
+            int RNG = Random.Range(1, 7);
             if (GetCurrentHealth() > maxHealth * 0.5)    //above 50% HP
             {
                 /*switch (RNG)
@@ -579,6 +581,11 @@ public class GuraMovement : Enemy
                 }
                 else{
                     attackNum = RNG;
+                    while (attackNum == lastAttack)
+                    {
+                        attackNum = Random.Range(1, 7);
+                    }
+                    lastAttack = attackNum;
                 }
             }
             else                                        //below 50% hp (overdrive)
@@ -603,6 +610,11 @@ public class GuraMovement : Enemy
                 }
                 else{
                     attackNum = RNG;
+                    while(attackNum == lastAttack)
+                    {
+                        attackNum = Random.Range(1, 7);
+                    }
+                    lastAttack = attackNum;
                 }
                 
                 if (!overdrive)
@@ -623,7 +635,7 @@ public class GuraMovement : Enemy
         }
 
         //Bullet Rain
-        if (bulletRainOn)
+        if (bulletRainOn && currentState != enemyState.dead)
         {
             bulletRainTimer -= Time.deltaTime;
 

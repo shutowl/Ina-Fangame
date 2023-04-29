@@ -21,14 +21,9 @@ public class MainMenuController : MonoBehaviour
     public Sprite selectedButtonBG;
     public Sprite defaultButtonBG;
     public GameObject[] mainMenuButtons;
-    public GameObject optionsBox;
-    public RectTransform optionsBG;
-    public float optionsOpenDuration = 0.2f;
-    private bool optionBoxIsMoving = false;
-    public GameObject[] optionsLeftText;
-    public GameObject[] optionsRightText;
     private int menuIndex = 0;
 
+    [Header("Difficulty Variables")]
     public GameObject difficultyBox;
     public RectTransform difficultyBG;
     public float difficultyOpenDuration = 0.2f;
@@ -37,6 +32,12 @@ public class MainMenuController : MonoBehaviour
     private int difficultyLevel = 0;
 
     [Header("Options Variables")]
+    public GameObject optionsBox;
+    public RectTransform optionsBG;
+    public float optionsOpenDuration = 0.2f;
+    private bool optionBoxIsMoving = false;
+    public GameObject[] optionsLeftText;
+    public GameObject[] optionsRightText;
     public bool option1 = true;
     public bool option2 = true;
     public bool option3 = false;
@@ -49,6 +50,14 @@ public class MainMenuController : MonoBehaviour
     bool volIncrease = false;
     int volIndex = 0;
 
+    [Header("Stage Select Variables")]
+    public GameObject stageSelectBox;
+    public GameObject[] row1Stages;
+    public GameObject[] row2Stages;
+    private int stageRow = 0;
+    private int stageCol = 0;
+    public TextMeshProUGUI[] stageStats;
+
     private InputActions input;
 
     void Awake()
@@ -58,6 +67,7 @@ public class MainMenuController : MonoBehaviour
         state = menuState.main;
         optionsBox.SetActive(false);
         difficultyBox.SetActive(false);
+        stageSelectBox.SetActive(false);
         Time.timeScale = 1;
 
         //Set Default Values
@@ -93,14 +103,14 @@ public class MainMenuController : MonoBehaviour
             }
             else if(state == menuState.difficulty)
             {
-                StartGame();
+                SelectStage(stageRow, stageCol);
             }
             else if (state == menuState.main)
             {
                 switch (menuIndex)
                 {
                     case 0:
-                        OpenDifficulty();
+                        OpenStageSelect();
                         break;
                     case 1:
                         OpenTutorial();
@@ -115,6 +125,16 @@ public class MainMenuController : MonoBehaviour
                     case 4:
                         ExitGame();
                         break;
+                }
+            }
+            else if(state == menuState.stage)
+            {
+                if (stageRow == 0 && stageCol == 1)  //Only Gura stage is working for now
+                    OpenDifficulty();
+                else
+                {
+                    Debug.Log("Stage still WIP!");
+                    //Play an error sound or smth
                 }
             }
         }
@@ -132,6 +152,10 @@ public class MainMenuController : MonoBehaviour
             {
                 if (!optionBoxIsMoving)
                     CloseOptions();
+            }
+            if(state == menuState.stage)
+            {
+                CloseStageSelect();
             }
             if(state == menuState.difficulty)
             {
@@ -186,6 +210,27 @@ public class MainMenuController : MonoBehaviour
                         break;
                 }
             }
+            if (state == menuState.stage)
+            {
+                switch (stageRow)
+                {
+                    case 0:
+                        //Does nothing
+                        break;
+                    case 1:
+                        row2Stages[stageCol].GetComponent<Image>().sprite = defaultButtonBG;
+                        row2Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                        stageRow = Mathf.Clamp(--stageRow, 0, 1);
+                        stageCol = Mathf.Clamp(stageCol, 0, 4);
+                        row1Stages[stageCol].GetComponent<Image>().sprite = selectedButtonBG;
+                        row1Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+                        break;
+                    case 2:
+                        //in case row 3 exists in the future
+                        break;
+                }
+                UpdateStageInfo(stageRow, stageCol);
+            }
         }
         if (input.UI.Down.WasPressedThisFrame())
         {
@@ -235,6 +280,24 @@ public class MainMenuController : MonoBehaviour
                         break;
                 }
             }
+            if(state == menuState.stage)
+            {
+                switch (stageRow)
+                {
+                    case 0:
+                        row1Stages[stageCol].GetComponent<Image>().sprite = defaultButtonBG;
+                        row1Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                        stageRow = Mathf.Clamp(++stageRow, 0, 1);
+                        stageCol = Mathf.Clamp(stageCol, 0, 5);
+                        row2Stages[stageCol].GetComponent<Image>().sprite = selectedButtonBG;
+                        row2Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+                        break;
+                    case 1:
+                        //Move to row 3 if more are added later
+                        break;
+                }
+                UpdateStageInfo(stageRow, stageCol);
+            }
         }
         if (input.UI.Left.WasPressedThisFrame())
         {
@@ -271,6 +334,27 @@ public class MainMenuController : MonoBehaviour
                         break;
                 }
             }
+            if (state == menuState.stage)
+            {
+                switch (stageRow)
+                {
+                    case 0: //Row 1 (Myth)
+                        row1Stages[stageCol].GetComponent<Image>().sprite = defaultButtonBG;
+                        row1Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                        stageCol = Mathf.Clamp(--stageCol, 0, 4);
+                        row1Stages[stageCol].GetComponent<Image>().sprite = selectedButtonBG;
+                        row1Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+                        break;
+                    case 1: //Row 2 (Council)
+                        row2Stages[stageCol].GetComponent<Image>().sprite = defaultButtonBG;
+                        row2Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                        stageCol = Mathf.Clamp(--stageCol, 0, 5);
+                        row2Stages[stageCol].GetComponent<Image>().sprite = selectedButtonBG;
+                        row2Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+                        break;
+                }
+                UpdateStageInfo(stageRow, stageCol);
+            }
         }
         if (input.UI.Right.WasPressedThisFrame())
         {
@@ -306,6 +390,27 @@ public class MainMenuController : MonoBehaviour
                         ChangeVolume(true, 2);
                         break;
                 }
+            }
+            if (state == menuState.stage)
+            {
+                switch (stageRow)
+                {
+                    case 0: //Row 1 (Myth)
+                        row1Stages[stageCol].GetComponent<Image>().sprite = defaultButtonBG;
+                        row1Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                        stageCol = Mathf.Clamp(++stageCol, 0, 4);
+                        row1Stages[stageCol].GetComponent<Image>().sprite = selectedButtonBG;
+                        row1Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+                        break;
+                    case 1: //Row 2 (Council)
+                        row2Stages[stageCol].GetComponent<Image>().sprite = defaultButtonBG;
+                        row2Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                        stageCol = Mathf.Clamp(++stageCol, 0, 5);
+                        row2Stages[stageCol].GetComponent<Image>().sprite = selectedButtonBG;
+                        row2Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+                        break;
+                }
+                UpdateStageInfo(stageRow, stageCol);
             }
         }
         if (input.UI.Left.WasReleasedThisFrame() || input.UI.Right.WasReleasedThisFrame())
@@ -362,6 +467,125 @@ public class MainMenuController : MonoBehaviour
         Debug.Log("Tutorial Button Clicked");
     }
 
+    void OpenStageSelect()
+    {
+        mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
+        mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        state = menuState.stage;
+        menuIndex = 0;
+        stageRow = 0;
+        stageCol = 0;
+        stageSelectBox.SetActive(true);
+        row1Stages[0].GetComponent<Image>().sprite = selectedButtonBG;
+        row1Stages[0].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+        UpdateStageInfo(stageRow, stageCol);
+    }
+
+    void CloseStageSelect()
+    {
+        switch (stageRow)
+        {
+            case 0:
+                row1Stages[stageCol].GetComponent<Image>().sprite = defaultButtonBG;
+                row1Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                break;
+            case 1:
+                row2Stages[stageCol].GetComponent<Image>().sprite = defaultButtonBG;
+                row2Stages[stageCol].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                break;
+        }
+        stageSelectBox.SetActive(false);
+        state = menuState.main;
+        menuIndex = 0;
+        mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
+        mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+    }
+
+    /*
+     * stageState[0] = Name
+     * stageState[0] = Generation
+     * stageState[0] = Description
+     */
+    void UpdateStageInfo(int row, int col)
+    {
+        switch (row)
+        {
+            case 0:
+                switch (col)
+                {
+                    case 0: //Myth
+                        stageStats[0].text = "Name: Myth Collab";
+                        stageStats[1].text = "Generation: Myth";
+                        stageStats[2].text = "Still work in progress!";
+                        break;
+                    case 1: //Gura
+                        stageStats[0].text = "Name: Gawr Gura";
+                        stageStats[1].text = "Generation: Myth";
+                        stageStats[2].text = "This small and aerodynamic shark girl is quick on her feet and will not hesitate " +
+                            "to jump at you when given the chance! Gura will fire beams of water through her trident and spray water " +
+                            "bullets everywhere.";
+                        break;
+                    case 2: //Calli
+                        stageStats[0].text = "Name: Mori Calliope";
+                        stageStats[1].text = "Generation: Myth";
+                        stageStats[2].text = "Still work in progress!";
+                        break;
+                    case 3: //Ame
+                        stageStats[0].text = "Name: Amelia Watson";
+                        stageStats[1].text = "Generation: Myth";
+                        stageStats[2].text = "Still work in progress!";
+                        break;
+                    case 4: //Kiara
+                        stageStats[0].text = "Name: Takanashi Kiara";
+                        stageStats[1].text = "Generation: Myth";
+                        stageStats[2].text = "Still work in progress!";
+                        break;
+                }
+                break;
+            case 1:
+                switch (col)
+                {
+                    case 0: //Council
+                        stageStats[0].text = "Name: Council Collab";
+                        stageStats[1].text = "Generation: Council";
+                        stageStats[2].text = "Still work in progress!";
+                        break;
+                    case 1: //Bae
+                        stageStats[0].text = "Name: Hakos Baelz";
+                        stageStats[1].text = "Generation: Council";
+                        stageStats[2].text = "Still work in progress!";
+                        break;
+                    case 2: //Mumei
+                        stageStats[0].text = "Name: Nanashi Mumei";
+                        stageStats[1].text = "Generation: Council";
+                        stageStats[2].text = "Still work in progress!";
+                        break;
+                    case 3: //Fauna
+                        stageStats[0].text = "Name: Ceres Fauna";
+                        stageStats[1].text = "Generation: Council";
+                        stageStats[2].text = "Still work in progress!";
+                        break;
+                    case 4: //Kronii
+                        stageStats[0].text = "Name: Ouro Kronii";
+                        stageStats[1].text = "Generation: Council";
+                        stageStats[2].text = "Still work in progress!";
+                        break;
+                    case 5: //Sana
+                        stageStats[0].text = "Name: Tsukumo Sana";
+                        stageStats[1].text = "Generation: Council";
+                        stageStats[2].text = "Still work in progress!";
+                        break;
+                }
+                break;
+        }
+    }
+
+    void SelectStage(int row, int col)
+    {
+        Debug.Log("Selected (" + row + ", " + col + ")");
+        StartGame();
+    }
+
     void OpenDifficulty()
     {
         mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
@@ -383,10 +607,8 @@ public class MainMenuController : MonoBehaviour
     {
         Color color = difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color;
         difficultyText[menuIndex].GetComponent<TextMeshProUGUI>().color = new Color(color.r, color.g, color.b, 0.5f);
-        state = menuState.main;
+        state = menuState.stage;
         menuIndex = 0;
-        mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
-        mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
 
         StartCoroutine(MoveDifficultyBox(false, difficultyOpenDuration));
         //Debug.Log("Difficulty Menu Closed");

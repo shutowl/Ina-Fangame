@@ -7073,21 +7073,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8601657668906471234, guid: e0aea44b736ce5a4f9986179f53e608f, type: 3}
-      propertyPath: difficulty
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 8601657668906471234, guid: e0aea44b736ce5a4f9986179f53e608f, type: 3}
-      propertyPath: attackInOrder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8601657668906471237, guid: e0aea44b736ce5a4f9986179f53e608f, type: 3}
       propertyPath: m_Name
       value: Gura
-      objectReference: {fileID: 0}
-    - target: {fileID: 8601657668906471237, guid: e0aea44b736ce5a4f9986179f53e608f, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0aea44b736ce5a4f9986179f53e608f, type: 3}
