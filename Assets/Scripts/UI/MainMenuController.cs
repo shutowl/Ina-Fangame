@@ -58,6 +58,8 @@ public class MainMenuController : MonoBehaviour
     private int stageCol = 0;
     public TextMeshProUGUI[] stageStats;
 
+    public GameObject WIPText;
+
     private InputActions input;
 
     void Awake()
@@ -133,6 +135,7 @@ public class MainMenuController : MonoBehaviour
                     OpenDifficulty();
                 else
                 {
+                    ShowWIPText();
                     Debug.Log("Stage still WIP!");
                     //Play an error sound or smth
                 }
@@ -464,6 +467,7 @@ public class MainMenuController : MonoBehaviour
 
     public void OpenTutorial()
     {
+        ShowWIPText();
         Debug.Log("Tutorial Button Clicked");
     }
 
@@ -643,6 +647,7 @@ public class MainMenuController : MonoBehaviour
 
     public void OpenCredits()
     {
+        ShowWIPText();
         Debug.Log("Credits Button Clicked");
     }
 
@@ -674,6 +679,11 @@ public class MainMenuController : MonoBehaviour
 
     private bool IntToBool(int integer){
         return (integer == 1);
+    }
+
+    private void ShowWIPText()
+    {
+        Instantiate(WIPText, GameObject.FindGameObjectWithTag("Canvas").transform, false);
     }
 
     //Load variables on entering scene

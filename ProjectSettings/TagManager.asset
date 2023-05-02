@@ -13,6 +13,7 @@ TagManager:
   - RespawnPoint
   - Spawner
   - IgnoreBullet
+  - Canvas
   layers:
   - Default
   - TransparentFX
