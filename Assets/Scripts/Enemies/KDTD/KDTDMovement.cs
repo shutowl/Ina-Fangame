@@ -9,7 +9,6 @@ public class KDTDMovement : Enemy
     public float jumpForce = 300f;
     public float minActionRate = 0.5f;
     public float maxActionRate = 2f;    // Performs an action every [1 to actionRate] seconds
-    private int direction;
     private int movesLeft;              // Number of movement options left before making an attack
     private float rngCounter = 0f;
     private float moveTimer = 0f;
@@ -130,7 +129,8 @@ public class KDTDMovement : Enemy
                             //create bullets
                             for (int i = 0; i < 20 + difficulty/2; i++)
                             {
-                                GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                //GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
                                 if (bullet != null)
                                 {
                                     bullet.transform.position = transform.position;
@@ -217,7 +217,8 @@ public class KDTDMovement : Enemy
                         //Spawn bullets at a random angle (above a certain point) every [rate] seconds at varying speeds
                         if (attack3RateTimer < 0 + (difficulty/400f))    //difficulty 4 = 0.01f
                         {
-                            GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                            //GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                            GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
                             if (bullet != null)
                             {
                                 bullet.transform.position = transform.position;
@@ -275,7 +276,8 @@ public class KDTDMovement : Enemy
                             //create bullets
                             for (int i = 0; i < 20 + difficulty; i++)
                             {
-                                GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                //GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
                                 if (bullet != null)
                                 {
                                     bullet.transform.position = transform.position;
@@ -326,7 +328,8 @@ public class KDTDMovement : Enemy
                             //create bullets
                             for (int i = 0; i < 20 + difficulty; i++)
                             {
-                                GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                //GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
                                 if (bullet != null)
                                 {
                                     bullet.transform.position = transform.position;
@@ -377,7 +380,8 @@ public class KDTDMovement : Enemy
                             //create bullets
                             for (int i = 0; i < 20 + difficulty; i++)
                             {
-                                GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                //GameObject bullet = ObjectPool.SharedInstance.GetPooledObject();
+                                GameObject bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
                                 if (bullet != null)
                                 {
                                     bullet.transform.position = transform.position;

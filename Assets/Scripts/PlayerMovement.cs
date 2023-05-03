@@ -317,7 +317,7 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = Vector2.zero;
 
             slideCounter -= Time.deltaTime;
-            hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later (turn on hitbox)
+            //hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later (turn on hitbox)
             hitboxTransform.position = new Vector2(transform.position.x, transform.position.y + hitboxOffset.y);  //lower hitbox
             //hitboxTransform.localScale = new Vector2(hitboxSize, hitboxSize + hitboxOffset.x);   //squish size
 
@@ -327,7 +327,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 currentState = playerState.moving;
                 ResetHitbox();
-
             }
 
             //Enables AO abilities during slide

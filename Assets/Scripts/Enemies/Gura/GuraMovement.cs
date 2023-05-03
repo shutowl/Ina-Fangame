@@ -10,7 +10,6 @@ public class GuraMovement : Enemy
     public float jumpForce = 300f;
     public float minActionRate = 0.5f;
     public float maxActionRate = 2f;    // Performs an action every [1 to actionRate] seconds
-    private int direction;
     private float rngCounter = 0f;
     private Vector2 centerPos = Vector2.zero;
     private float attackTimer;          // Used for attack timings (such as delays or charges)
@@ -43,7 +42,6 @@ public class GuraMovement : Enemy
         base.Start();
 
         lastAttack = 1;
-        direction = -1; //start facing left;
         rb = GetComponent<Rigidbody2D>();
         currentState = enemyState.idle;
         centerPos = Camera.main.transform.position;
@@ -114,6 +112,7 @@ public class GuraMovement : Enemy
                         {
                             rb.velocity = Vector2.zero;
                             rb.AddForce(new Vector2(100 * direction, 300));
+                            direction = (player.transform.position.x - transform.position.x > 0) ? 1 : -1;
 
                             GameObject bullet = Instantiate(bullets[1], transform.position, Quaternion.identity);
                             bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;
@@ -142,7 +141,8 @@ public class GuraMovement : Enemy
                         if (!grounded && rb.velocity.y < -4f)
                         {
                             rb.velocity = Vector2.zero;
-                            rb.AddForce(new Vector2(100 * -direction, 300));
+                            rb.AddForce(new Vector2(100 * direction, 300));
+                            direction = (player.transform.position.x - transform.position.x > 0) ? 1 : -1;
 
                             GameObject bullet = Instantiate(bullets[1], transform.position, Quaternion.identity);
                             bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;

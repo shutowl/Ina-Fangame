@@ -19,6 +19,8 @@ public class Enemy : MonoBehaviour
     public bool grounded;
     public bool isBoss;
     public int maxHealth = 30;
+    private float scale = 1f;
+    protected int direction;
     [SerializeField] private int currentHealth;
     private float hitstunTimer = 0f;
     public float ghostDuration = 1f;                //Determines how long the enemy contact hitbox is disabled for (ex: the Hazard script)
@@ -32,6 +34,8 @@ public class Enemy : MonoBehaviour
 
     public void Start()
     {
+        scale = transform.localScale.x;
+        direction = -1; //start facing left;
         currentHealth = maxHealth;
         comboMeter = FindObjectOfType<ComboMeter>();
         bossHealthBar = FindObjectOfType<BossHealthBar>();
@@ -40,6 +44,15 @@ public class Enemy : MonoBehaviour
 
     public void Update()
     {
+        if(direction == -1)
+        {
+            transform.localScale = new Vector2(-scale, scale);
+        }
+        else
+        {
+            transform.localScale = new Vector2(scale, scale);
+        }
+
         if(hitstunTimer > 0)
         {
             hitstunTimer -= Time.deltaTime;

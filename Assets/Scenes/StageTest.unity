@@ -5193,11 +5193,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   n1Damage: 20
-  n2Damage: 20
-  n3Damage: 15
+  n2Damage: 30
+  n3Damage: 10
   nairDamage: 20
   dairDamage: 30
-  n3HitRate: 0.2
+  n3HitRate: 0.12
 --- !u!61 &198911145
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7035,11 +7035,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8601657668906471233, guid: e0aea44b736ce5a4f9986179f53e608f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.368637
+      value: 13.98
       objectReference: {fileID: 0}
     - target: {fileID: 8601657668906471233, guid: e0aea44b736ce5a4f9986179f53e608f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.9008828
+      value: 1.88
       objectReference: {fileID: 0}
     - target: {fileID: 8601657668906471233, guid: e0aea44b736ce5a4f9986179f53e608f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10300,6 +10300,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1692348990 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8601657668906471237, guid: e0aea44b736ce5a4f9986179f53e608f, type: 3}
+  m_PrefabInstance: {fileID: 765090613}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1692348997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692348990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b51c0737a7de45459c0240663992d87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooledObjects: []
+  objectToPool: {fileID: 0}
+  amountToPool: 0
 --- !u!1 &1703717215
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,7 +9,6 @@ public class Tako : Enemy
     public float jumpForce = 500;
     public float actionTimer = 2;   //Actions will alternate every 1 to actionTimer seconds
     private float rngCounter = 0;
-    private int direction = 1;
 
     private Rigidbody2D rb;
 

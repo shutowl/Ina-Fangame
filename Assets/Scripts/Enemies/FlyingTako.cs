@@ -16,7 +16,6 @@ public class FlyingTako : Enemy
 
     private float maxDistance = 8;          //Max distance enemy can fly from center of stage
     private Vector2 centerPos;              //Camera position
-    private int direction = 1;              //1 = right, -1 = left
     private float timer = 0f;
     private float xPos;
 

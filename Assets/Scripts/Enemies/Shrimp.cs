@@ -9,7 +9,6 @@ public class Shrimp : Enemy
     float actionTimer = 0f;
     float attackStep = 0;
     public float jumpForce;
-    int direction;
 
     private Rigidbody2D rb;
     private GameObject player;

@@ -34,7 +34,8 @@ public class PhysicsBullet : MonoBehaviour
         lifeTimeTimer += Time.deltaTime;
         if (lifeTimeTimer > lifeTime)
         {
-            gameObject.SetActive(false);
+            Destroy(this.gameObject);
+            //gameObject.SetActive(false);  //For object pooling
         }
     }
 
@@ -53,7 +54,8 @@ public class PhysicsBullet : MonoBehaviour
             laser.GetComponent<GuraLaser>().lifeTime = 0.5f;
             laser.GetComponent<GuraLaser>().SetPositions(Vector2.down * 2f, Vector2.up * 20f);
 
-            gameObject.SetActive(false);
+            Destroy(this.gameObject);
+            //gameObject.SetActive(false);  //For object pooling
         }
     }
 
