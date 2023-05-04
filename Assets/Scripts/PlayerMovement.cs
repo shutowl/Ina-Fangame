@@ -131,6 +131,8 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 jumpBufferCounter = 0f;
+
+                AudioManager.Instance.Play("Jump");
             }
             //Jump Buffer
             if (inputActions.Player.Jump.WasPressedThisFrame())
@@ -619,6 +621,8 @@ public class PlayerMovement : MonoBehaviour
         currentState = playerState.hitstun;
         hitstunCounter = hitstun;
         damagediFramesCounter = hitstun + 0.5f;
+
+        AudioManager.Instance.Play("Damaged");
     }
 
     public void setDamageState(float hitstun)   //used for variable hitstun lengths
@@ -630,6 +634,8 @@ public class PlayerMovement : MonoBehaviour
         hitstunCounter = hitstun;
         this.hitstun = hitstun;
         damagediFramesCounter = hitstun + 0.5f;
+
+        AudioManager.Instance.Play("Damaged");
     }
 
     public void setCutsceneState(float delay)

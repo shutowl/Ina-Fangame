@@ -20,6 +20,8 @@ public class Grounded : MonoBehaviour
 			player.grounded = true;
 			player.ResetAttackTimer();
 			player.CreateDust();
+
+			AudioManager.Instance.Play("JumpLand");
 		}
 	}
 

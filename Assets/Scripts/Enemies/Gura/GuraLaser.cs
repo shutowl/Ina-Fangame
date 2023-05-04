@@ -16,7 +16,7 @@ public class GuraLaser : MonoBehaviour
     public Vector3 endPos;
     public bool explode = false;    //creates a fountain of bullets at contact with ground
     public bool indicator = false;
-
+    bool soundPlayed = false;
 
     void Start()
     {
@@ -27,6 +27,7 @@ public class GuraLaser : MonoBehaviour
 
         lifeTimeTimer = lifeTime;
         delayTime = delay;
+        soundPlayed = false;
 
         if (indicator)
         {
@@ -78,6 +79,12 @@ public class GuraLaser : MonoBehaviour
             if (lifeTimeTimer <= 0)
             {
                 Destroy(this.gameObject);
+            }
+
+            if (!soundPlayed && !indicator)
+            {
+                AudioManager.Instance.Play("Laser");
+                soundPlayed = true;
             }
         }
     }

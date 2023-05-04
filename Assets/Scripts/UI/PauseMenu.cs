@@ -55,8 +55,16 @@ public class PauseMenu : MonoBehaviour
         {
             if(menu == PauseState.pause)
             {
-                if (!paused) PauseGame(true);   //Pause game
-                else PauseGame(false);          //Unpause game
+                if (!paused)
+                {
+                    PauseGame(true);   //Pause game
+                    AudioManager.Instance.Play("Pause");
+                }
+                else
+                {
+                    PauseGame(false);   //Unpause game
+                    AudioManager.Instance.Play("Unpause");
+                }
             }
         }
 
@@ -70,12 +78,15 @@ public class PauseMenu : MonoBehaviour
                     {
                         case 0:
                             ResumeGame();
+                            AudioManager.Instance.Play("Unpause");
                             break;
                         case 1:
                             OpenSettings();
+                            AudioManager.Instance.Play("MenuSelect");
                             break;
                         case 2:
                             ExitGame();
+                            AudioManager.Instance.Play("MenuSelect");
                             break;
                     }
                 }
@@ -89,6 +100,7 @@ public class PauseMenu : MonoBehaviour
                 else if (menu == PauseState.settings)
                 {
                     CloseSettings();
+                    AudioManager.Instance.Play("MenuCancel");
                 }
             }
             if (input.UI.Up.WasPressedThisFrame())
@@ -109,6 +121,8 @@ public class PauseMenu : MonoBehaviour
                     settingsLeftText[pauseIndex].color = Color.white;
                     settingsRightText[pauseIndex].color = Color.white;
                 }
+
+                AudioManager.Instance.Play("MenuMove");
             }
             if (input.UI.Down.WasPressedThisFrame())
             {
@@ -128,6 +142,8 @@ public class PauseMenu : MonoBehaviour
                     settingsLeftText[pauseIndex].color = Color.white;
                     settingsRightText[pauseIndex].color = Color.white;
                 }
+
+                AudioManager.Instance.Play("MenuMove");
             }
             if (input.UI.Left.WasPressedThisFrame())
             {
@@ -189,16 +205,19 @@ public class PauseMenu : MonoBehaviour
                 case 0: //Master
                     if (volIncrease) masterVol = Mathf.Clamp(++masterVol, 0, 100);
                     else masterVol = Mathf.Clamp(--masterVol, 0, 100);
+                    AudioManager.Instance.ChangeMasterVolume(masterVol);
                     settingsRightText[0].text = masterVol + "%";
                     break;
                 case 1: //BGM
                     if (volIncrease) BGMVol = Mathf.Clamp(++BGMVol, 0, 100);
                     else BGMVol = Mathf.Clamp(--BGMVol, 0, 100);
+                    AudioManager.Instance.ChangeBGMVolume(BGMVol);
                     settingsRightText[1].text = BGMVol + "%";
                     break;
                 case 2: //SFX
                     if (volIncrease) SFXVol = Mathf.Clamp(++SFXVol, 0, 100);
                     else SFXVol = Mathf.Clamp(--SFXVol, 0, 100);
+                    AudioManager.Instance.ChangeSFXVolume(SFXVol);
                     settingsRightText[2].text = SFXVol + "%";
                     break;
             }
@@ -228,8 +247,7 @@ public class PauseMenu : MonoBehaviour
             pauseUI.SetActive(false);
             StartCoroutine(FindObjectOfType<PlayerMovement>().PausePlayer(false));
             Debug.Log("Game Unpaused");
-        }
-
+        }                
     }
 
     public void ResumeGame()

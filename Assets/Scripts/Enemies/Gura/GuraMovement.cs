@@ -103,6 +103,7 @@ public class GuraMovement : Enemy
                         if(attackTimer <= 0)
                         {
                             rb.AddForce(new Vector2((Mathf.Abs(transform.position.x - player.transform.position.x)) * 60 * direction, jumpForce));
+                            AudioManager.Instance.Play("Jump");
                             attackStep = 3;
                         }
                     }
@@ -126,7 +127,9 @@ public class GuraMovement : Enemy
                             bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;
                             bullet.GetComponent<NormalBulletNoFollow>().SetDirection(1, -2);
 
-                            if(difficulty >= 10)
+                            AudioManager.Instance.Play("Bullet2");
+
+                            if (difficulty >= 10)
                             {
                                 attackStep = 4;
                             }
@@ -142,6 +145,7 @@ public class GuraMovement : Enemy
                         {
                             rb.velocity = Vector2.zero;
                             rb.AddForce(new Vector2(100 * direction, 300));
+                            AudioManager.Instance.Play("Jump");
                             direction = (player.transform.position.x - transform.position.x > 0) ? 1 : -1;
 
                             GameObject bullet = Instantiate(bullets[1], transform.position, Quaternion.identity);
@@ -163,6 +167,8 @@ public class GuraMovement : Enemy
                             bullet = Instantiate(bullets[1], transform.position, Quaternion.identity);
                             bullet.GetComponent<NormalBulletNoFollow>().speed = 7f;
                             bullet.GetComponent<NormalBulletNoFollow>().SetDirection(2, -2);
+
+                            AudioManager.Instance.Play("Bullet2");
 
                             if (difficulty >= 75) 
                             {
@@ -186,6 +192,7 @@ public class GuraMovement : Enemy
                         {
                             rb.velocity = Vector2.zero;
                             rb.AddForce(new Vector2(100 * direction, 400));
+                            AudioManager.Instance.Play("Jump");
 
                             GameObject laser = Instantiate(bullets[2], transform.position, Quaternion.identity);
                             laser.GetComponent<GuraLaser>().SetPositions(Vector2.zero, Vector2.down * 10f);
@@ -218,10 +225,12 @@ public class GuraMovement : Enemy
                             for (int i = 0; i < 4 + Mathf.Clamp(difficulty / 20, -2, 10); i++)
                             {
                                 bullet = Instantiate(bullets[0], transform.position, Quaternion.identity);
-                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(700f, 1000f));
+                                bullet.GetComponent<PhysicsBullet>().SetForce(Random.Range(400f, 1000f));
                                 bullet.GetComponent<PhysicsBullet>().SetDirection(10 * direction, Random.Range(20f, 50f));
                                 bullet.GetComponent<PhysicsBullet>().geyser = true;
                             }
+
+                            AudioManager.Instance.Play("Bullet2");
 
                             currentState = enemyState.idle;
                         }
@@ -281,6 +290,8 @@ public class GuraMovement : Enemy
                                 fireRateTimer = fireRate;
                             }
                             bulletOffset += offsetRate;
+
+                            AudioManager.Instance.Play("Bullet2");
                         }
 
                         if (attackTimer <= 0)
@@ -296,6 +307,7 @@ public class GuraMovement : Enemy
                     if(attackStep == 1) //Jump
                     {
                         rb.AddForce(new Vector2(0, jumpForce));
+                        AudioManager.Instance.Play("Jump");
 
                         attackTimer = 0.5f;
                         attackStep = 2;
@@ -331,6 +343,7 @@ public class GuraMovement : Enemy
                             GameObject laser = Instantiate(bullets[2], transform.position, Quaternion.identity);
                             laser.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
                             laser.GetComponent<GuraLaser>().SetLifeTime(1f);
+
                             attackTimer = 1f - Mathf.Clamp((difficulty / 200), -1f, 0.7f); ;   //laser charge time
                             attackStep = 4;
                         }
@@ -350,6 +363,7 @@ public class GuraMovement : Enemy
                             GameObject laser = Instantiate(bullets[2], transform.position, Quaternion.identity);
                             laser.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
                             laser.GetComponent<GuraLaser>().SetLifeTime(1f);
+
                             attackTimer = 2f - Mathf.Clamp((difficulty / 100), -1f, 1.5f);   //laser charge time
                             attackStep = 5;
                         }
@@ -370,6 +384,7 @@ public class GuraMovement : Enemy
                             laser.GetComponent<GuraLaser>().SetPositions(Vector2.zero, (delayedPos - transform.position) * 3f);
                             laser.GetComponent<GuraLaser>().SetLifeTime(2f);
                             laser.GetComponent<GuraLaser>().SetWidth(4f);
+
                             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
                             currentState = enemyState.idle;
                             Destroy(laserIndicator);
@@ -383,6 +398,7 @@ public class GuraMovement : Enemy
                     {
                         rb.velocity = Vector2.zero;
                         rb.AddForce(new Vector2(25f * direction, 400f));
+                        AudioManager.Instance.Play("Jump");
                         GetComponent<BoxCollider2D>().enabled = false;
                         comboMeter.SetStop(true);
 
@@ -430,6 +446,8 @@ public class GuraMovement : Enemy
                             GetComponent<BoxCollider2D>().enabled = true;
                             comboMeter.SetStop(false);
                             currentState = enemyState.idle;
+
+                            AudioManager.Instance.Play("Jump");
                         }
                     }
                     break;
@@ -459,6 +477,8 @@ public class GuraMovement : Enemy
                             bullet.GetComponent<NormalBulletNoFollow>().SetDirection(Random.Range(0f, 7f) * direction, 20f);
 
                             wFireRateTimer = wFireRate;  //Fire Rate
+
+                            AudioManager.Instance.Play("Bullet1");
                         }
 
                         if(attackTimer <= 0){   //Show Ceiling Indicators
@@ -514,7 +534,7 @@ public class GuraMovement : Enemy
                 case 10:
                     if(attackStep == 1)
                     {
-                        attackTimer = 3f;
+                        attackTimer = 2f;
                         attackStep = 2;
                     }
                     if(attackStep == 2)

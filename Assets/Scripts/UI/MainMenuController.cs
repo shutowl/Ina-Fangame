@@ -102,10 +102,13 @@ public class MainMenuController : MonoBehaviour
                         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option3) ? "Yes" : "No";
                         break;
                 }
+
+                AudioManager.Instance.Play("MenuMove");
             }
             else if(state == menuState.difficulty)
             {
                 SelectStage(stageRow, stageCol);
+                AudioManager.Instance.Play("MenuSelect");
             }
             else if (state == menuState.main)
             {
@@ -113,29 +116,40 @@ public class MainMenuController : MonoBehaviour
                 {
                     case 0:
                         OpenStageSelect();
+                        AudioManager.Instance.Play("MenuSelect");
                         break;
                     case 1:
                         OpenTutorial();
+                        AudioManager.Instance.Play("MenuError");
                         break;
                     case 2:
-                        if(!optionBoxIsMoving)
+                        if (!optionBoxIsMoving)
+                        {
                             OpenOptions();
+                            AudioManager.Instance.Play("MenuSelect");
+                        }
                         break;
                     case 3:
                         OpenCredits();
+                        AudioManager.Instance.Play("MenuError");
                         break;
                     case 4:
                         ExitGame();
+                        AudioManager.Instance.Play("MenuSelect");
                         break;
                 }
             }
             else if(state == menuState.stage)
             {
-                if (stageRow == 0 && stageCol == 1)  //Only Gura stage is working for now
+                if (stageRow == 0 && stageCol == 1)     //Only Gura stage is working for now
+                {
                     OpenDifficulty();
+                    AudioManager.Instance.Play("MenuSelect");
+                }
                 else
                 {
                     ShowWIPText();
+                    AudioManager.Instance.Play("MenuError");
                     Debug.Log("Stage still WIP!");
                     //Play an error sound or smth
                 }
@@ -150,19 +164,26 @@ public class MainMenuController : MonoBehaviour
                 menuIndex = 3; //Moves to exit
                 mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
                 mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+                AudioManager.Instance.Play("MenuCancel");
             }
             if (state == menuState.options)
             {
                 if (!optionBoxIsMoving)
+                {
                     CloseOptions();
+                    AudioManager.Instance.Play("MenuCancel");
+                }
             }
             if(state == menuState.stage)
             {
                 CloseStageSelect();
+                AudioManager.Instance.Play("MenuCancel");
             }
             if(state == menuState.difficulty)
             {
                 CloseDifficulty();
+                AudioManager.Instance.Play("MenuCancel");
             }
         }
         if (input.UI.Up.WasPressedThisFrame())
@@ -174,6 +195,8 @@ public class MainMenuController : MonoBehaviour
                 menuIndex = Mathf.Clamp(--menuIndex, 0, mainMenuButtons.Length);
                 mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
                 mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+                AudioManager.Instance.Play("MenuMove");
             }
             if(state == menuState.options)
             {
@@ -184,6 +207,8 @@ public class MainMenuController : MonoBehaviour
                 optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
 
                 if(changeVol) changeVol = false;
+
+                AudioManager.Instance.Play("MenuMove");
             }
             if(state == menuState.difficulty)
             {
@@ -212,6 +237,8 @@ public class MainMenuController : MonoBehaviour
                         difficultyDescription.text = "Take at your own risk...";
                         break;
                 }
+
+                AudioManager.Instance.Play("MenuMove");
             }
             if (state == menuState.stage)
             {
@@ -233,6 +260,8 @@ public class MainMenuController : MonoBehaviour
                         break;
                 }
                 UpdateStageInfo(stageRow, stageCol);
+
+                AudioManager.Instance.Play("MenuMove");
             }
         }
         if (input.UI.Down.WasPressedThisFrame())
@@ -241,9 +270,11 @@ public class MainMenuController : MonoBehaviour
             {
                 mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
                 mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
-                menuIndex = Mathf.Clamp(++menuIndex, 0, mainMenuButtons.Length);
+                menuIndex = Mathf.Clamp(++menuIndex, 0, mainMenuButtons.Length-1);
                 mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
                 mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+                AudioManager.Instance.Play("MenuMove");
             }
             if (state == menuState.options)
             {
@@ -254,6 +285,8 @@ public class MainMenuController : MonoBehaviour
                 optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().color = Color.white;
 
                 if(changeVol) changeVol = false;
+
+                AudioManager.Instance.Play("MenuMove");
             }
             if (state == menuState.difficulty)
             {
@@ -282,6 +315,8 @@ public class MainMenuController : MonoBehaviour
                         difficultyDescription.text = "Take at your own risk...";
                         break;
                 }
+
+                AudioManager.Instance.Play("MenuMove");
             }
             if(state == menuState.stage)
             {
@@ -300,6 +335,8 @@ public class MainMenuController : MonoBehaviour
                         break;
                 }
                 UpdateStageInfo(stageRow, stageCol);
+
+                AudioManager.Instance.Play("MenuMove");
             }
         }
         if (input.UI.Left.WasPressedThisFrame())
@@ -357,6 +394,8 @@ public class MainMenuController : MonoBehaviour
                         break;
                 }
                 UpdateStageInfo(stageRow, stageCol);
+
+                AudioManager.Instance.Play("MenuMove");
             }
         }
         if (input.UI.Right.WasPressedThisFrame())
@@ -414,6 +453,8 @@ public class MainMenuController : MonoBehaviour
                         break;
                 }
                 UpdateStageInfo(stageRow, stageCol);
+
+                AudioManager.Instance.Play("MenuMove");
             }
         }
         if (input.UI.Left.WasReleasedThisFrame() || input.UI.Right.WasReleasedThisFrame())
@@ -442,16 +483,19 @@ public class MainMenuController : MonoBehaviour
                 case 0: //Master
                     if (volIncrease) masterVol = Mathf.Clamp(++masterVol, 0, 100);
                     else masterVol = Mathf.Clamp(--masterVol, 0, 100);
+                    AudioManager.Instance.ChangeMasterVolume(masterVol);
                     optionsRightText[5].GetComponent<TextMeshProUGUI>().text = masterVol + "%";
                     break;
                 case 1: //BGM
                     if (volIncrease) BGMVol = Mathf.Clamp(++BGMVol, 0, 100);
                     else BGMVol = Mathf.Clamp(--BGMVol, 0, 100);
+                    AudioManager.Instance.ChangeBGMVolume(BGMVol);
                     optionsRightText[6].GetComponent<TextMeshProUGUI>().text = BGMVol + "%";
                     break;
                 case 2: //SFX
                     if (volIncrease) SFXVol = Mathf.Clamp(++SFXVol, 0, 100);
                     else SFXVol = Mathf.Clamp(--SFXVol, 0, 100);
+                    AudioManager.Instance.ChangeSFXVolume(SFXVol);
                     optionsRightText[7].GetComponent<TextMeshProUGUI>().text = SFXVol + "%";
                     break;
             }
@@ -483,6 +527,8 @@ public class MainMenuController : MonoBehaviour
         row1Stages[0].GetComponent<Image>().sprite = selectedButtonBG;
         row1Stages[0].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
         UpdateStageInfo(stageRow, stageCol);
+
+
     }
 
     void CloseStageSelect()
@@ -641,6 +687,7 @@ public class MainMenuController : MonoBehaviour
         mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
         mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
 
+        OnDisable();
         StartCoroutine(MoveOptionsBox(false, optionsOpenDuration));
         //Debug.Log("Options Menu Closed");
     }
