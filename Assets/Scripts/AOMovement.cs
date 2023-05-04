@@ -89,6 +89,8 @@ public class AOMovement : MonoBehaviour
                 {
                     autoFireRateTimer = autoFireRate;
                     Instantiate(bullets[0], player.transform.position + offset, Quaternion.identity);
+
+                    AudioManager.Instance.Play("Bullet2");
                     autoAmountCounter--;
                 }
                 if(autoAmountCounter <= 0)
@@ -134,6 +136,8 @@ public class AOMovement : MonoBehaviour
                 //instantiate a bullet in AO's direction and position
                 if (autoFireRateTimer <= 0)
                     Instantiate(bullets[0], player.transform.position + offset, Quaternion.identity);
+
+                AudioManager.Instance.Play("Bullet2");
                 break;
             case 1:
                 //Debug.Log("Fired Lv 2 shot");   //piercing laser
@@ -142,6 +146,8 @@ public class AOMovement : MonoBehaviour
                     laser.GetComponent<aoBullet>().SetPositions(Vector2.zero, Vector2.up * 30);
                 else
                     laser.GetComponent<aoBullet>().SetPositions(Vector2.zero, 30 * direction.x * Vector2.right);
+
+                AudioManager.Instance.Play("Laser");
                 break;
             default:
                 //Debug.Log("Fired Lv 3 shot");   //stronger piercing laser
@@ -150,6 +156,8 @@ public class AOMovement : MonoBehaviour
                     laser2.GetComponent<aoBullet>().SetPositions(Vector2.zero, Vector2.up * 30);
                 else
                     laser2.GetComponent<aoBullet>().SetPositions(Vector2.zero, 30 * direction.x * Vector2.right);
+
+                AudioManager.Instance.Play("Laser");
                 break;
         }
         chargeTime = 0f;
