@@ -135,9 +135,10 @@ public class AOMovement : MonoBehaviour
                 //Debug.Log("Fired Lv 0 shot");   //small spammable projectile
                 //instantiate a bullet in AO's direction and position
                 if (autoFireRateTimer <= 0)
+                {
                     Instantiate(bullets[0], player.transform.position + offset, Quaternion.identity);
-
-                AudioManager.Instance.Play("Bullet2");
+                    AudioManager.Instance.Play("Bullet2");
+                }
                 break;
             case 1:
                 //Debug.Log("Fired Lv 2 shot");   //piercing laser

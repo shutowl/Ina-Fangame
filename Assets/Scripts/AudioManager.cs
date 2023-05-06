@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
 	public static AudioManager Instance = null;
 
 	public Sound[] sounds;
+	AudioClip currentClip;
 
 	// Initialize the singleton instance.
 	private void Awake()
@@ -39,7 +40,18 @@ public class AudioManager : MonoBehaviour
 			if(name.Equals(sounds[i].name))
             {
 				clip = sounds[i].clip;
-				effectsSource.PlayOneShot(clip);
+
+				if(currentClip != clip)
+                {
+					currentClip = clip;
+					effectsSource.PlayOneShot(currentClip);
+				}
+                else
+                {
+					effectsSource.Stop();
+					effectsSource.PlayOneShot(currentClip);
+				}
+
 				break;
 			}
         }

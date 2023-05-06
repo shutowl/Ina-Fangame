@@ -143,10 +143,10 @@ public class Enemy : MonoBehaviour
                 difficulty = 1;
                 break;
             case 1: //Normal
-                difficulty = 40;
+                difficulty = 30;
                 break;
             case 2: //Hard
-                difficulty = 70;
+                difficulty = 80;
                 break;
             case 3: //Impossible
                 difficulty = 200;
