@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class StageSpawn : MonoBehaviour
 {
@@ -11,11 +12,15 @@ public class StageSpawn : MonoBehaviour
         boss
     }
     public StageState currentState;
+    public bool inOrder = false;
 
     //Room is 20 x 11, Origin fixed on middle of stage
     public int roomLength;
     public int roomHeight;
     public Transform contoller;
+    public TextMeshProUGUI mainStageText;
+    public TextMeshProUGUI subStageText;
+    public GameObject StageUI;
 
     public GameObject[] enemies;
     public GameObject[] bosses;
@@ -25,6 +30,10 @@ public class StageSpawn : MonoBehaviour
     public int minWaveLength;
     public int maxWaveLength;
     private int currentStage = 1;
+    private int stageRow = 0;           //Determines generation of stage (Ex: Myth)
+    private int stageCol = 0;           //Determines main talent of generation (Ex: Gura)
+    bool collabStage = false;
+    int wave;
     private int wavesLeft;              //How mnay waves until the boss (0 = BossWave)
     private float waveDuration;         //Max time a wave lasts for
 
@@ -36,10 +45,11 @@ public class StageSpawn : MonoBehaviour
     void Start()
     {
         wavesLeft = Random.Range(minWaveLength, maxWaveLength);
-        waveDuration = 2f;
+        waveDuration = 5f;
         currentState = StageState.waiting;
 
         comboMeter = FindObjectOfType<ComboMeter>();
+        StageUI.SetActive(false);
     }
 
     void Update()
@@ -57,27 +67,113 @@ public class StageSpawn : MonoBehaviour
             if (wavesLeft == 0)
             {
                 bossTimer = 10f;
-                switch (currentStage)
+                switch (stageRow)
                 {
-                    //Stage 1 Boss: KDTD
+                    //Myth Gen
+                    case 0:
+                        switch (stageCol)
+                        {
+                            case 0: //Myth
+
+                                break;
+                            case 1: //Gura
+                                StartCoroutine(SpawnGuraBoss());
+                                currentState = StageState.boss;
+                                break;
+                            case 2: //Calli
+
+                                break;
+                            case 3: //Ame
+
+                                break;
+                            case 4: //Kiara
+
+                                break;
+                        }
+                        break;
+                    //Council Gen
                     case 1:
-                        StartCoroutine(SpawnStage1Boss());
-                        currentState = StageState.boss;
+                        switch (stageCol)
+                        {
+                            case 0: //Council
+
+                                break;
+                            case 1: //Bae
+
+                                break;
+                            case 2: //Mumei
+
+                                break;
+                            case 3: //Fauna
+
+                                break;
+                            case 4: //Kronii
+
+                                break;
+                            case 5: //Sana
+
+                                break;
+                        }
                         break;
                 }
             }
             //Normal wave
             else
             {
-                switch (currentStage)
+                switch (stageRow)
                 {
-                    //Stage 1 Enemies: Takos, others
-                    case 1:
-                        int wave = Random.Range(1, 7); //1-6
-                        StartCoroutine(SpawnStage1Wave(wave));
+                    //Myth Gen
+                    case 0:
+                        switch (stageCol)
+                        {
+                            case 0: //Myth
+
+                                break;
+                            case 1: //Gura
+                                if (inOrder)
+                                {
+                                    wave = Mathf.Clamp((wave + 1) % 3, 1, 2);   //Clamp((wave + 1) % numOfAttacks+1, 1, numOfAttacks)
+                                }
+                                else
+                                {
+                                    wave = Random.Range(1, 3); //1-2
+                                }
+                                StartCoroutine(SpawnGuraWave(wave));
+                                break;
+                            case 2: //Calli
+
+                                break;
+                            case 3: //Ame
+
+                                break;
+                            case 4: //Kiara
+
+                                break;
+                        }
                         break;
-                    //Stage 2 Enemies
-                    case 2:
+                    //Council Gen
+                    case 1:
+                        switch (stageCol)
+                        {
+                            case 0: //Council
+
+                                break;
+                            case 1: //Bae
+
+                                break;
+                            case 2: //Mumei
+
+                                break;
+                            case 3: //Fauna
+
+                                break;
+                            case 4: //Kronii
+
+                                break;
+                            case 5: //Sana
+
+                                break;
+                        }
                         break;
                 }
 
@@ -89,9 +185,19 @@ public class StageSpawn : MonoBehaviour
         {
             if (noEnemies && bossTimer <= 0)
             {
-                wavesLeft = Random.Range(minWaveLength, maxWaveLength);
-                waveDuration = 5f;
-                currentState = StageState.waiting;
+                //Check if single or collab stage
+                //If single, finish level
+                if (!collabStage)
+                {
+                    CompleteStage();
+                }
+                //Otherwise, continue to next stage
+                else
+                {
+                    wavesLeft = Random.Range(minWaveLength, maxWaveLength);
+                    waveDuration = 5f;
+                    currentState = StageState.waiting;
+                }
             }
             bossTimer -= Time.deltaTime;
         }
@@ -119,7 +225,16 @@ public class StageSpawn : MonoBehaviour
         return waveDuration;
     }
 
-    IEnumerator SpawnStage1Wave(int wave)
+    //The player finishes the level and statistics are shown
+    //Menu prompt will also show to either retry or go back
+    void CompleteStage()
+    {
+        StartCoroutine(FindObjectOfType<PlayerMovement>().PausePlayer(true));
+        StageUI.SetActive(true);
+        Debug.Log("Stage Complete");
+    }
+
+    IEnumerator SpawnTutorialWave(int wave)
     {
         switch (wave)
         {
@@ -273,11 +388,112 @@ public class StageSpawn : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnStage1Boss()
+    IEnumerator SpawnTutorialBoss()
     {
         spawner.GetComponent<Spawner>().SetSpawn(bosses[0], 4f);
         Instantiate(spawner, contoller.position + new Vector3(5, 1), Quaternion.identity);
 
         yield return null;
+    }
+
+    IEnumerator SpawnGuraWave(int wave)
+    {
+        switch (wave)
+        {
+            case 1:
+                waveDuration = 5f;
+
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(4, -4), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.2f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(5, -4), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.2f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(6, -4), Quaternion.identity);
+                break;
+            case 2:
+                waveDuration = 5f;
+
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(-4, -4), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.2f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(-5, -4), Quaternion.identity);
+
+                yield return new WaitForSeconds(0.2f);
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(-6, -4), Quaternion.identity);
+                break;
+        }
+    }
+
+    IEnumerator SpawnGuraBoss()
+    {
+        spawner.GetComponent<Spawner>().SetSpawn(bosses[1], 4f);
+        Instantiate(spawner, contoller.position + new Vector3(5, 1), Quaternion.identity);
+
+        yield return null;
+    }
+
+    //Load variables on entering scene
+    private void OnEnable()
+    {
+        stageRow = PlayerPrefs.GetInt("stageRow");
+        stageCol = PlayerPrefs.GetInt("stageCol");
+
+        switch (stageRow)
+        {
+            case 0:
+                switch (stageCol)
+                {
+                    case 0: //Myth
+                        collabStage = true;
+                        mainStageText.text = "Main Stage";
+                        subStageText.text = "Myth Collab";
+                        break;
+                    case 1: //Gura
+                        collabStage = false;
+                        mainStageText.text = "Atlantis";
+                        subStageText.text = "Gura's stage";
+                        break;
+                    case 2: //Calli
+                        
+                        break;
+                    case 3: //Ame
+                        
+                        break;
+                    case 4: //Kiara
+                        
+                        break;
+                }
+                break;
+            case 1:
+                switch (stageCol)
+                {
+                    case 0: //Council
+                        
+                        break;
+                    case 1: //Bae
+                        
+                        break;
+                    case 2: //Mumei
+                        
+                        break;
+                    case 3: //Fauna
+                        
+                        break;
+                    case 4: //Kronii
+                        
+                        break;
+                    case 5: //Sana
+                        
+                        break;
+                }
+                break;
+        }
     }
 }

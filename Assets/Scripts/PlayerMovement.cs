@@ -97,6 +97,7 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         clips = anim.runtimeAnimatorController.animationClips;
         inputActions = new InputActions();
+        inputActions.Player.Enable();
         rb = GetComponent<Rigidbody2D>();
         if (rb is null)
             Debug.LogError("Rigidbody is NULL");
@@ -106,6 +107,7 @@ public class PlayerMovement : MonoBehaviour
         walkDelayCounter = walkDelay;
 
         respawnPoint = transform.position;
+        paused = false;
     }
 
     void Update()
@@ -603,16 +605,6 @@ public class PlayerMovement : MonoBehaviour
 
         Debug.LogError("Animation clip name not found!: " + name);
         return 0f;
-    }
-
-    private void OnEnable()
-    {
-        inputActions.Player.Enable();
-    }
-
-    private void OnDisable()
-    {
-        inputActions.Player.Disable();
     }
 
     public void setDamageState()

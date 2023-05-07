@@ -136,7 +136,7 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log(PlayerPrefs.GetInt("difficulty"));
+        //Debug.Log(PlayerPrefs.GetInt("difficulty"));
         switch (PlayerPrefs.GetInt("difficulty"))
         {
             case 0: //Casual

@@ -505,6 +505,9 @@ public class MainMenuController : MonoBehaviour
     public void StartGame()
     {
         PlayerPrefs.SetInt("difficulty", difficultyLevel);
+        PlayerPrefs.SetInt("stageRow", stageRow);
+        PlayerPrefs.SetInt("stageCol", stageCol);
+
         SceneManager.LoadScene("LoadingScreen");
         //Debug.Log("Started game with difficulty level: " + difficultyLevel);
     }
@@ -527,8 +530,6 @@ public class MainMenuController : MonoBehaviour
         row1Stages[0].GetComponent<Image>().sprite = selectedButtonBG;
         row1Stages[0].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
         UpdateStageInfo(stageRow, stageCol);
-
-
     }
 
     void CloseStageSelect()
