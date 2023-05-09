@@ -20,7 +20,6 @@ public class StageSpawn : MonoBehaviour
     public Transform contoller;
     public TextMeshProUGUI mainStageText;
     public TextMeshProUGUI subStageText;
-    public GameObject StageUI;
 
     public GameObject[] enemies;
     public GameObject[] bosses;
@@ -36,20 +35,22 @@ public class StageSpawn : MonoBehaviour
     int wave;
     private int wavesLeft;              //How mnay waves until the boss (0 = BossWave)
     private float waveDuration;         //Max time a wave lasts for
+    bool stageComplete;
 
     private float bossTimer = 0f;       //Used to prevent other waves from spawning during boss wave
 
     ComboMeter comboMeter;
-
+    StatisticsMenu statisticsMenu;
 
     void Start()
     {
+        stageComplete = false;
         wavesLeft = Random.Range(minWaveLength, maxWaveLength);
         waveDuration = 5f;
         currentState = StageState.waiting;
 
         comboMeter = FindObjectOfType<ComboMeter>();
-        StageUI.SetActive(false);
+        statisticsMenu = FindObjectOfType<StatisticsMenu>();
     }
 
     void Update()
@@ -187,7 +188,7 @@ public class StageSpawn : MonoBehaviour
             {
                 //Check if single or collab stage
                 //If single, finish level
-                if (!collabStage)
+                if (!collabStage && !stageComplete)
                 {
                     CompleteStage();
                 }
@@ -202,7 +203,7 @@ public class StageSpawn : MonoBehaviour
             bossTimer -= Time.deltaTime;
         }
 
-        if(waveDuration > 0)
+        if(waveDuration > 0 && !stageComplete)
             waveDuration -= Time.deltaTime;
 
         noEnemies = (GameObject.FindGameObjectsWithTag("Enemy").Length == 0);
@@ -229,8 +230,9 @@ public class StageSpawn : MonoBehaviour
     //Menu prompt will also show to either retry or go back
     void CompleteStage()
     {
+        stageComplete = true;
         StartCoroutine(FindObjectOfType<PlayerMovement>().PausePlayer(true));
-        StageUI.SetActive(true);
+        statisticsMenu.OpenStatistics();
         Debug.Log("Stage Complete");
     }
 

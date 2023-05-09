@@ -257,11 +257,17 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: add537adcd4e6af4abb01d25806ec4fc, type: 3}
   - name: Jump
     clip: {fileID: 8300000, guid: e7e6e68f8ec1db64f868a7b936b40285, type: 3}
+  - name: JumpPlayer
+    clip: {fileID: 8300000, guid: 3c4b1ff68a2557040aa12a59fc70013c, type: 3}
   - name: JumpLand
     clip: {fileID: 8300000, guid: 54eceaa116cff42479edff7796050944, type: 3}
   - name: Laser
-    clip: {fileID: 8300000, guid: 96c8220ffea39db42a50e44b99d0d637, type: 3}
+    clip: {fileID: 8300000, guid: 79b231445d571594d9004a845f668cd3, type: 3}
   - name: Bullet1
     clip: {fileID: 8300000, guid: 01bb777ae1902de4aa83a11c11af4ad9, type: 3}
   - name: Bullet2
     clip: {fileID: 8300000, guid: f6189e38d6639904196d10e95437ae42, type: 3}
+  - name: LowHealthAlarm
+    clip: {fileID: 8300000, guid: 372545ebaa8d6ab42a94c8071fdeffd7, type: 3}
+  - name: PlayerLaser
+    clip: {fileID: 8300000, guid: 9e3cb4470df183443b801ca38fb4fa20, type: 3}

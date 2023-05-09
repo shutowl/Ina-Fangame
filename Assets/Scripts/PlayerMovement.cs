@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
     private float hitstunCounter;
     public float damagediFrames = 1f;
     private float damagediFramesCounter;
+    int timesHit = 0;
 
     [Header ("Coyote Time And Jump Buffers")]
     public float coyoteTime = 0.2f;
@@ -73,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
     private float attackTimer = 0f;          //If attack is pressed again while active, goes into the next attack in the combo. Also acts as attack duration for single attack combos
     private float flipOffset = 0.1f;         //Player continues looking towards attack for [flipOffset] seconds longer.
     private float bounceTimer = 0f;
+    AOMovement AO;
 
     [Header("Other")]
     public ParticleSystem dust;
@@ -94,6 +96,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        AO = FindObjectOfType<AOMovement>();
         anim = GetComponent<Animator>();
         clips = anim.runtimeAnimatorController.animationClips;
         inputActions = new InputActions();
@@ -108,6 +111,7 @@ public class PlayerMovement : MonoBehaviour
 
         respawnPoint = transform.position;
         paused = false;
+        timesHit = 0;
     }
 
     void Update()
@@ -134,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
 
                 jumpBufferCounter = 0f;
 
-                AudioManager.Instance.Play("Jump");
+                AudioManager.Instance.Play("JumpPlayer");
             }
             //Jump Buffer
             if (inputActions.Player.Jump.WasPressedThisFrame())
@@ -258,11 +262,11 @@ public class PlayerMovement : MonoBehaviour
             //Fire
             if (inputActions.Player.Fire.WasPressedThisFrame())
             {
-                FindObjectOfType<AOMovement>().Charge();
+                AO.Charge();
             }
             if (inputActions.Player.Fire.WasReleasedThisFrame())
             {
-                FindObjectOfType<AOMovement>().Fire();
+                AO.Fire();
             }
         }
         //-----ROLL STATE-----
@@ -298,11 +302,11 @@ public class PlayerMovement : MonoBehaviour
             //Enables AO abilities during roll
             if (inputActions.Player.Fire.WasPressedThisFrame())
             {
-                FindObjectOfType<AOMovement>().Charge();
+                AO.Charge();
             }
             if (inputActions.Player.Fire.WasReleasedThisFrame())
             {
-                FindObjectOfType<AOMovement>().Fire();
+                AO.Fire();
             }
 
             //Walk Delay
@@ -336,11 +340,11 @@ public class PlayerMovement : MonoBehaviour
             //Enables AO abilities during slide
             if (inputActions.Player.Fire.WasPressedThisFrame())
             {
-                FindObjectOfType<AOMovement>().Charge();
+                AO.Charge();
             }
             if (inputActions.Player.Fire.WasReleasedThisFrame())
             {
-                FindObjectOfType<AOMovement>().Fire();
+                AO.Fire();
             }
 
             //Walk Delay
@@ -379,13 +383,12 @@ public class PlayerMovement : MonoBehaviour
             //Enables AO abilities during attacks
             if (inputActions.Player.Fire.WasPressedThisFrame())
             {
-                FindObjectOfType<AOMovement>().Charge();
+                AO.Charge();
             }
             if (inputActions.Player.Fire.WasReleasedThisFrame())
             {
-                FindObjectOfType<AOMovement>().Fire();
+                AO.Fire();
             }
-
             //Cancels attacks into a roll
             if (inputActions.Player.Roll.WasPressedThisFrame())
             {
@@ -449,11 +452,11 @@ public class PlayerMovement : MonoBehaviour
             //Enables AO abilities during hitstun
             if (inputActions.Player.Fire.WasPressedThisFrame())
             {
-                FindObjectOfType<AOMovement>().Charge();
+                AO.Charge();
             }
             if (inputActions.Player.Fire.WasReleasedThisFrame())
             {
-                FindObjectOfType<AOMovement>().Fire();
+                AO.Fire();
             }
         }
 
@@ -614,6 +617,8 @@ public class PlayerMovement : MonoBehaviour
         hitstunCounter = hitstun;
         damagediFramesCounter = hitstun + 0.5f;
 
+        timesHit++;
+
         AudioManager.Instance.Play("Damaged");
     }
 
@@ -627,6 +632,8 @@ public class PlayerMovement : MonoBehaviour
         this.hitstun = hitstun;
         damagediFramesCounter = hitstun + 0.5f;
 
+        timesHit++;
+
         AudioManager.Instance.Play("Damaged");
     }
 
@@ -639,6 +646,13 @@ public class PlayerMovement : MonoBehaviour
     public IEnumerator PausePlayer(bool paused)
     {
         yield return new WaitForEndOfFrame();
+        if (paused)
+        {
+            AO.Fire();
+            inputActions.Player.Disable();
+            rb.velocity = Vector2.zero;
+            moveVal.x = 0;
+        }
         this.paused = paused;
     }
 
@@ -684,6 +698,11 @@ public class PlayerMovement : MonoBehaviour
     public int getAttackNum()
     {
         return attackNum;
+    }
+
+    public int GetTimesHit()
+    {
+        return timesHit;
     }
 
     public void Bounce()    //used for when DAir hits something

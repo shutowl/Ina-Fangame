@@ -17,6 +17,7 @@ public class LoadingScreen : MonoBehaviour
     {
         progressBar.value = 0;
         loadText.text = "Loading...";
+        sceneName = PlayerPrefs.GetString("nextScene");
         StartCoroutine(LoadAsyncScene());
     }
 

@@ -508,6 +508,7 @@ public class MainMenuController : MonoBehaviour
         PlayerPrefs.SetInt("stageRow", stageRow);
         PlayerPrefs.SetInt("stageCol", stageCol);
 
+        PlayerPrefs.SetString("nextScene", "StageTest");
         SceneManager.LoadScene("LoadingScreen");
         //Debug.Log("Started game with difficulty level: " + difficultyLevel);
     }

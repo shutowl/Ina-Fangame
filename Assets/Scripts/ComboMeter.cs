@@ -18,11 +18,13 @@ public class ComboMeter : MonoBehaviour
     private int hitCount = 0;
     private int bonusDMG = 0;
     private float timer = 0f;
+    private int maxCombo = 0;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        maxCombo = 0;
         timer = 0;
         stopTime = false;
         comboSlider.maxValue = maxTime;
@@ -45,7 +47,6 @@ public class ComboMeter : MonoBehaviour
         }
 
         comboSlider.value = timer;
-
     }
 
     public void AddCombo()
@@ -58,12 +59,21 @@ public class ComboMeter : MonoBehaviour
         comboText.text = hitCount + " HITS!";
         bonusDMGText.text = "+" + bonusDMG + "% DMG";
 
+        if(hitCount > maxCombo)
+        {
+            maxCombo = hitCount;
+        }
     }
 
     public void ResetCombo()
     {
         hitCount = 0;
         timer = 0;
+    }
+
+    public int GetMaxCombo()
+    {
+        return maxCombo;
     }
 
     public void SetStop(bool stop)

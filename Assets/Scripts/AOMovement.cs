@@ -148,7 +148,7 @@ public class AOMovement : MonoBehaviour
                 else
                     laser.GetComponent<aoBullet>().SetPositions(Vector2.zero, 30 * direction.x * Vector2.right);
 
-                AudioManager.Instance.Play("Laser");
+                AudioManager.Instance.Play("PlayerLaser");
                 break;
             default:
                 //Debug.Log("Fired Lv 3 shot");   //stronger piercing laser
@@ -158,7 +158,7 @@ public class AOMovement : MonoBehaviour
                 else
                     laser2.GetComponent<aoBullet>().SetPositions(Vector2.zero, 30 * direction.x * Vector2.right);
 
-                AudioManager.Instance.Play("Laser");
+                AudioManager.Instance.Play("PlayerLaser");
                 break;
         }
         chargeTime = 0f;
