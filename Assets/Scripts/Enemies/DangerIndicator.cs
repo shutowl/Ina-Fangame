@@ -38,6 +38,8 @@ public class DangerIndicator : MonoBehaviour
 
                 //flashRate decreases as lifeTime decreases
                 flashRate = Mathf.Clamp(flashRate - lifeTime / 30, 0.1f, 5f);
+
+                AudioManager.Instance.Play("Beep");
             }
         }
 

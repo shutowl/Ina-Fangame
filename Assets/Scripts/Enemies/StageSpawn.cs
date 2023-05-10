@@ -51,6 +51,8 @@ public class StageSpawn : MonoBehaviour
 
         comboMeter = FindObjectOfType<ComboMeter>();
         statisticsMenu = FindObjectOfType<StatisticsMenu>();
+
+        AudioManager.Instance.PlayMusic("tempBGM");
     }
 
     void Update()

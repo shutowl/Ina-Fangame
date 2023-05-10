@@ -44,20 +44,25 @@ public class Crowbar : MonoBehaviour
             {
                 case 1:     //Neutral 1
                     enemy.TakeDamage(n1Damage, 0.3f);
+                    AudioManager.Instance.Play("Impact1");
                     break;
                 case 2:     //Neutral 2
                     enemy.TakeDamage(n2Damage, 0.2f);
+                    AudioManager.Instance.Play("Impact1");
                     break;
                 case 3:     //Neutral 3
                     enemy.TakeDamage(n3Damage, n3HitRate);
                     n3HitRateTimer = n3HitRate;
+                    AudioManager.Instance.Play("Impact2");
                     break;
                 case 4:     //NAir
                     enemy.TakeDamage(nairDamage, 0.1f);
+                    AudioManager.Instance.Play("Impact1");
                     break;
                 case 5:     //DAir
                     enemy.TakeDamage(dairDamage, 0.1f);
                     player.Bounce();
+                    AudioManager.Instance.Play("Impact1");
                     break;
             }
         }
@@ -73,6 +78,7 @@ public class Crowbar : MonoBehaviour
             {
                 enemy.TakeDamage(n3Damage, n3HitRate);
                 n3HitRateTimer = n3HitRate;
+                AudioManager.Instance.Play("Impact2");
             }
         }
     }

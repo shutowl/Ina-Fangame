@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
 	public static AudioManager Instance = null;
 
 	public Sound[] sounds;
+	public Sound[] music;
 	AudioClip currentClip;
 
 	// Initialize the singleton instance.
@@ -62,9 +63,23 @@ public class AudioManager : MonoBehaviour
 	}
 
 	// Play a single clip through the music source.
-	public void PlayMusic(AudioClip clip)
+	public void PlayMusic(string name)
 	{
-		musicSource.PlayOneShot(clip);
+		AudioClip clip = null;
+		for (int i = 0; i < music.Length; i++)
+		{
+			if (name.Equals(music[i].name))
+			{
+				clip = music[i].clip;
+				musicSource.Stop();
+				musicSource.PlayOneShot(clip);
+				break;
+			}
+		}
+		if (clip == null)
+		{
+			Debug.LogError("BGM named '" + name + "' not found! (Check for typos?)");
+		}
 	}
 
 	public void ChangeMasterVolume(float value)

@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     public float maxSpeed = 3f;             //Max player speed
     public float jumpPower = 100f;          //How high the player jumps
     private bool bufferJump = false;
-    private float tempSpeed;
+    private float runSpeed;
     private float walkSpeed;
     public float walkDelay = 1.0f;          //How long a button is held before walk is enabled
     private float walkDelayCounter;
@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
         if (rb is null)
             Debug.LogError("Rigidbody is NULL");
 
-        tempSpeed = speed;
+        runSpeed = speed;
         walkSpeed = speed / 2;
         walkDelayCounter = walkDelay;
 
@@ -175,7 +175,7 @@ public class PlayerMovement : MonoBehaviour
             if (inputActions.Player.Attack.WasReleasedThisFrame())
             {
                 walkDelayCounter = walkDelay;
-                speed = tempSpeed;
+                speed = runSpeed;
                 ResetHitbox();
             }
 
@@ -313,7 +313,7 @@ public class PlayerMovement : MonoBehaviour
             if (inputActions.Player.Attack.WasReleasedThisFrame())
             {
                 walkDelayCounter = walkDelay;
-                speed = tempSpeed;
+                speed = runSpeed;
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
             }
         }
@@ -351,7 +351,7 @@ public class PlayerMovement : MonoBehaviour
             if (inputActions.Player.Attack.WasReleasedThisFrame())
             {
                 walkDelayCounter = walkDelay;
-                speed = tempSpeed;
+                speed = runSpeed;
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
             }
         }
@@ -419,16 +419,19 @@ public class PlayerMovement : MonoBehaviour
                     if (inputActions.Player.Move.ReadValue<Vector2>().y == -1)
                     {
                         StartCoroutine(Attack(0, GetAnimationClipLength("ina_dair") - animOffset, 5));
+                        AudioManager.Instance.Play("Swing");
+
                     }
                     //Neutral Aerial: Quick swing forward
                     else
                     {
                         StartCoroutine(Attack(0, GetAnimationClipLength("ina_nair") - animOffset, 4));
+                        AudioManager.Instance.Play("Swing");
                     }
                 }
             }
         }
-        //-----DAMAGED STATE-----
+        //-----HITSTUN STATE-----
         else if(currentState == playerState.hitstun)
         {
             //hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0.5f); //DEBUG - remove later
@@ -445,6 +448,9 @@ public class PlayerMovement : MonoBehaviour
 
             if (hitstunCounter <= 0)
             {
+
+                walkDelayCounter = walkDelay;
+                speed = runSpeed;
                 ResetHitbox();
                 currentState = playerState.moving;
             }
@@ -648,10 +654,16 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForEndOfFrame();
         if (paused)
         {
-            AO.Fire();
+            hitbox.GetComponent<BoxCollider2D>().enabled = false;
+            AO.Reset();
             inputActions.Player.Disable();
             rb.velocity = Vector2.zero;
             moveVal.x = 0;
+        }
+        else
+        {
+            hitbox.GetComponent<BoxCollider2D>().enabled = true;
+            inputActions.Player.Enable();
         }
         this.paused = paused;
     }
@@ -680,6 +692,8 @@ public class PlayerMovement : MonoBehaviour
 
         attackTimer = duration;
         this.attackNum = attackNum;
+
+        AudioManager.Instance.Play("Swing");
     }
 
     private void OnTriggerEnter2D(Collider2D col)

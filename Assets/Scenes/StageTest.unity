@@ -8190,9 +8190,7 @@ MonoBehaviour:
   timeTakenText: {fileID: 1239554245}
   timeTaken: 0
   maxComboText: {fileID: 1861885780}
-  maxCombo: 0
   timesHitText: {fileID: 1580902310}
-  timesHit: 0
 --- !u!1 &928569536
 GameObject:
   m_ObjectHideFlags: 0
@@ -9820,7 +9818,7 @@ SpriteRenderer:
   m_SortingLayerID: 757211571
   m_SortingLayer: 1
   m_SortingOrder: 15
-  m_Sprite: {fileID: -1704222571, guid: 2c4df29b18d054e40b3eabec73f05a0a, type: 3}
+  m_Sprite: {fileID: -215126415, guid: 8ffd994fb54e5c04daf9d9de93c130dc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

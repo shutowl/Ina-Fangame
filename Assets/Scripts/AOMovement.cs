@@ -90,7 +90,7 @@ public class AOMovement : MonoBehaviour
                     autoFireRateTimer = autoFireRate;
                     Instantiate(bullets[0], player.transform.position + offset, Quaternion.identity);
 
-                    AudioManager.Instance.Play("Bullet2");
+                    AudioManager.Instance.Play("PlayerBullet");
                     autoAmountCounter--;
                 }
                 if(autoAmountCounter <= 0)
@@ -137,7 +137,7 @@ public class AOMovement : MonoBehaviour
                 if (autoFireRateTimer <= 0)
                 {
                     Instantiate(bullets[0], player.transform.position + offset, Quaternion.identity);
-                    AudioManager.Instance.Play("Bullet2");
+                    AudioManager.Instance.Play("PlayerBullet");
                 }
                 break;
             case 1:
@@ -167,6 +167,11 @@ public class AOMovement : MonoBehaviour
         autoAmountCounter = autoAmount;
 
         //offset = savedOffset;
+    }
+
+    public void Reset()
+    {
+        isCharging = false;
     }
 
     public Vector2 getDirection()

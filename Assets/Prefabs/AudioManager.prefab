@@ -144,7 +144,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -242,9 +242,9 @@ MonoBehaviour:
   musicSource: {fileID: 8827481806793481457}
   sounds:
   - name: MenuMove
-    clip: {fileID: 8300000, guid: 051efbef5868cf8469f9b8faa1cbf8d7, type: 3}
+    clip: {fileID: 8300000, guid: bef06807e076f8746a093f5704295ee3, type: 3}
   - name: MenuSelect
-    clip: {fileID: 8300000, guid: 6d0f685e3587de44b96002a37ee58f2c, type: 3}
+    clip: {fileID: 8300000, guid: 051efbef5868cf8469f9b8faa1cbf8d7, type: 3}
   - name: MenuError
     clip: {fileID: 8300000, guid: 9768ee331373cb64591d8af46833f54d, type: 3}
   - name: MenuCancel
@@ -271,3 +271,16 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 372545ebaa8d6ab42a94c8071fdeffd7, type: 3}
   - name: PlayerLaser
     clip: {fileID: 8300000, guid: 9e3cb4470df183443b801ca38fb4fa20, type: 3}
+  - name: PlayerBullet
+    clip: {fileID: 8300000, guid: 3a4b474f22175ff4e86efb37b6895122, type: 3}
+  - name: Beep
+    clip: {fileID: 8300000, guid: 8dde918c46b9d384e9137e542a9f742f, type: 3}
+  - name: Impact1
+    clip: {fileID: 8300000, guid: 78734b65bbb9f4d47909c0ece10acb8f, type: 3}
+  - name: Impact2
+    clip: {fileID: 8300000, guid: f005068eeb0f21e44ad081252dcf53db, type: 3}
+  - name: Swing
+    clip: {fileID: 8300000, guid: 8d015b88d6b598c48985ae3facf05bfa, type: 3}
+  music:
+  - name: tempBGM
+    clip: {fileID: 8300000, guid: a5a3f4ca95214884d87db36226e38cd3, type: 3}
