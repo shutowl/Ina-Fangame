@@ -72,14 +72,6 @@ public class MainMenuController : MonoBehaviour
         stageSelectBox.SetActive(false);
         Time.timeScale = 1;
 
-        //Set Default Values
-        PlayerPrefs.GetInt("hitNumbersOn", 1);
-        PlayerPrefs.GetInt("stageTimerOn", 1);
-        PlayerPrefs.GetInt("option3", 1);
-        PlayerPrefs.GetInt("mVol", 70);
-        PlayerPrefs.GetInt("bgmVol", 70);
-        PlayerPrefs.GetInt("sfxVol", 70);
-
         AudioManager.Instance.PlayMusic("titleBGM");
     }
 
@@ -740,12 +732,16 @@ public class MainMenuController : MonoBehaviour
     //Load variables on entering scene
     private void OnEnable()
     {
-        hitNumbersOn = IntToBool(PlayerPrefs.GetInt("hitNumbersOn"));
-        stageTimerOn = IntToBool(PlayerPrefs.GetInt("stageTimerOn"));
-        option3 = IntToBool(PlayerPrefs.GetInt("option3"));
-        masterVol = PlayerPrefs.GetInt("mVol");
-        BGMVol = PlayerPrefs.GetInt("bgmVol");
-        SFXVol = PlayerPrefs.GetInt("sfxVol");
+        hitNumbersOn = IntToBool(PlayerPrefs.GetInt("hitNumbersOn", 1));
+        stageTimerOn = IntToBool(PlayerPrefs.GetInt("stageTimerOn", 1));
+        option3 = IntToBool(PlayerPrefs.GetInt("option3", 1));
+        masterVol = PlayerPrefs.GetInt("mVol", 50);
+        BGMVol = PlayerPrefs.GetInt("bgmVol", 50);
+        SFXVol = PlayerPrefs.GetInt("sfxVol", 50);
+
+        AudioManager.Instance.ChangeMasterVolume(masterVol);
+        AudioManager.Instance.ChangeBGMVolume(BGMVol);
+        AudioManager.Instance.ChangeSFXVolume(SFXVol);
 
         optionsRightText[0].GetComponent<TextMeshProUGUI>().text = (hitNumbersOn) ? "Yes" : "No";
         optionsRightText[1].GetComponent<TextMeshProUGUI>().text = (stageTimerOn) ? "Yes" : "No";
