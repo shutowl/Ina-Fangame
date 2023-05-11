@@ -240,12 +240,13 @@ MonoBehaviour:
   ghostDuration: 0.2
   stunned: 0
   enemyName: KDTD??
+  difficulty: 0
+  hitNumber: {fileID: 6830065319639149353, guid: 4181f8704273bbe4db23c007e0d9654d, type: 3}
   speed: 5
   jumpForce: 600
   minActionRate: 1
   maxActionRate: 2
   attack3Rate: 0.1
-  difficulty: 0
   bullets:
   - {fileID: 5126173865412392491, guid: cbfcd963f8b77e84997ee0a01001c371, type: 3}
   tako: {fileID: 3400607705881677324, guid: 39e06b5630529c945b413660e71986fa, type: 3}

@@ -38,8 +38,8 @@ public class MainMenuController : MonoBehaviour
     private bool optionBoxIsMoving = false;
     public GameObject[] optionsLeftText;
     public GameObject[] optionsRightText;
-    public bool option1 = true;
-    public bool option2 = true;
+    public bool hitNumbersOn = true;
+    public bool stageTimerOn = true;
     public bool option3 = false;
     public int resolution = 0;
     public int fullscreen = 0;
@@ -73,12 +73,14 @@ public class MainMenuController : MonoBehaviour
         Time.timeScale = 1;
 
         //Set Default Values
-        PlayerPrefs.GetInt("option1", 1);
-        PlayerPrefs.GetInt("option2", 1);
+        PlayerPrefs.GetInt("hitNumbersOn", 1);
+        PlayerPrefs.GetInt("stageTimerOn", 1);
         PlayerPrefs.GetInt("option3", 1);
         PlayerPrefs.GetInt("mVol", 70);
         PlayerPrefs.GetInt("bgmVol", 70);
         PlayerPrefs.GetInt("sfxVol", 70);
+
+        AudioManager.Instance.PlayMusic("titleBGM");
     }
 
     void Update()
@@ -90,12 +92,12 @@ public class MainMenuController : MonoBehaviour
                 switch (menuIndex)
                 {
                     case 0:
-                        option1 = !option1;
-                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option1) ? "Yes" : "No";
+                        hitNumbersOn = !hitNumbersOn;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (hitNumbersOn) ? "Yes" : "No";
                         break;
                     case 1:
-                        option2 = !option2;
-                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option2) ? "Yes" : "No";
+                        stageTimerOn = !stageTimerOn;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (stageTimerOn) ? "Yes" : "No";
                         break;
                     case 2:
                         option3 = !option3;
@@ -346,12 +348,12 @@ public class MainMenuController : MonoBehaviour
                 switch (menuIndex)
                 {
                     case 0: //Option 1
-                        option1 = !option1;
-                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option1) ? "Yes" : "No";
+                        hitNumbersOn = !hitNumbersOn;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (hitNumbersOn) ? "Yes" : "No";
                         break;
                     case 1: //Option 2
-                        option2 = !option2;
-                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option2) ? "Yes" : "No";
+                        stageTimerOn = !stageTimerOn;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (stageTimerOn) ? "Yes" : "No";
                         break;
                     case 2: //Option 3
                         option3 = !option3;
@@ -405,12 +407,12 @@ public class MainMenuController : MonoBehaviour
                 switch (menuIndex)
                 {
                     case 0: //Option 1
-                        option1 = !option1;
-                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option1) ? "Yes" : "No";
+                        hitNumbersOn = !hitNumbersOn;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (hitNumbersOn) ? "Yes" : "No";
                         break;
                     case 1: //Option 2
-                        option2 = !option2;
-                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option2) ? "Yes" : "No";
+                        stageTimerOn = !stageTimerOn;
+                        optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (stageTimerOn) ? "Yes" : "No";
                         break;
                     case 2: //Option 3
                         option3 = !option3;
@@ -738,35 +740,35 @@ public class MainMenuController : MonoBehaviour
     //Load variables on entering scene
     private void OnEnable()
     {
-        option1 = IntToBool(PlayerPrefs.GetInt("option1"));
-        option2 = IntToBool(PlayerPrefs.GetInt("option2"));
+        hitNumbersOn = IntToBool(PlayerPrefs.GetInt("hitNumbersOn"));
+        stageTimerOn = IntToBool(PlayerPrefs.GetInt("stageTimerOn"));
         option3 = IntToBool(PlayerPrefs.GetInt("option3"));
         masterVol = PlayerPrefs.GetInt("mVol");
         BGMVol = PlayerPrefs.GetInt("bgmVol");
         SFXVol = PlayerPrefs.GetInt("sfxVol");
 
-        optionsRightText[0].GetComponent<TextMeshProUGUI>().text = (option1) ? "Yes" : "No";
-        optionsRightText[1].GetComponent<TextMeshProUGUI>().text = (option2) ? "Yes" : "No";
+        optionsRightText[0].GetComponent<TextMeshProUGUI>().text = (hitNumbersOn) ? "Yes" : "No";
+        optionsRightText[1].GetComponent<TextMeshProUGUI>().text = (stageTimerOn) ? "Yes" : "No";
         optionsRightText[2].GetComponent<TextMeshProUGUI>().text = (option3) ? "Yes" : "No";
         optionsRightText[5].GetComponent<TextMeshProUGUI>().text = masterVol + "%";
         optionsRightText[6].GetComponent<TextMeshProUGUI>().text = BGMVol + "%";
         optionsRightText[7].GetComponent<TextMeshProUGUI>().text = SFXVol + "%";
 
-        Debug.Log("Variables loaded: " + option1 + " " + option2 + " " + option3 + " " + masterVol + " " + BGMVol + " " + SFXVol);
+        Debug.Log("Variables loaded: " + hitNumbersOn + " " + stageTimerOn + " " + option3 + " " + masterVol + " " + BGMVol + " " + SFXVol);
     }
 
     //Save variables on exiting scene
     private void OnDisable()
     {
-        PlayerPrefs.SetInt("option1", BoolToInt(option1));
-        PlayerPrefs.SetInt("option2", BoolToInt(option2));
+        PlayerPrefs.SetInt("hitNumbersOn", BoolToInt(hitNumbersOn));
+        PlayerPrefs.SetInt("stageTimerOn", BoolToInt(stageTimerOn));
         PlayerPrefs.SetInt("option3", BoolToInt(option3));
 
         PlayerPrefs.SetInt("mVol", masterVol);
         PlayerPrefs.SetInt("bgmVol", BGMVol);
         PlayerPrefs.SetInt("sfxVol", SFXVol);
 
-        Debug.Log("Variables saved: " + option1 + " " + option2 + " " + option3 + " " + masterVol + " " + BGMVol + " " + SFXVol);
+        Debug.Log("Variables saved: " + hitNumbersOn + " " + stageTimerOn + " " + option3 + " " + masterVol + " " + BGMVol + " " + SFXVol);
     }
 
     IEnumerator MoveOptionsBox(bool on, float duration)

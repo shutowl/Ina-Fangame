@@ -36,6 +36,9 @@ public class StageSpawn : MonoBehaviour
     private int wavesLeft;              //How mnay waves until the boss (0 = BossWave)
     private float waveDuration;         //Max time a wave lasts for
     bool stageComplete;
+    public float quickClearDuration = 3f;       //If waves is cleared with lots of time left, reduce time till next wave
+    public float quickClearStartDuration = 2f;  //Waves cannot be cleared within the first few seconds
+    float quickClearStartTimer;
 
     private float bossTimer = 0f;       //Used to prevent other waves from spawning during boss wave
 
@@ -59,6 +62,16 @@ public class StageSpawn : MonoBehaviour
     {
         if(currentState == StageState.waiting)
         {
+            if (quickClearStartTimer > 0)
+            {
+                quickClearStartTimer -= Time.deltaTime;
+            }
+            if (noEnemies && quickClearStartTimer < 0)
+            {
+                waveDuration = quickClearDuration;
+                quickClearStartTimer = 100f;
+            }
+
             if (waveDuration <= 0)
             {
                 currentState = StageState.spawning;
@@ -135,7 +148,7 @@ public class StageSpawn : MonoBehaviour
                             case 1: //Gura
                                 if (inOrder)
                                 {
-                                    wave = Mathf.Clamp((wave + 1) % 3, 1, 2);   //Clamp((wave + 1) % numOfAttacks+1, 1, numOfAttacks)
+                                    wave = Mathf.Clamp((wave + 1) % 4, 1, 3);   //Clamp((wave + 1) % numOfWaves+1, 1, numOfWaves)
                                 }
                                 else
                                 {
@@ -210,7 +223,6 @@ public class StageSpawn : MonoBehaviour
 
         noEnemies = (GameObject.FindGameObjectsWithTag("Enemy").Length == 0);
         comboMeter.SetStop(noEnemies);
-        //Debug.Log(GameObject.FindGameObjectsWithTag("Enemy").Length);
     }
 
     public int GetCurrentWave()
@@ -402,41 +414,36 @@ public class StageSpawn : MonoBehaviour
 
     IEnumerator SpawnGuraWave(int wave)
     {
+        quickClearStartTimer = quickClearStartDuration;
+
         switch (wave)
         {
             case 1:
-                waveDuration = 5f;
+                waveDuration = 10f;
 
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
                 Instantiate(spawner, contoller.position + new Vector3(4, -4), Quaternion.identity);
-
-                yield return new WaitForSeconds(0.2f);
-                spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
-                Instantiate(spawner, contoller.position + new Vector3(5, -4), Quaternion.identity);
-
-                yield return new WaitForSeconds(0.2f);
-                spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
-                Instantiate(spawner, contoller.position + new Vector3(6, -4), Quaternion.identity);
                 break;
             case 2:
-                waveDuration = 5f;
+                waveDuration = 10f;
 
                 spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
                 Instantiate(spawner, contoller.position + new Vector3(-4, -4), Quaternion.identity);
-
-                yield return new WaitForSeconds(0.2f);
-                spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
-                Instantiate(spawner, contoller.position + new Vector3(-5, -4), Quaternion.identity);
-
-                yield return new WaitForSeconds(0.2f);
-                spawner.GetComponent<Spawner>().SetSpawn(enemies[2], 1f);
-                Instantiate(spawner, contoller.position + new Vector3(-6, -4), Quaternion.identity);
+                break;
+            case 3:
+                waveDuration = 10f;
+                spawner.GetComponent<Spawner>().SetSpawn(enemies[3], 1f);
+                Instantiate(spawner, contoller.position + new Vector3(12, 1), Quaternion.identity);
                 break;
         }
+
+        yield return null;
     }
 
     IEnumerator SpawnGuraBoss()
     {
+        quickClearStartTimer = quickClearStartDuration;
+
         spawner.GetComponent<Spawner>().SetSpawn(bosses[1], 4f);
         Instantiate(spawner, contoller.position + new Vector3(5, 1), Quaternion.identity);
 
@@ -463,15 +470,23 @@ public class StageSpawn : MonoBehaviour
                         collabStage = false;
                         mainStageText.text = "Atlantis";
                         subStageText.text = "Gura's stage";
+                        minWaveLength = 5;
+                        maxWaveLength = 5;
                         break;
                     case 2: //Calli
-                        
+                        collabStage = false;
+                        mainStageText.text = "The Underworld";
+                        subStageText.text = "Calli's stage";
                         break;
                     case 3: //Ame
-                        
+                        collabStage = false;
+                        mainStageText.text = "Ameverse";
+                        subStageText.text = "Ame's stage";
                         break;
                     case 4: //Kiara
-                        
+                        collabStage = false;
+                        mainStageText.text = "KFP";
+                        subStageText.text = "Kiara's stage";
                         break;
                 }
                 break;
@@ -494,7 +509,9 @@ public class StageSpawn : MonoBehaviour
                         
                         break;
                     case 5: //Sana
-                        
+                        collabStage = false;
+                        mainStageText.text = "Space";
+                        subStageText.text = "Sana's stage";
                         break;
                 }
                 break;

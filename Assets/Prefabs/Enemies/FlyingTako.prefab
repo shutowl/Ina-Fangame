@@ -142,10 +142,11 @@ MonoBehaviour:
   isBoss: 0
   maxHealth: 100
   currentHealth: 0
-  hitstunTimer: 0
   ghostDuration: 1
   stunned: 0
   enemyName: 
+  difficulty: 1
+  hitNumber: {fileID: 6830065319639149353, guid: 4181f8704273bbe4db23c007e0d9654d, type: 3}
   duration: 7
   fireRate: 2
   bullets:

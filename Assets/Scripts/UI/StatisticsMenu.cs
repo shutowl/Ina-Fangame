@@ -16,6 +16,7 @@ public class StatisticsMenu : MonoBehaviour
     public Sprite selectedButtonBG;
 
     [Header("Statistics")]
+    public TextMeshProUGUI stageTimer;
     public TextMeshProUGUI timeTakenText;
     [SerializeField] float timeTaken;
     public TextMeshProUGUI maxComboText;
@@ -42,6 +43,11 @@ public class StatisticsMenu : MonoBehaviour
         timeTaken = 0f;
         //Max combo stat grabbed from ComboMeter
         //Time hit stat grabbed from PlayerMovement
+
+        if (PlayerPrefs.GetInt("stageTimerOn") == 0)
+        {
+            stageTimer.text = "";
+        }
     }
 
     void Update()
@@ -93,6 +99,14 @@ public class StatisticsMenu : MonoBehaviour
         else
         {
             timeTaken += Time.deltaTime;
+
+            if(PlayerPrefs.GetInt("stageTimerOn") == 1)
+            {
+                int minutes = (int)(timeTaken / 60);
+                int seconds = (int)(timeTaken % 60);
+                int ms = (int)(timeTaken * 1000 % 1000);
+                stageTimer.text = string.Format("{0:00}:{1:00}:{2:000}", minutes, seconds, ms);
+            }
         }
     }
 

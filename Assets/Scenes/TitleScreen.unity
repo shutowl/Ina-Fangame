@@ -12672,8 +12672,8 @@ MonoBehaviour:
   - {fileID: 1701555142}
   - {fileID: 1470473290}
   - {fileID: 1894863630}
-  option1: 1
-  option2: 1
+  hitNumbersOn: 1
+  stageTimerOn: 1
   option3: 0
   resolution: 0
   fullscreen: 0

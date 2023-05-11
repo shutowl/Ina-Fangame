@@ -227,6 +227,8 @@ MonoBehaviour:
   ghostDuration: 1
   stunned: 0
   enemyName: 
+  difficulty: 1
+  hitNumber: {fileID: 6830065319639149353, guid: 4181f8704273bbe4db23c007e0d9654d, type: 3}
   actionRate: 1
   jumpForce: 700
   bullet: {fileID: 4219144156338261470, guid: f8edb747bbb23624b8e8f247dfc86ce9, type: 3}

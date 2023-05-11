@@ -481,12 +481,12 @@ public class GuraMovement : Enemy
                             AudioManager.Instance.Play("Bullet1");
                         }
 
-                        if(attackTimer <= 0){   //Show Ceiling Indicators
+                        if(attackTimer <= 0){   //Show Floor Indicators
                             attackTimer = 1.5f;
                             
                             float gapSize = 3f - Mathf.Clamp(difficulty/150f, -1.5f, 1.75f);
                             for(int i = -20; i < 20; i++){
-                                danger = Instantiate(dangerIndicator, new Vector2(player.transform.position.x + i*gapSize, 8f), Quaternion.identity);
+                                danger = Instantiate(dangerIndicator, new Vector2(player.transform.position.x + i*gapSize, -1.5f), Quaternion.identity);
                                 danger.GetComponent<DangerIndicator>().lifeTime = attackTimer;
                             }
                             delayedPos = new Vector2(player.transform.position.x, 8f);

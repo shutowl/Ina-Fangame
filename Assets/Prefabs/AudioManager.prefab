@@ -284,3 +284,5 @@ MonoBehaviour:
   music:
   - name: tempBGM
     clip: {fileID: 8300000, guid: a5a3f4ca95214884d87db36226e38cd3, type: 3}
+  - name: titleBGM
+    clip: {fileID: 8300000, guid: 936f9699d3b5881438ce52c5138cfacb, type: 3}

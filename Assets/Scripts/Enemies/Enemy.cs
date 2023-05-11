@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour
     protected ComboMeter comboMeter;
     private Rigidbody2D rbBase;
     protected BossHealthBar bossHealthBar;
+    public GameObject hitNumber;
 
     public void Start()
     {
@@ -77,7 +78,8 @@ public class Enemy : MonoBehaviour
     //damage taken (includes hitstun)
     public void TakeDamage(int damage, float hitstun)
     {
-        currentHealth -= damage + (int)(damage * comboMeter.GetBonusDMG() / 100);
+        int totalDamage = damage + (int)(damage * comboMeter.GetBonusDMG() / 100);
+        currentHealth -= totalDamage;
 
         if (currentHealth <= 0)
         {
@@ -93,12 +95,19 @@ public class Enemy : MonoBehaviour
 
         comboMeter.AddCombo();
         if (isBoss) bossHealthBar.SetHP(currentHealth);
+
+        if(PlayerPrefs.GetInt("hitNumbersOn") == 1)
+        {
+            GameObject text = Instantiate(hitNumber, transform.position, Quaternion.identity);
+            text.GetComponent<HitNumber>().SetText("" + totalDamage);
+        }
     }
 
     //damage taken (no hitstun)
     public void TakeDamageNoStun(int damage)
     {
-        currentHealth -= damage + (int)(damage * comboMeter.GetBonusDMG()/100);
+        int totalDamage = damage + (int)(damage * comboMeter.GetBonusDMG() / 100);
+        currentHealth -= totalDamage;
 
         if (currentHealth <= 0)
         {
@@ -109,6 +118,12 @@ public class Enemy : MonoBehaviour
 
         comboMeter.AddCombo();
         if (isBoss) bossHealthBar.SetHP(currentHealth);
+
+        if (PlayerPrefs.GetInt("hitNumbersOn") == 1)
+        {
+            GameObject text = Instantiate(hitNumber, transform.position, Quaternion.identity);
+            text.GetComponent<HitNumber>().SetText("" + totalDamage);
+        }
     }
 
     public int GetCurrentHealth()

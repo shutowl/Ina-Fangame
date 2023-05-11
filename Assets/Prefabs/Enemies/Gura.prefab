@@ -157,6 +157,7 @@ MonoBehaviour:
   stunned: 0
   enemyName: Gura
   difficulty: 0
+  hitNumber: {fileID: 6830065319639149353, guid: 4181f8704273bbe4db23c007e0d9654d, type: 3}
   speed: 10
   jumpForce: 800
   minActionRate: 0.5
