@@ -9668,6 +9668,7 @@ MonoBehaviour:
   knockbackLimit: 0.5
   knockbackStrength: 3
   damagediFrames: 1
+  hitstunFlashRate: 0.1
   coyoteTime: 0.15
   jumpBufferTime: 0.2
   hitboxSize: 0.1285727
