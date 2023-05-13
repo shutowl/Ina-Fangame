@@ -54,6 +54,9 @@ public class PlayerMovement : MonoBehaviour
     private float hitstunCounter;
     public float damagediFrames = 1f;
     private float damagediFramesCounter;
+    public float hitstunFlashRate = 0.2f;
+    float hitstunFlashTimer = 0f;
+    bool flashOn = false;
     int timesHit = 0;
 
     [Header ("Coyote Time And Jump Buffers")]
@@ -448,7 +451,6 @@ public class PlayerMovement : MonoBehaviour
 
             if (hitstunCounter <= 0)
             {
-
                 walkDelayCounter = walkDelay;
                 speed = runSpeed;
                 ResetHitbox();
@@ -530,6 +532,26 @@ public class PlayerMovement : MonoBehaviour
         {
             damagediFramesCounter -= Time.deltaTime;
             hitbox.GetComponent<BoxCollider2D>().enabled = false;
+
+            //flash
+            hitstunFlashTimer -= Time.deltaTime;
+            if (hitstunFlashTimer <= 0)
+            {
+                if (flashOn)
+                {
+                    GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
+                }
+                else
+                {
+                    GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+                }
+                flashOn = !flashOn;
+                hitstunFlashTimer = hitstunFlashRate;
+            }
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
         }
 
         //Attack
@@ -621,7 +643,9 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = Vector2.zero;
         currentState = playerState.hitstun;
         hitstunCounter = hitstun;
-        damagediFramesCounter = hitstun + 0.5f;
+        damagediFramesCounter = damagediFrames + hitstun;
+        hitstunFlashTimer = hitstunFlashRate;
+        flashOn = false;
 
         timesHit++;
 
@@ -636,7 +660,9 @@ public class PlayerMovement : MonoBehaviour
         currentState = playerState.hitstun;
         hitstunCounter = hitstun;
         this.hitstun = hitstun;
-        damagediFramesCounter = hitstun + 0.5f;
+        damagediFramesCounter = damagediFrames + hitstun;
+        hitstunFlashTimer = hitstunFlashRate;
+        flashOn = false;
 
         timesHit++;
 
