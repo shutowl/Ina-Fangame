@@ -13,6 +13,7 @@ public class PauseMenu : MonoBehaviour
         settings,
         graphics,
         audio,
+        exitConfirm
     }
     private PauseState menu;
 
@@ -24,8 +25,10 @@ public class PauseMenu : MonoBehaviour
 
     public GameObject pauseMenu;
     public GameObject settingsMenu;
+    public GameObject exitConfirmMenu;
     public TextMeshProUGUI[] settingsLeftText;
     public TextMeshProUGUI[] settingsRightText;
+    public GameObject[] exitConfirmButtons;
     bool changeVol = false;
     bool volIncrease = false;
     int volIndex = 0;
@@ -46,6 +49,7 @@ public class PauseMenu : MonoBehaviour
         menu = PauseState.pause;
 
         settingsMenu.SetActive(false);
+        exitConfirmMenu.SetActive(false);
     }
 
     // Update is called once per frame
@@ -85,25 +89,45 @@ public class PauseMenu : MonoBehaviour
                             AudioManager.Instance.Play("MenuSelect");
                             break;
                         case 2:
+                            OpenExitConfirm();
+                            AudioManager.Instance.Play("MenuSelect");
+                            break;
+                    }
+                }
+                else if(menu == PauseState.exitConfirm)
+                {
+                    switch (pauseIndex)
+                    {
+                        case 0:
                             ExitGame();
+                            AudioManager.Instance.Play("MenuSelect");
+                            break;
+                        case 1:
+                            CloseExitConfirm();
                             AudioManager.Instance.Play("MenuSelect");
                             break;
                     }
                 }
             }
-            if (input.UI.Cancel.WasPressedThisFrame())
+            else if (input.UI.Cancel.WasPressedThisFrame())
             {
                 if(menu == PauseState.pause)
                 {
-                    //ResumeGame();
+                    ResumeGame();
+                    AudioManager.Instance.Play("Unpause");
                 }
                 else if (menu == PauseState.settings)
                 {
                     CloseSettings();
                     AudioManager.Instance.Play("MenuCancel");
                 }
+                else if(menu == PauseState.exitConfirm)
+                {
+                    CloseExitConfirm();
+                    AudioManager.Instance.Play("MenuCancel");
+                }
             }
-            if (input.UI.Up.WasPressedThisFrame())
+            else if(input.UI.Up.WasPressedThisFrame())
             {
                 if(menu == PauseState.pause)
                 {
@@ -124,7 +148,7 @@ public class PauseMenu : MonoBehaviour
 
                 AudioManager.Instance.Play("MenuMove");
             }
-            if (input.UI.Down.WasPressedThisFrame())
+            else if(input.UI.Down.WasPressedThisFrame())
             {
                 if (menu == PauseState.pause)
                 {
@@ -145,7 +169,7 @@ public class PauseMenu : MonoBehaviour
 
                 AudioManager.Instance.Play("MenuMove");
             }
-            if (input.UI.Left.WasPressedThisFrame())
+            else if(input.UI.Left.WasPressedThisFrame())
             {
                 if(menu == PauseState.settings)
                 {
@@ -162,8 +186,21 @@ public class PauseMenu : MonoBehaviour
                             break;
                     }
                 }
+                else if(menu == PauseState.exitConfirm)
+                {
+                    exitConfirmButtons[pauseIndex].GetComponent<Image>().sprite = defaultButtonBG;
+                    exitConfirmButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+
+                    if (pauseIndex == 0) pauseIndex = 1;
+                    else pauseIndex = 0;
+
+                    exitConfirmButtons[pauseIndex].GetComponent<Image>().sprite = selectedButtonBG;
+                    exitConfirmButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+                    AudioManager.Instance.Play("MenuMove");
+                }
             }
-            if (input.UI.Right.WasPressedThisFrame())
+            else if(input.UI.Right.WasPressedThisFrame())
             {
                 if (menu == PauseState.settings)
                 {
@@ -180,8 +217,21 @@ public class PauseMenu : MonoBehaviour
                             break;
                     }
                 }
+                else if (menu == PauseState.exitConfirm)
+                {
+                    exitConfirmButtons[pauseIndex].GetComponent<Image>().sprite = defaultButtonBG;
+                    exitConfirmButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+
+                    if (pauseIndex == 0) pauseIndex = 1;
+                    else pauseIndex = 0;
+
+                    exitConfirmButtons[pauseIndex].GetComponent<Image>().sprite = selectedButtonBG;
+                    exitConfirmButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+
+                    AudioManager.Instance.Play("MenuMove");
+                }
             }
-            if (input.UI.Left.WasReleasedThisFrame() || input.UI.Right.WasReleasedThisFrame())
+            else if(input.UI.Left.WasReleasedThisFrame() || input.UI.Right.WasReleasedThisFrame())
             {
                 if (menu == PauseState.settings)
                 {
@@ -281,6 +331,30 @@ public class PauseMenu : MonoBehaviour
         pauseMenuButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
         pauseMenu.SetActive(true);
         Debug.Log("Settings Closed");
+    }
+
+    public void OpenExitConfirm()
+    {
+        pauseMenu.SetActive(false);
+        pauseMenuButtons[pauseIndex].GetComponent<Image>().sprite = defaultButtonBG;
+        pauseMenuButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        pauseIndex = 1;
+        menu = PauseState.exitConfirm;
+        exitConfirmButtons[pauseIndex].GetComponent<Image>().sprite = selectedButtonBG;
+        exitConfirmButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+        exitConfirmMenu.SetActive(true);
+    }
+
+    public void CloseExitConfirm()
+    {
+        exitConfirmMenu.SetActive(false);
+        exitConfirmButtons[pauseIndex].GetComponent<Image>().sprite = defaultButtonBG;
+        exitConfirmButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+        pauseIndex = 0;
+        menu = PauseState.pause;
+        pauseMenuButtons[pauseIndex].GetComponent<Image>().sprite = selectedButtonBG;
+        pauseMenuButtons[pauseIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
+        pauseMenu.SetActive(true);
     }
 
     public void ExitGame()

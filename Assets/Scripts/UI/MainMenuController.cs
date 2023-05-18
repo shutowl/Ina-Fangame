@@ -73,6 +73,8 @@ public class MainMenuController : MonoBehaviour
         Time.timeScale = 1;
 
         AudioManager.Instance.PlayMusic("titleBGM");
+
+        Debug.Log(Input.GetJoystickNames());
     }
 
     void Update()
@@ -86,18 +88,27 @@ public class MainMenuController : MonoBehaviour
                     case 0:
                         hitNumbersOn = !hitNumbersOn;
                         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (hitNumbersOn) ? "Yes" : "No";
+                        AudioManager.Instance.Play("MenuSelect");
                         break;
                     case 1:
                         stageTimerOn = !stageTimerOn;
                         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (stageTimerOn) ? "Yes" : "No";
+                        AudioManager.Instance.Play("MenuSelect");
                         break;
                     case 2:
                         option3 = !option3;
                         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option3) ? "Yes" : "No";
+                        AudioManager.Instance.Play("MenuSelect");
+                        break;
+                    case 3:
+                        ShowWIPText();
+                        AudioManager.Instance.Play("MenuError");
+                        break;
+                    case 4:
+                        ShowWIPText();
+                        AudioManager.Instance.Play("MenuError");
                         break;
                 }
-
-                AudioManager.Instance.Play("MenuMove");
             }
             else if(state == menuState.difficulty)
             {
@@ -155,7 +166,7 @@ public class MainMenuController : MonoBehaviour
             {
                 mainMenuButtons[menuIndex].GetComponent<Image>().sprite = defaultButtonBG;
                 mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
-                menuIndex = 3; //Moves to exit
+                menuIndex = 4; //Moves to exit
                 mainMenuButtons[menuIndex].GetComponent<Image>().sprite = selectedButtonBG;
                 mainMenuButtons[menuIndex].GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
 
@@ -342,14 +353,17 @@ public class MainMenuController : MonoBehaviour
                     case 0: //Option 1
                         hitNumbersOn = !hitNumbersOn;
                         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (hitNumbersOn) ? "Yes" : "No";
+                        AudioManager.Instance.Play("MenuSelect");
                         break;
                     case 1: //Option 2
                         stageTimerOn = !stageTimerOn;
                         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (stageTimerOn) ? "Yes" : "No";
+                        AudioManager.Instance.Play("MenuSelect");
                         break;
                     case 2: //Option 3
                         option3 = !option3;
                         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option3) ? "Yes" : "No";
+                        AudioManager.Instance.Play("MenuSelect");
                         break;
                     case 3: //Resolution
 
@@ -401,14 +415,17 @@ public class MainMenuController : MonoBehaviour
                     case 0: //Option 1
                         hitNumbersOn = !hitNumbersOn;
                         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (hitNumbersOn) ? "Yes" : "No";
+                        AudioManager.Instance.Play("MenuSelect");
                         break;
                     case 1: //Option 2
                         stageTimerOn = !stageTimerOn;
                         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (stageTimerOn) ? "Yes" : "No";
+                        AudioManager.Instance.Play("MenuSelect");
                         break;
                     case 2: //Option 3
                         option3 = !option3;
                         optionsRightText[menuIndex].GetComponent<TextMeshProUGUI>().text = (option3) ? "Yes" : "No";
+                        AudioManager.Instance.Play("MenuSelect");
                         break;
                     case 3: //Resolution
 

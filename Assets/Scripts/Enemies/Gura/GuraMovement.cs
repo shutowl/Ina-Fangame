@@ -663,12 +663,16 @@ public class GuraMovement : Enemy
             {
                 GameObject bullet = Instantiate(bullets[0], new Vector2(Random.Range(centerPos.x-11, centerPos.x+11), centerPos.y+6.5f), Quaternion.identity);
                 bullet.GetComponent<PhysicsBullet>().SetDirection(0, -1);
-                bullet.GetComponent<PhysicsBullet>().SetGravity(0.5f);
+                bullet.GetComponent<PhysicsBullet>().SetGravity(0.3f);
 
                 if (difficulty > 100)
                 {
                     bullet.GetComponent<PhysicsBullet>().geyser = true;
                     bulletRainTimer = bulletRainRate + 0.1f;
+                }
+                else if(difficulty < 20)
+                {
+                    bulletRainTimer = bulletRainRate + 0.2f;
                 }
                 else
                 {
