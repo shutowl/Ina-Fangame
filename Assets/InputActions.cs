@@ -98,6 +98,24 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AttackSkill"",
+                    ""type"": ""Button"",
+                    ""id"": ""8ea225c7-4b1a-4167-9141-39f16b113978"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DefenseSkill"",
+                    ""type"": ""Button"",
+                    ""id"": ""e392d46b-0c90-472d-aad4-000844dc9171"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -463,6 +481,28 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""70980ef2-ab9a-4b22-89d2-4759ce23891d"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DefenseSkill"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3aed596d-5fde-416c-b559-8adce4731dae"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AttackSkill"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -787,6 +827,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Confirm = m_Player.FindAction("Confirm", throwIfNotFound: true);
+        m_Player_AttackSkill = m_Player.FindAction("AttackSkill", throwIfNotFound: true);
+        m_Player_DefenseSkill = m_Player.FindAction("DefenseSkill", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Confirm = m_UI.FindAction("Confirm", throwIfNotFound: true);
@@ -865,6 +907,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Confirm;
+    private readonly InputAction m_Player_AttackSkill;
+    private readonly InputAction m_Player_DefenseSkill;
     public struct PlayerActions
     {
         private @InputActions m_Wrapper;
@@ -877,6 +921,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Confirm => m_Wrapper.m_Player_Confirm;
+        public InputAction @AttackSkill => m_Wrapper.m_Player_AttackSkill;
+        public InputAction @DefenseSkill => m_Wrapper.m_Player_DefenseSkill;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -910,6 +956,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Confirm.started += instance.OnConfirm;
             @Confirm.performed += instance.OnConfirm;
             @Confirm.canceled += instance.OnConfirm;
+            @AttackSkill.started += instance.OnAttackSkill;
+            @AttackSkill.performed += instance.OnAttackSkill;
+            @AttackSkill.canceled += instance.OnAttackSkill;
+            @DefenseSkill.started += instance.OnDefenseSkill;
+            @DefenseSkill.performed += instance.OnDefenseSkill;
+            @DefenseSkill.canceled += instance.OnDefenseSkill;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -938,6 +990,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Confirm.started -= instance.OnConfirm;
             @Confirm.performed -= instance.OnConfirm;
             @Confirm.canceled -= instance.OnConfirm;
+            @AttackSkill.started -= instance.OnAttackSkill;
+            @AttackSkill.performed -= instance.OnAttackSkill;
+            @AttackSkill.canceled -= instance.OnAttackSkill;
+            @DefenseSkill.started -= instance.OnDefenseSkill;
+            @DefenseSkill.performed -= instance.OnDefenseSkill;
+            @DefenseSkill.canceled -= instance.OnDefenseSkill;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1077,6 +1135,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnConfirm(InputAction.CallbackContext context);
+        void OnAttackSkill(InputAction.CallbackContext context);
+        void OnDefenseSkill(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

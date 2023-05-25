@@ -638,6 +638,13 @@ public class PlayerMovement : MonoBehaviour
         return 0f;
     }
 
+    //Currently should give player invincibility for a certain duration
+    //And should stop player movement/momentum for a short time.
+    public void StartDefenseSkill()
+    {
+        Debug.Log("Defense Skill Activated");
+    }
+
     public void setDamageState()
     {
         rb.velocity = Vector2.zero;
@@ -743,6 +750,11 @@ public class PlayerMovement : MonoBehaviour
     public int GetTimesHit()
     {
         return timesHit;
+    }
+
+    public bool IsPaused()
+    {
+        return paused;
     }
 
     public void Bounce()    //used for when DAir hits something

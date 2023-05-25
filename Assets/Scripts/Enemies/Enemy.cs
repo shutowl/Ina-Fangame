@@ -100,6 +100,7 @@ public class Enemy : MonoBehaviour
         {
             GameObject text = Instantiate(hitNumber, transform.position, Quaternion.identity);
             text.GetComponent<HitNumber>().SetText("" + totalDamage);
+            text.GetComponent<HitNumber>().SetSize(totalDamage);
         }
     }
 
@@ -123,6 +124,7 @@ public class Enemy : MonoBehaviour
         {
             GameObject text = Instantiate(hitNumber, transform.position, Quaternion.identity);
             text.GetComponent<HitNumber>().SetText("" + totalDamage);
+            text.GetComponent<HitNumber>().SetSize(totalDamage);
         }
     }
 

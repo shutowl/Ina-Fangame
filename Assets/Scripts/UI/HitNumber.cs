@@ -19,7 +19,7 @@ public class HitNumber : MonoBehaviour
 
         rb.velocity = Vector2.zero;
         direction = (FindObjectOfType<PlayerMovement>().transform.position.x - transform.position.x > 0) ? -1 : 1;
-        rb.AddForce(new Vector2(Random.Range(100f, 200f) * direction, Random.Range(300f, 400f)));
+        rb.AddForce(new Vector2(Random.Range(0f, 200f) * direction, Random.Range(300f, 400f)));
         GetComponent<Canvas>().worldCamera = Camera.main;
 
         durationTimer = duration;
@@ -41,5 +41,10 @@ public class HitNumber : MonoBehaviour
     public void SetText(string text)
     {
         this.text.text = text;
+    }
+
+    public void SetSize(float damage)
+    {
+        this.text.fontSize = Mathf.Clamp(damage / 4, 5f, 12f);
     }
 }
