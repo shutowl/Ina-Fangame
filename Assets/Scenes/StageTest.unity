@@ -10496,6 +10496,11 @@ MonoBehaviour:
   hitboxTransform: {fileID: 389475910}
   hurtbox: {fileID: 198911143}
   animOffset: 0.1
+  bombDuration: 1.5
+  bombIdleDuration: 0.5
+  startBombRadius: 3
+  endBombRadius: 8
+  bombObject: {fileID: 5812430344437444024, guid: d629e08c03212fc4eab726a2d4bdeedd, type: 3}
   dust: {fileID: 150810106}
   grounded: 0
 --- !u!114 &1304905288
@@ -10671,7 +10676,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1304905285}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.69, y: 0, z: 0}
+  m_LocalPosition: {x: -0.69, y: 0.03, z: 0}
   m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10696,8 +10701,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSanity: 200
-  regenRate: 0.05
-  skillAmount: 50
+  regenRate: 0.01
+  skillCost: 75
   sanityText: {fileID: 665074023}
   sanitySlider: {fileID: 1803546148}
   consumeDuration: 1

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4219144156338261470
+--- !u!1 &5812430344437444024
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8813353072481328782}
-  - component: {fileID: 3667654500275776049}
-  - component: {fileID: 118306648687949642}
-  - component: {fileID: 4787290531010563392}
-  - component: {fileID: 4219144156338261471}
-  - component: {fileID: 1870601498555041019}
+  - component: {fileID: 5812430344437444028}
+  - component: {fileID: 5812430344437444029}
+  - component: {fileID: 5812430344437444026}
+  - component: {fileID: 5812430344437444027}
   m_Layer: 0
-  m_Name: Gura Normal Bullet
-  m_TagString: Hazard
+  m_Name: PlayerBomb
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8813353072481328782
+--- !u!4 &5812430344437444028
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4219144156338261470}
+  m_GameObject: {fileID: 5812430344437444024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.24, y: 7.58, z: 0}
-  m_LocalScale: {x: 0.5186, y: 0.5186, z: 0.5186}
+  m_LocalPosition: {x: -0.6655, y: -0.1155, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &3667654500275776049
+--- !u!212 &5812430344437444029
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4219144156338261470}
+  m_GameObject: {fileID: 5812430344437444024}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -77,8 +75,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -706312276, guid: c0a3756da6d0a6f44a432900d5530628, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Color: {r: 1, g: 0.40356088, b: 0, a: 0.14117648}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -88,34 +86,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &118306648687949642
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4219144156338261470}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 0
-  m_CollisionDetection: 1
-  m_Constraints: 0
---- !u!58 &4787290531010563392
+--- !u!58 &5812430344437444026
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4219144156338261470}
+  m_GameObject: {fileID: 5812430344437444024}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -124,35 +101,19 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.49999997
---- !u!114 &4219144156338261471
+  m_Radius: 0.5
+--- !u!114 &5812430344437444027
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4219144156338261470}
+  m_GameObject: {fileID: 5812430344437444024}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8df890d0f109a144aa313c50dfab1f83, type: 3}
+  m_Script: {fileID: 11500000, guid: 78773f37ab515d546b470f9d24791d29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 6
-  lifeTime: 3
-  follow: 0
-  x: 0
-  y: -1
---- !u!114 &1870601498555041019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4219144156338261470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d4b8905c9aa78147b3617f4f833fd6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 10
-  hitstun: 0.5
+  startRadius: 1
+  endRadius: 5
+  bombDuration: 3

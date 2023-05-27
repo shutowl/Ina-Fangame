@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
         parrying,
         hitstun,
         dead,
+        bomb,
         inCutscene
     }
     public playerState currentState;
@@ -78,6 +79,15 @@ public class PlayerMovement : MonoBehaviour
     private float flipOffset = 0.1f;         //Player continues looking towards attack for [flipOffset] seconds longer.
     private float bounceTimer = 0f;
     AOMovement AO;
+
+    [Header("Bomb")]
+    public float bombDuration = 2f;         //Duration player is invulnerable for
+    public float bombIdleDuration = 0.5f;   //Duration player stays still for
+    float bombDurationTimer;
+    float bombIdleTimer;
+    public float startBombRadius = 3f;
+    public float endBombRadius = 8f;           //Max radius of the bomb (bullets inside are destroyed)
+    public GameObject bombObject;
 
     [Header("Other")]
     public ParticleSystem dust;
@@ -271,6 +281,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 AO.Fire();
             }
+
+            //Bomb
+            if (inputActions.Player.DefenseSkill.WasPressedThisFrame())
+            {
+                GetComponent<PlayerSanity>().UseDefenseSkill();
+            }
         }
         //-----ROLL STATE-----
         else if(currentState == playerState.rolling)
@@ -319,6 +335,12 @@ public class PlayerMovement : MonoBehaviour
                 speed = runSpeed;
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
             }
+
+            // Bomb
+            if (inputActions.Player.DefenseSkill.WasPressedThisFrame())
+            {
+                GetComponent<PlayerSanity>().UseDefenseSkill();
+            }
         }
         //-----SLIDE STATE-----
         else if(currentState == playerState.sliding)
@@ -356,6 +378,12 @@ public class PlayerMovement : MonoBehaviour
                 walkDelayCounter = walkDelay;
                 speed = runSpeed;
                 hitbox.color = new Color(hitbox.color.r, hitbox.color.g, hitbox.color.b, 0);
+            }
+
+            // Bomb
+            if (inputActions.Player.DefenseSkill.WasPressedThisFrame())
+            {
+                GetComponent<PlayerSanity>().UseDefenseSkill();
             }
         }
         //-----ATTACKING STATE----- (only applies to Neutral 2 and 3)
@@ -433,6 +461,12 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
             }
+
+            // Bomb
+            if (inputActions.Player.DefenseSkill.WasPressedThisFrame())
+            {
+                GetComponent<PlayerSanity>().UseDefenseSkill();
+            }
         }
         //-----HITSTUN STATE-----
         else if(currentState == playerState.hitstun)
@@ -458,6 +492,26 @@ public class PlayerMovement : MonoBehaviour
             }
 
             //Enables AO abilities during hitstun
+            if (inputActions.Player.Fire.WasPressedThisFrame())
+            {
+                AO.Charge();
+            }
+            if (inputActions.Player.Fire.WasReleasedThisFrame())
+            {
+                AO.Fire();
+            }
+        }
+        //-----BOMB STATE-----
+        else if(currentState == playerState.bomb)
+        {
+            if (bombIdleTimer <= 0)
+            {
+                //Unfreeze player
+                rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                currentState = playerState.moving;
+            }
+
+            //Enable AO
             if (inputActions.Player.Fire.WasPressedThisFrame())
             {
                 AO.Charge();
@@ -570,6 +624,16 @@ public class PlayerMovement : MonoBehaviour
             bounceTimer -= Time.deltaTime;
         }
 
+        //Bomb
+        if(bombDurationTimer >= 0)
+        {
+            bombDurationTimer -= Time.deltaTime;
+        }
+        if(bombIdleTimer >= 0)
+        {
+            bombIdleTimer -= Time.deltaTime;
+        }
+
 
         //------Animations-------
         /* STATES:
@@ -580,7 +644,7 @@ public class PlayerMovement : MonoBehaviour
          * 4 = parrying
          * 5 = hitstun
          * 6 = dead
-         * 7 = cutscene
+         * 7 = bomb
          */
         anim.SetInteger("curState", (int)currentState);
         anim.SetFloat("xVelocity", Mathf.Abs(rb.velocity.x));
@@ -642,6 +706,20 @@ public class PlayerMovement : MonoBehaviour
     //And should stop player movement/momentum for a short time.
     public void StartDefenseSkill()
     {
+        bombDurationTimer = bombDuration;
+        bombIdleTimer = bombIdleDuration;
+        damagediFramesCounter = bombDuration;
+
+        //Player stays still
+        rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+        rb.velocity = Vector2.zero;
+
+        //Create a circle at the player's position that destroys any bullets it touches (not lasers)
+        GameObject bomb = Instantiate(bombObject, transform.position, Quaternion.identity);
+        bomb.GetComponent<PlayerBomb>().SetDuration(bombDuration);
+        bomb.GetComponent<PlayerBomb>().SetRadius(startBombRadius, endBombRadius);
+
+        currentState = playerState.bomb;
         Debug.Log("Defense Skill Activated");
     }
 

@@ -10,7 +10,7 @@ public class PlayerSanity : MonoBehaviour
     public float maxSanity;
     float curSanity;
     public float regenRate = 0.05f;
-    public float skillAmount;               //Amount of sanity required to use skill (May change depending on skill later on?)
+    public float skillCost;               //Amount of sanity required to use skill (May change depending on skill later on?)
     PlayerMovement player;
 
     public TextMeshProUGUI sanityText;
@@ -37,14 +37,6 @@ public class PlayerSanity : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (input.Player.DefenseSkill.WasPressedThisFrame())  //Debug: Use Skill
-        {
-            if(curSanity > skillAmount && !consuming)
-            {
-                UseDefenseSkill();
-            }
-        }
-
         if (!consuming && !player.IsPaused())
         {
             curSanity = sanitySlider.value = Mathf.Clamp(curSanity + regenRate, 0, maxSanity);
@@ -54,12 +46,15 @@ public class PlayerSanity : MonoBehaviour
 
     public void UseDefenseSkill()
     {
-        player.StartDefenseSkill();
-        StartCoroutine(ConsumeSanity(50f));
+        if (curSanity > skillCost && !consuming)
+        {
+            player.StartDefenseSkill();
+            StartCoroutine(ConsumeSanity(skillCost));
+        }
     }
 
     //Decreases sanity by a certain amount
-    IEnumerator ConsumeSanity(float amount)
+    public IEnumerator ConsumeSanity(float amount)
     {
         consuming = true;
 
@@ -81,5 +76,11 @@ public class PlayerSanity : MonoBehaviour
         sanityText.text = curSanity.ToString("F0") + "/" + maxSanity;
 
         consuming = false;
+    }
+
+    public void AddSanity(float amount)
+    {
+        curSanity = sanitySlider.value = Mathf.Clamp(curSanity + amount, 0, maxSanity);
+        sanityText.text = curSanity.ToString("F0") + "/" + maxSanity;
     }
 }

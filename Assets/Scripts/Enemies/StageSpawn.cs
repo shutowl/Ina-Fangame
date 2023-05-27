@@ -470,8 +470,8 @@ public class StageSpawn : MonoBehaviour
                         collabStage = false;
                         mainStageText.text = "Atlantis";
                         subStageText.text = "Gura's stage";
-                        minWaveLength = 5;
-                        maxWaveLength = 5;
+                        //minWaveLength = 5;
+                        //maxWaveLength = 5;
                         break;
                     case 2: //Calli
                         collabStage = false;

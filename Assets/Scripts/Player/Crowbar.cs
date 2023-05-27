@@ -43,24 +43,24 @@ public class Crowbar : MonoBehaviour
             switch (player.getAttackNum())
             {
                 case 1:     //Neutral 1
-                    enemy.TakeDamage(n1Damage, 0.3f);
+                    enemy.TakeDamage(n1Damage, 2, 0.3f);
                     AudioManager.Instance.Play("Impact1");
                     break;
                 case 2:     //Neutral 2
-                    enemy.TakeDamage(n2Damage, 0.2f);
+                    enemy.TakeDamage(n2Damage, 1, 0.2f);
                     AudioManager.Instance.Play("Impact1");
                     break;
                 case 3:     //Neutral 3
-                    enemy.TakeDamage(n3Damage, n3HitRate);
+                    enemy.TakeDamage(n3Damage, 0.5f, n3HitRate);
                     n3HitRateTimer = n3HitRate;
                     AudioManager.Instance.Play("Impact2");
                     break;
                 case 4:     //NAir
-                    enemy.TakeDamage(nairDamage, 0.1f);
+                    enemy.TakeDamage(nairDamage, 2f, 0.1f);
                     AudioManager.Instance.Play("Impact1");
                     break;
                 case 5:     //DAir
-                    enemy.TakeDamage(dairDamage, 0.1f);
+                    enemy.TakeDamage(dairDamage, 3f, 0.1f);
                     player.Bounce();
                     AudioManager.Instance.Play("Impact1");
                     break;
@@ -76,7 +76,7 @@ public class Crowbar : MonoBehaviour
 
             if (n3Active && player.getAttackNum() == 3) //Allows n3 to hit multiple times
             {
-                enemy.TakeDamage(n3Damage, n3HitRate);
+                enemy.TakeDamage(n3Damage, 0.5f, n3HitRate);
                 n3HitRateTimer = n3HitRate;
                 AudioManager.Instance.Play("Impact2");
             }

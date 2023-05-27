@@ -32,6 +32,7 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D rbBase;
     protected BossHealthBar bossHealthBar;
     public GameObject hitNumber;
+    protected PlayerSanity playerSanity;
 
     public void Start()
     {
@@ -40,6 +41,7 @@ public class Enemy : MonoBehaviour
         currentHealth = maxHealth;
         comboMeter = FindObjectOfType<ComboMeter>();
         bossHealthBar = FindObjectOfType<BossHealthBar>();
+        playerSanity = FindObjectOfType<PlayerSanity>();
         rbBase = GetComponent<Rigidbody2D>();
     }
 
@@ -76,7 +78,7 @@ public class Enemy : MonoBehaviour
     }
 
     //damage taken (includes hitstun)
-    public void TakeDamage(int damage, float hitstun)
+    public void TakeDamage(int damage, float sanity, float hitstun)
     {
         int totalDamage = damage + (int)(damage * comboMeter.GetBonusDMG() / 100);
         currentHealth -= totalDamage;
@@ -93,6 +95,7 @@ public class Enemy : MonoBehaviour
             ghostTimer = ghostDuration;
         }
 
+        //Combo
         comboMeter.AddCombo();
         if (isBoss) bossHealthBar.SetHP(currentHealth);
 
@@ -102,10 +105,13 @@ public class Enemy : MonoBehaviour
             text.GetComponent<HitNumber>().SetText("" + totalDamage);
             text.GetComponent<HitNumber>().SetSize(totalDamage);
         }
+
+        //Sanity Recovery
+        playerSanity.AddSanity(sanity);
     }
 
     //damage taken (no hitstun)
-    public void TakeDamageNoStun(int damage)
+    public void TakeDamageNoStun(int damage, float sanity)
     {
         int totalDamage = damage + (int)(damage * comboMeter.GetBonusDMG() / 100);
         currentHealth -= totalDamage;
@@ -117,6 +123,7 @@ public class Enemy : MonoBehaviour
             currentState = enemyState.dying;
         }
 
+        //Combo
         comboMeter.AddCombo();
         if (isBoss) bossHealthBar.SetHP(currentHealth);
 
@@ -126,6 +133,9 @@ public class Enemy : MonoBehaviour
             text.GetComponent<HitNumber>().SetText("" + totalDamage);
             text.GetComponent<HitNumber>().SetSize(totalDamage);
         }
+
+        //Sanity Recovery
+        playerSanity.AddSanity(sanity);
     }
 
     public int GetCurrentHealth()
@@ -141,11 +151,11 @@ public class Enemy : MonoBehaviour
 
             if((int)col.GetComponent<aoBullet>().bulletLevel == 2) //laser
             {
-                TakeDamage(damage, 0.5f);
+                TakeDamage(damage, 5f, 0.5f);
             }
             else
             {
-                TakeDamageNoStun(damage);
+                TakeDamageNoStun(damage, 0.5f);
                 Destroy(col.gameObject);
             }
         }
