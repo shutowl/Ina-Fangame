@@ -100,6 +100,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""DefenseSkill"",
+                    ""type"": ""Button"",
+                    ""id"": ""e392d46b-0c90-472d-aad4-000844dc9171"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""AttackSkill"",
                     ""type"": ""Button"",
                     ""id"": ""8ea225c7-4b1a-4167-9141-39f16b113978"",
@@ -109,9 +118,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DefenseSkill"",
+                    ""name"": ""Heal"",
                     ""type"": ""Button"",
-                    ""id"": ""e392d46b-0c90-472d-aad4-000844dc9171"",
+                    ""id"": ""a61fa6a0-9424-47a5-ad6b-aa57bd0a6712"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -495,6 +504,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""3b7cf57e-a2d7-4f53-b2ba-5307fad1a405"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Heal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""3aed596d-5fde-416c-b559-8adce4731dae"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
@@ -827,8 +847,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Confirm = m_Player.FindAction("Confirm", throwIfNotFound: true);
-        m_Player_AttackSkill = m_Player.FindAction("AttackSkill", throwIfNotFound: true);
         m_Player_DefenseSkill = m_Player.FindAction("DefenseSkill", throwIfNotFound: true);
+        m_Player_AttackSkill = m_Player.FindAction("AttackSkill", throwIfNotFound: true);
+        m_Player_Heal = m_Player.FindAction("Heal", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Confirm = m_UI.FindAction("Confirm", throwIfNotFound: true);
@@ -907,8 +928,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Confirm;
-    private readonly InputAction m_Player_AttackSkill;
     private readonly InputAction m_Player_DefenseSkill;
+    private readonly InputAction m_Player_AttackSkill;
+    private readonly InputAction m_Player_Heal;
     public struct PlayerActions
     {
         private @InputActions m_Wrapper;
@@ -921,8 +943,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Confirm => m_Wrapper.m_Player_Confirm;
-        public InputAction @AttackSkill => m_Wrapper.m_Player_AttackSkill;
         public InputAction @DefenseSkill => m_Wrapper.m_Player_DefenseSkill;
+        public InputAction @AttackSkill => m_Wrapper.m_Player_AttackSkill;
+        public InputAction @Heal => m_Wrapper.m_Player_Heal;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -956,12 +979,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Confirm.started += instance.OnConfirm;
             @Confirm.performed += instance.OnConfirm;
             @Confirm.canceled += instance.OnConfirm;
-            @AttackSkill.started += instance.OnAttackSkill;
-            @AttackSkill.performed += instance.OnAttackSkill;
-            @AttackSkill.canceled += instance.OnAttackSkill;
             @DefenseSkill.started += instance.OnDefenseSkill;
             @DefenseSkill.performed += instance.OnDefenseSkill;
             @DefenseSkill.canceled += instance.OnDefenseSkill;
+            @AttackSkill.started += instance.OnAttackSkill;
+            @AttackSkill.performed += instance.OnAttackSkill;
+            @AttackSkill.canceled += instance.OnAttackSkill;
+            @Heal.started += instance.OnHeal;
+            @Heal.performed += instance.OnHeal;
+            @Heal.canceled += instance.OnHeal;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -990,12 +1016,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Confirm.started -= instance.OnConfirm;
             @Confirm.performed -= instance.OnConfirm;
             @Confirm.canceled -= instance.OnConfirm;
-            @AttackSkill.started -= instance.OnAttackSkill;
-            @AttackSkill.performed -= instance.OnAttackSkill;
-            @AttackSkill.canceled -= instance.OnAttackSkill;
             @DefenseSkill.started -= instance.OnDefenseSkill;
             @DefenseSkill.performed -= instance.OnDefenseSkill;
             @DefenseSkill.canceled -= instance.OnDefenseSkill;
+            @AttackSkill.started -= instance.OnAttackSkill;
+            @AttackSkill.performed -= instance.OnAttackSkill;
+            @AttackSkill.canceled -= instance.OnAttackSkill;
+            @Heal.started -= instance.OnHeal;
+            @Heal.performed -= instance.OnHeal;
+            @Heal.canceled -= instance.OnHeal;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1135,8 +1164,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnConfirm(InputAction.CallbackContext context);
-        void OnAttackSkill(InputAction.CallbackContext context);
         void OnDefenseSkill(InputAction.CallbackContext context);
+        void OnAttackSkill(InputAction.CallbackContext context);
+        void OnHeal(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

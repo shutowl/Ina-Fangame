@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
         hitstun,
         dead,
         bomb,
+        healing,
         inCutscene
     }
     public playerState currentState;
@@ -88,6 +89,11 @@ public class PlayerMovement : MonoBehaviour
     public float startBombRadius = 3f;
     public float endBombRadius = 8f;           //Max radius of the bomb (bullets inside are destroyed)
     public GameObject bombObject;
+
+    [Header("Healing")]
+    public int healAmount;
+    public float healDelayDuration = 1f;
+    float healTimer = 0f;
 
     [Header("Other")]
     public ParticleSystem dust;
@@ -286,6 +292,17 @@ public class PlayerMovement : MonoBehaviour
             if (inputActions.Player.DefenseSkill.WasPressedThisFrame())
             {
                 GetComponent<PlayerSanity>().UseDefenseSkill();
+            }
+
+            //Heal
+            if (inputActions.Player.Heal.WasPressedThisFrame() && grounded && GetComponent<PlayerHealth>().Heal(0) && 
+                GetComponent<PlayerSanity>().GetCurrentSanity() > GetComponent<PlayerSanity>().healSkillCost)
+            {
+                currentState = playerState.healing;
+                healTimer = healDelayDuration;
+
+                rb.velocity = Vector2.zero;
+                AO.Reset();
             }
         }
         //-----ROLL STATE-----
@@ -519,6 +536,22 @@ public class PlayerMovement : MonoBehaviour
             if (inputActions.Player.Fire.WasReleasedThisFrame())
             {
                 AO.Fire();
+            }
+        }
+
+        //-----HEALING STATE------
+        else if(currentState == playerState.healing)
+        {
+            healTimer -= Time.deltaTime;
+
+            if (inputActions.Player.Heal.WasReleasedThisFrame())
+            {
+                currentState = playerState.moving;
+            }
+            if(healTimer <= 0)
+            {
+                currentState = playerState.moving;
+                GetComponent<PlayerSanity>().UseHeal(healAmount);
             }
         }
 

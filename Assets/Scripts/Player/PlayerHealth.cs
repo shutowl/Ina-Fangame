@@ -78,8 +78,21 @@ public class PlayerHealth : MonoBehaviour
         }
 
         delayTimer = delayDuration;
+    }
 
-
+    //Returns true if healing activates, false otherwise.
+    public bool Heal(int amount)
+    {
+        if(currentHealth != maxHealth)
+        {
+            currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+            SetHealth(currentHealth);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void FullHeal()

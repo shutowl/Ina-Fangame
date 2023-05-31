@@ -78,6 +78,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "DefenseSkill",
+                    "type": "Button",
+                    "id": "e392d46b-0c90-472d-aad4-000844dc9171",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "AttackSkill",
                     "type": "Button",
                     "id": "8ea225c7-4b1a-4167-9141-39f16b113978",
@@ -87,9 +96,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "DefenseSkill",
+                    "name": "Heal",
                     "type": "Button",
-                    "id": "e392d46b-0c90-472d-aad4-000844dc9171",
+                    "id": "a61fa6a0-9424-47a5-ad6b-aa57bd0a6712",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -468,6 +477,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "DefenseSkill",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3b7cf57e-a2d7-4f53-b2ba-5307fad1a405",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Heal",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

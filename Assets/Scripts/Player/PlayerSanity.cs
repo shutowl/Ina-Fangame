@@ -10,7 +10,8 @@ public class PlayerSanity : MonoBehaviour
     public float maxSanity;
     float curSanity;
     public float regenRate = 0.05f;
-    public float skillCost;               //Amount of sanity required to use skill (May change depending on skill later on?)
+    public float defenseSkillCost;               //Amount of sanity required to use skill (May change depending on skill later on?)
+    public float healSkillCost;
     PlayerMovement player;
 
     public TextMeshProUGUI sanityText;
@@ -46,10 +47,22 @@ public class PlayerSanity : MonoBehaviour
 
     public void UseDefenseSkill()
     {
-        if (curSanity > skillCost && !consuming)
+        if (curSanity > defenseSkillCost && !consuming)
         {
             player.StartDefenseSkill();
-            StartCoroutine(ConsumeSanity(skillCost));
+            StartCoroutine(ConsumeSanity(defenseSkillCost));
+        }
+    }
+
+    public void UseHeal(int amount)
+    {
+        if (curSanity > healSkillCost && !consuming)
+        {
+            bool healed = GetComponent<PlayerHealth>().Heal(amount);
+            if (healed)
+            {
+                StartCoroutine(ConsumeSanity(healSkillCost));
+            }
         }
     }
 
@@ -82,5 +95,10 @@ public class PlayerSanity : MonoBehaviour
     {
         curSanity = sanitySlider.value = Mathf.Clamp(curSanity + amount, 0, maxSanity);
         sanityText.text = curSanity.ToString("F0") + "/" + maxSanity;
+    }
+
+    public float GetCurrentSanity()
+    {
+        return curSanity;
     }
 }
