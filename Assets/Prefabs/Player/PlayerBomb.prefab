@@ -117,3 +117,4 @@ MonoBehaviour:
   startRadius: 1
   endRadius: 5
   bombDuration: 3
+  damageRate: 0.5

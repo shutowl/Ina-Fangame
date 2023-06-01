@@ -8,12 +8,16 @@ public class PlayerBomb : MonoBehaviour
     public float startRadius;
     public float endRadius;
     public float bombDuration;
+    public float damageRate;        //enemies in range are damaged every [damageRate] seconds
+    float rateTimer = 0f;
 
     void Start()
     {
         transform.localScale = new Vector2(startRadius, startRadius);
         transform.DOScale(endRadius, bombDuration/2).SetEase(Ease.OutCubic);
         transform.DOScale(0, bombDuration/2).SetEase(Ease.InQuint).SetDelay(bombDuration/2);
+
+        rateTimer = 0f;
     }
 
     void Update()
@@ -43,6 +47,21 @@ public class PlayerBomb : MonoBehaviour
         if (col.CompareTag("Hazard"))
         {
             Destroy(col.gameObject);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        rateTimer -= Time.deltaTime;
+
+        if (col.CompareTag("Enemy"))
+        {
+            if(rateTimer <= 0)
+            {
+                //Damage Enemy
+                col.GetComponent<Enemy>().TakeDamage(10, 0, 0.5f);
+                rateTimer = damageRate;
+            }
         }
     }
 }

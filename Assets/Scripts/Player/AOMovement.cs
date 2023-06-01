@@ -172,6 +172,8 @@ public class AOMovement : MonoBehaviour
     public void Reset()
     {
         isCharging = false;
+        chargeTime = 0f;
+        chargeLevel = 0;
     }
 
     public Vector2 getDirection()

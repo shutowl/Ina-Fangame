@@ -6598,8 +6598,8 @@ MonoBehaviour:
   - {fileID: 8986591528592699730, guid: 542cd30a306e2bb4bbaeabc5d7b3863c, type: 3}
   - {fileID: 8601657668906471237, guid: e0aea44b736ce5a4f9986179f53e608f, type: 3}
   spawner: {fileID: 1441519280357491592, guid: 6a4c4e8c612c6e248a1c78bd50ae75f8, type: 3}
-  minWaveLength: 0
-  maxWaveLength: 0
+  minWaveLength: 3
+  maxWaveLength: 3
   quickClearDuration: 2
   quickClearStartDuration: 2
 --- !u!1 &508388574
